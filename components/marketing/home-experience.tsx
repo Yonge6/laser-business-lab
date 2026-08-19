@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
-import { useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
 import { OpportunityCard } from "@/components/marketing/opportunity-card";
@@ -98,8 +98,44 @@ const stepIcons = [Target, MagnifyingGlass, Hammer, ShoppingCartSimple];
 export function HomeExperience() {
   const { locale } = useLanguage();
   const [selected, setSelected] = useState(opportunities[0]);
+  const [carouselEdges, setCarouselEdges] = useState({ atStart: true, atEnd: false });
+  const carouselRef = useRef<HTMLDivElement>(null);
   const t = copy[locale];
   const marketCase = marketCaseByOpportunity[selected.id];
+
+  const updateCarouselEdges = useCallback(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const atStart = carousel.scrollLeft <= 2;
+    const atEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 2;
+    setCarouselEdges((current) => current.atStart === atStart && current.atEnd === atEnd ? current : { atStart, atEnd });
+  }, []);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    updateCarouselEdges();
+    const resizeObserver = new ResizeObserver(updateCarouselEdges);
+    resizeObserver.observe(carousel);
+    carousel.addEventListener("scroll", updateCarouselEdges, { passive: true });
+
+    return () => {
+      resizeObserver.disconnect();
+      carousel.removeEventListener("scroll", updateCarouselEdges);
+    };
+  }, [updateCarouselEdges]);
+
+  const moveCarousel = (direction: -1 | 1) => {
+    const carousel = carouselRef.current;
+    const firstCard = carousel?.querySelector<HTMLElement>(".opportunity-card");
+    if (!carousel || !firstCard) return;
+
+    const gap = Number.parseFloat(window.getComputedStyle(carousel).columnGap) || 16;
+    const cardsPerMove = window.innerWidth > 1100 ? 3 : 1;
+    carousel.scrollBy({ left: direction * (firstCard.offsetWidth + gap) * cardsPerMove, behavior: "smooth" });
+  };
 
   return (
     <main>
@@ -123,10 +159,18 @@ export function HomeExperience() {
           <span>{t.catalog}</span>
           <p>{t.catalogSub}</p>
         </div>
-        <div className="opportunity-grid" tabIndex={0} aria-label={locale === "zh" ? "横向滑动浏览 6 个产品机会" : "Swipe horizontally through 6 product opportunities"}>
-          {opportunities.map((opportunity) => (
-            <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
-          ))}
+        <div className="opportunity-carousel">
+          <button className="carousel-control carousel-control-prev" type="button" onClick={() => moveCarousel(-1)} disabled={carouselEdges.atStart} aria-label={locale === "zh" ? "查看上一组产品机会" : "View previous product opportunities"} aria-controls="opportunity-carousel-track">
+            <ArrowLeft weight="bold" aria-hidden="true" />
+          </button>
+          <div ref={carouselRef} id="opportunity-carousel-track" className="opportunity-grid" tabIndex={0} aria-label={locale === "zh" ? "横向滑动浏览 6 个产品机会" : "Swipe horizontally through 6 product opportunities"}>
+            {opportunities.map((opportunity) => (
+              <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
+            ))}
+          </div>
+          <button className="carousel-control carousel-control-next" type="button" onClick={() => moveCarousel(1)} disabled={carouselEdges.atEnd} aria-label={locale === "zh" ? "查看下一组产品机会" : "View next product opportunities"} aria-controls="opportunity-carousel-track">
+            <ArrowRight weight="bold" aria-hidden="true" />
+          </button>
         </div>
         <div className="opportunity-next-step" key={selected.id} aria-live="polite">
           <div className="selection-rank"><span>{t.selected}</span><strong>#{String(selected.rank).padStart(2, "0")}</strong></div>

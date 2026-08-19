@@ -89,10 +89,17 @@ img { display: block; max-width: 100%; }
 .opportunity-catalog-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin: 0 4px 14px; border-bottom: 1px solid var(--line-dark); padding-bottom: 10px; }
 .opportunity-catalog-heading span { color: var(--red); font-family: var(--font-display); font-size: 1.08rem; font-style: italic; font-weight: 900; text-transform: uppercase; letter-spacing: .03em; }
 .opportunity-catalog-heading p { color: var(--muted); margin: 0; font-size: .76rem; text-align: right; }
-.opportunity-grid { width: 100vw; margin-left: calc(50% - 50vw); padding: 8px max(24px, calc((100vw - 1320px) / 2)) 18px; display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 32px) / 3); gap: 16px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-padding-inline: max(24px, calc((100vw - 1320px) / 2)); scroll-snap-type: inline mandatory; scrollbar-color: var(--red) var(--line); scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+.opportunity-carousel { width: 100vw; margin-left: calc(50% - 50vw); position: relative; }
+.opportunity-grid { width: 100%; padding: 8px max(24px, calc((100vw - 1320px) / 2)) 18px; display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 32px) / 3); gap: 16px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-padding-inline: max(24px, calc((100vw - 1320px) / 2)); scroll-snap-type: inline mandatory; scrollbar-color: var(--red) var(--line); scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
 .opportunity-grid::-webkit-scrollbar { height: 7px; }
 .opportunity-grid::-webkit-scrollbar-track { background: var(--line); }
 .opportunity-grid::-webkit-scrollbar-thumb { background: var(--red); }
+.carousel-control { appearance: none; position: absolute; z-index: 8; top: calc(50% - 5px); width: 58px; height: 70px; border: 2px solid var(--ink); background: var(--ink); color: var(--white); display: grid; place-items: center; cursor: pointer; transform: translateY(-50%) skewX(-8deg); box-shadow: 6px 6px 0 rgba(231, 49, 14, .24); transition: background .2s ease, border-color .2s ease, color .2s ease, opacity .2s ease, transform .2s ease; }
+.carousel-control svg { width: 28px; height: 28px; transform: skewX(8deg); }
+.carousel-control:hover:not(:disabled) { background: var(--red); border-color: var(--red); transform: translateY(-50%) skewX(-8deg) scale(1.06); }
+.carousel-control:disabled { background: var(--paper-strong); border-color: var(--line-dark); color: var(--line-dark); box-shadow: none; cursor: not-allowed; opacity: .72; }
+.carousel-control-prev { left: max(12px, calc((100vw - 1320px) / 2 - 76px)); }
+.carousel-control-next { right: max(12px, calc((100vw - 1320px) / 2 - 76px)); }
 .opportunity-card { appearance: none; border: 1px solid var(--line-dark); padding: 0; background: var(--paper-strong); position: relative; min-width: 0; height: 350px; display: grid; grid-template-columns: 45% 55%; text-align: left; cursor: pointer; overflow: hidden; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); scroll-snap-align: start; scroll-snap-stop: always; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .opportunity-card:hover, .opportunity-card.is-active { transform: translateY(-7px); border-color: var(--red); box-shadow: var(--shadow); z-index: 2; }
 .card-rank { position: absolute; z-index: 3; top: 0; left: 0; min-width: 90px; height: 56px; display: grid; place-items: center; background: var(--red); color: white; font-family: var(--font-display), sans-serif; font-size: 34px; font-weight: 900; font-style: italic; clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%); }
@@ -224,7 +231,11 @@ img { display: block; max-width: 100%; }
   .opportunity-showcase { width: 100%; }
   .opportunity-catalog-heading { align-items: flex-start; flex-direction: column; gap: 4px; margin-inline: 14px; }
   .opportunity-catalog-heading p { text-align: left; }
-  .opportunity-grid { width: 100vw; margin-left: calc(50% - 50vw); padding-inline: 14px; grid-auto-columns: 88vw; scroll-padding-inline: 14px; }
+  .opportunity-grid { padding-inline: 14px; grid-auto-columns: 88vw; scroll-padding-inline: 14px; }
+  .carousel-control { top: calc(50% - 5px); width: 44px; height: 58px; box-shadow: 4px 4px 0 rgba(231, 49, 14, .24); }
+  .carousel-control svg { width: 22px; height: 22px; }
+  .carousel-control-prev { left: 8px; }
+  .carousel-control-next { right: 8px; }
   .opportunity-card { height: 370px; grid-template-columns: 44% 56%; }
   .opportunity-next-step { margin: 0 14px; min-height: 0; display: grid; grid-template-columns: 82px 1fr; gap: 16px; }
   .selection-rank { min-height: 110px; }
