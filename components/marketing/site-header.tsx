@@ -11,6 +11,7 @@ import { assetPath } from "@/lib/site";
 const copy = {
   en: {
     tagline: "Turn skills into profitable products",
+    home: "Home",
     opportunities: "Opportunities",
     calculators: "Calculators",
     equipment: "Equipment",
@@ -21,6 +22,7 @@ const copy = {
   },
   zh: {
     tagline: "把技能变成可盈利的产品",
+    home: "首页",
     opportunities: "机会发现",
     calculators: "利润计算",
     equipment: "设备匹配",
@@ -37,6 +39,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const t = copy[locale];
   const nav = [
+    [t.home, "/"],
     [t.opportunities, "/opportunities"],
     [t.calculators, "/calculator"],
     [t.equipment, "/calculator/machine-finder"],
@@ -45,6 +48,7 @@ export function SiteHeader() {
   ];
 
   function isActive(href: string) {
+    if (href === "/") return pathname === href;
     if (href === "/calculator/machine-finder") return pathname.startsWith(href);
     if (href === "/calculator") return pathname.startsWith(href) && !pathname.startsWith("/calculator/machine-finder");
     return pathname === href || pathname.startsWith(`${href}/`);
