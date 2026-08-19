@@ -1,6 +1,7 @@
 "use client";
 
 import { Lightning, TrendUp } from "@phosphor-icons/react";
+import Link from "next/link";
 import { useMemo } from "react";
 import { useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -8,7 +9,6 @@ import { NumberField } from "@/components/calculator/number-field";
 import { calculateTumblerProfit, type TumblerInput } from "@/lib/calculators/tumbler";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
-import { TrackedMachineLink } from "@/components/results/tracked-machine-link";
 
 const copy = {
   en: {
@@ -82,7 +82,7 @@ export function TumblerCalculator() {
         <header><Lightning weight="fill" /><div><p className="eyebrow">{t.speedQuest}</p><h2>{t.faster}</h2></div></header>
         <div className="scenario-grid"><div><span>{t.current}</span><strong>{formatNumber(result.outputPerShift)}</strong><small>{t.units}</small></div><TrendUp weight="bold" /><div className="fast"><span>{t.efficiency}</span><strong>{formatNumber(result.highEfficiencyOutputPerShift)}</strong><small>{t.units}</small></div></div>
         <p>{t.note}</p>
-        <TrackedMachineLink machine="vertigo" tool="tumbler_profit" result="drinkware-high-efficiency">{t.cta}</TrackedMachineLink>
+        <Link className="button machine-cta" href="/calculator/machine-finder?method=laser&product=tumblers">{t.cta}</Link>
       </div>
       <EstimateDisclaimer />
     </section>
