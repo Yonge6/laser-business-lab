@@ -1,4 +1,4 @@
-# Laser Business Lab
+# Maker Business Lab
 
 Live site: [https://yonge6.github.io/laser-business-lab/](https://yonge6.github.io/laser-business-lab/)
 

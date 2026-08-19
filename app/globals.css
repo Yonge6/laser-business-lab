@@ -55,6 +55,7 @@ img { display: block; max-width: 100%; }
 .main-nav { display: flex; align-items: center; gap: 24px; margin-left: auto; font-family: var(--font-display), sans-serif; font-weight: 700; text-transform: uppercase; font-size: 14px; letter-spacing: .04em; }
 .main-nav a { border-bottom: 2px solid transparent; padding: 10px 0; }
 .main-nav a:hover { border-color: var(--red); }
+.main-nav a.is-active { color: white; background: var(--red); border-color: var(--red); padding-inline: 12px; }
 .main-nav .nav-cta { background: var(--ink); color: white; padding: 11px 16px; border: 0; }
 .main-nav .nav-cta:hover { background: var(--red); }
 .header-actions { display: flex; align-items: center; gap: 16px; }
@@ -84,7 +85,8 @@ img { display: block; max-width: 100%; }
 .radar-title span { background: var(--red); color: white; padding: 5px 18px; font-family: var(--font-display), sans-serif; font-weight: 900; font-style: italic; letter-spacing: .05em; transform: skewX(-18deg); }
 .radar-title::after { content: ""; height: 4px; width: 100px; background: var(--red); }
 
-.opportunity-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-block: 6px 42px; }
+.opportunity-showcase { padding-block: 6px 42px; }
+.opportunity-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .opportunity-card { appearance: none; border: 1px solid var(--line-dark); padding: 0; background: var(--paper-strong); position: relative; min-width: 0; height: 350px; display: grid; grid-template-columns: 45% 55%; text-align: left; cursor: pointer; overflow: hidden; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .opportunity-card:hover, .opportunity-card.is-active { transform: translateY(-7px); border-color: var(--red); box-shadow: var(--shadow); z-index: 2; }
 .card-rank { position: absolute; z-index: 3; top: 0; left: 0; min-width: 90px; height: 56px; display: grid; place-items: center; background: var(--red); color: white; font-family: var(--font-display), sans-serif; font-size: 34px; font-weight: 900; font-style: italic; clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%); }
@@ -103,6 +105,21 @@ img { display: block; max-width: 100%; }
 .metric-row small { font-family: var(--font-display), sans-serif; font-size: 8px; line-height: 1.1; font-weight: 700; min-height: 20px; }
 .metric-row b { font-family: var(--font-display), sans-serif; font-size: 18px; }
 .process-tab { position: absolute; left: 0; bottom: 0; z-index: 3; color: white; background: var(--ink); padding: 7px 35px; font-family: var(--font-display), sans-serif; font-weight: 800; font-style: italic; text-transform: uppercase; }
+.opportunity-next-step { margin-top: 16px; min-height: 132px; display: grid; grid-template-columns: 128px minmax(0, 1fr) 170px 260px; align-items: center; gap: 24px; border: 2px solid var(--ink); background: var(--paper-strong); box-shadow: 8px 8px 0 rgba(17, 16, 15, .12); animation: mission-in .25s ease-out; }
+.selection-rank { align-self: stretch; display: grid; align-content: center; justify-items: center; background: var(--ink); color: white; clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%); font-family: var(--font-display), sans-serif; text-transform: uppercase; }
+.selection-rank span { color: var(--red); font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+.selection-rank strong { font-size: 42px; font-style: italic; line-height: 1; }
+.selection-copy small, .selection-profit span { color: var(--red); font-family: var(--font-display), sans-serif; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.selection-copy h2 { margin: 4px 0 7px; font-family: var(--font-display), sans-serif; font-size: 30px; font-style: italic; line-height: 1; text-transform: uppercase; }
+.selection-copy p { margin: 0; color: var(--muted); line-height: 1.45; }
+.selection-profit { display: flex; flex-direction: column; border-left: 1px solid var(--line); padding-left: 24px; }
+.selection-profit strong { color: var(--red); font-family: var(--font-display), sans-serif; font-size: 38px; font-style: italic; line-height: 1.1; }
+.selection-actions { display: grid; gap: 10px; padding-right: 22px; }
+.selection-actions .button { min-height: 46px; padding-inline: 16px; font-size: 14px; }
+.selection-more { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--ink); font-family: var(--font-display), sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; }
+.selection-more:hover { color: var(--red); }
+.selection-more svg { width: 17px; height: 17px; }
+@keyframes mission-in { from { opacity: .55; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .opportunity-card.is-active .process-tab { background: var(--red); }
 
 .game-path-section { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--paper-strong); }
@@ -154,7 +171,9 @@ img { display: block; max-width: 100%; }
   .main-nav a { font-size: 18px; }
   .menu-button { display: grid; }
   .hero-section { grid-template-columns: 1fr 420px; gap: 30px; }
-  .opportunity-grid { overflow-x: auto; grid-template-columns: repeat(3, minmax(380px, 1fr)); padding-bottom: 52px; }
+  .opportunity-grid { overflow-x: auto; grid-template-columns: repeat(3, minmax(380px, 1fr)); padding-bottom: 18px; }
+  .opportunity-next-step { grid-template-columns: 110px minmax(0, 1fr) 150px; }
+  .selection-actions { grid-column: 2 / 4; grid-template-columns: minmax(220px, 1fr) minmax(180px, .7fr); padding: 0 22px 20px 0; }
   .game-path-grid { grid-template-columns: 150px 1fr; }
   .level-panel { grid-column: 1 / 3; max-width: 420px; padding-bottom: 28px; }
 }
@@ -178,8 +197,18 @@ img { display: block; max-width: 100%; }
   .hero-actions { display: grid; }
   .button { width: 100%; min-height: 54px; }
   .radar-wrap { margin-top: 46px; }
+  .opportunity-showcase { width: 100%; }
   .opportunity-grid { grid-template-columns: repeat(3, minmax(330px, 88vw)); margin-left: 14px; width: calc(100% - 14px); scroll-snap-type: x mandatory; }
   .opportunity-card { scroll-snap-align: center; height: 370px; grid-template-columns: 44% 56%; }
+  .opportunity-next-step { margin: 0 14px; min-height: 0; display: grid; grid-template-columns: 82px 1fr; gap: 16px; }
+  .selection-rank { min-height: 110px; }
+  .selection-rank strong { font-size: 32px; }
+  .selection-copy { padding: 16px 14px 16px 0; }
+  .selection-copy h2 { font-size: 24px; }
+  .selection-copy p { font-size: 13px; }
+  .selection-profit { grid-column: 1 / 3; border: 0; border-top: 1px solid var(--line); padding: 14px 18px 0; }
+  .selection-profit strong { font-size: 32px; }
+  .selection-actions { grid-column: 1 / 3; grid-template-columns: 1fr; padding: 0 18px 18px; }
   .game-path-grid { display: block; padding-block: 28px; }
   .path-flag { width: 180px; height: 70px; box-shadow: none; margin-bottom: 32px; }
   .game-steps { overflow-x: auto; grid-template-columns: repeat(4, minmax(120px, 1fr)); padding-bottom: 20px; }

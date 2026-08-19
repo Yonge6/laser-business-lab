@@ -9,6 +9,7 @@ import { opportunities } from "@/lib/opportunities/data";
 import { OpportunityCard } from "@/components/marketing/opportunity-card";
 import { OpportunityRadar } from "@/components/marketing/opportunity-radar";
 import { assetPath } from "@/lib/site";
+import { formatCurrency } from "@/lib/format";
 
 const copy = {
   en: {
@@ -18,6 +19,11 @@ const copy = {
     sub: "Compare real maker opportunities by demand, margin, competition and production fit.",
     find: "Find my opportunity",
     calculate: "Calculate a product",
+    selected: "Selected opportunity",
+    nextMission: "Next mission: validate the business",
+    profit: "Est. gross profit / item",
+    calculateSelected: "Calculate this product",
+    compareAll: "Compare all opportunities",
     path: "Your game path",
     steps: [
       ["Discover", "Find high-potential products."],
@@ -45,6 +51,11 @@ const copy = {
     sub: "从需求、利润、竞争和生产适配度比较真实的 Maker 产品机会。",
     find: "寻找我的机会",
     calculate: "计算一个产品",
+    selected: "已选机会",
+    nextMission: "下一项任务：验证商业模型",
+    profit: "预计单件毛利",
+    calculateSelected: "计算这个产品",
+    compareAll: "查看全部机会",
     path: "你的游戏路径",
     steps: [
       ["发现", "寻找高潜力产品。"],
@@ -91,10 +102,25 @@ export function HomeExperience() {
         <OpportunityRadar opportunity={selected} />
       </section>
 
-      <section className="opportunity-grid shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
-        {opportunities.map((opportunity) => (
-          <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
-        ))}
+      <section className="opportunity-showcase shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
+        <div className="opportunity-grid">
+          {opportunities.map((opportunity) => (
+            <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
+          ))}
+        </div>
+        <div className="opportunity-next-step" key={selected.id} aria-live="polite">
+          <div className="selection-rank"><span>{t.selected}</span><strong>#{String(selected.rank).padStart(2, "0")}</strong></div>
+          <div className="selection-copy">
+            <small>{t.nextMission}</small>
+            <h2>{locale === "zh" ? selected.titleZh : selected.title}</h2>
+            <p>{locale === "zh" ? selected.evidenceZh : selected.evidence}</p>
+          </div>
+          <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
+          <div className="selection-actions">
+            <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
+            <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
+          </div>
+        </div>
       </section>
 
       <section className="game-path-section">

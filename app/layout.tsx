@@ -23,18 +23,18 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://laserbusinesslab.co
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "Laser Business Lab — Turn Maker Skills Into Business Numbers", template: "%s | Laser Business Lab" },
+  title: { default: "Maker Business Lab — Turn Maker Skills Into Business Numbers", template: "%s | Maker Business Lab" },
   description: "Find maker products worth selling, calculate realistic profit and payback, and match your business to the right production setup.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Laser Business Lab",
+    title: "Maker Business Lab",
     description: "Choose your next winning maker product with explainable opportunity scores and business math.",
     url: siteUrl,
-    siteName: "Laser Business Lab",
+    siteName: "Maker Business Lab",
     type: "website",
     locale: "en_US",
   },
-  twitter: { card: "summary_large_image", title: "Laser Business Lab", description: "Turn maker skills into profitable products." },
+  twitter: { card: "summary_large_image", title: "Maker Business Lab", description: "Turn maker skills into profitable products." },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

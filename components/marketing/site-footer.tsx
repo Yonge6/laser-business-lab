@@ -7,7 +7,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 const copy = {
   en: {
     line: "Business intelligence for people who make things.",
-    disclosure: "Laser Business Lab may recommend OneLaser products. Some outbound links are tracked and may be affiliated with OneLaser.",
+    disclosure: "Maker Business Lab may recommend OneLaser products. Some outbound links are tracked and may be affiliated with OneLaser.",
     estimates: "All profit, demand, and capacity figures are estimates—not financial or business advice.",
     privacy: "Privacy",
     disclaimer: "Disclaimer",
@@ -15,7 +15,7 @@ const copy = {
   },
   zh: {
     line: "为 Maker 提供商业选择情报。",
-    disclosure: "Laser Business Lab 可能推荐 OneLaser 产品。部分外链会被追踪，并可能与 OneLaser 存在关联。",
+    disclosure: "Maker Business Lab 可能推荐 OneLaser 产品。部分外链会被追踪，并可能与 OneLaser 存在关联。",
     estimates: "所有利润、需求和产能数据均为估算，不构成财务或商业建议。",
     privacy: "隐私",
     disclaimer: "免责声明",
@@ -30,7 +30,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div>
-          <div className="footer-brand"><Asterisk weight="bold" /> LASER BUSINESS LAB</div>
+          <div className="footer-brand"><Asterisk weight="bold" /> MAKER BUSINESS LAB</div>
           <p>{t.line}</p>
         </div>
         <div className="footer-disclosures">
