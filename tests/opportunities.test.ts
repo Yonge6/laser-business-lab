@@ -4,6 +4,11 @@ import { opportunities } from "@/lib/opportunities/data";
 import { marketCaseByOpportunity } from "@/lib/opportunities/market-cases";
 
 describe("opportunity ranking engine", () => {
+  it("keeps the featured catalog sorted by opportunity score with matching ranks", () => {
+    expect(opportunities.map((item) => item.score)).toEqual([82, 79, 78, 77, 76, 74, 73]);
+    expect(opportunities.map((item) => item.rank)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+
   it("prioritizes laser personalization for a side-income maker", () => {
     const ranked = rankOpportunities({
       interests: ["personalized", "gifts"],
