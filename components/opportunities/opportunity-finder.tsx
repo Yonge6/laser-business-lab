@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Cube, Sparkle, Target } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Check, Cube, Sparkle, Target, TShirt } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { rankOpportunities, type OpportunityAnswers } from "@/lib/opportunities/engine";
@@ -26,7 +26,7 @@ const copy = {
     intro: "Five choices. A ranked maker business path built around your reality.",
     questions: ["What kind of products interest you?", "How do you want to make?", "What is your starting budget?", "How much time can you commit?", "What is your next business goal?"],
     interests: [["personalized", "Personalized gifts"], ["home", "Home & desk"], ["weddings", "Weddings & events"], ["functional", "Useful products"], ["local", "Local business"], ["premium", "Premium custom work"]],
-    methods: [["laser", "Laser making"], ["3d-printing", "3D printing"], ["not-sure", "Help me choose"]],
+    methods: [["laser", "Laser making"], ["3d-printing", "3D printing"], ["heat-press", "Heat press & transfer"], ["not-sure", "Help me choose"]],
     budgets: [["under-500", "Under $500"], ["500-3k", "$500–$3K"], ["3-8k", "$3K–$8K"], ["8k+", "$8K+"]],
     time: [["under-5", "Under 5 hours / week"], ["5-15", "5–15 hours / week"], ["15-30", "15–30 hours / week"], ["30+", "30+ hours / week"]],
     goals: [["first-sale", "Make my first sale"], ["side-income", "Build side income"], ["scale", "Scale production"]],
@@ -50,7 +50,7 @@ const copy = {
     intro: "完成五个选择，获得符合你现实条件的 Maker 商业路径。",
     questions: ["你对哪类产品感兴趣？", "你希望用什么方式制作？", "你的启动预算是多少？", "每周能投入多少时间？", "你的下一个商业目标是什么？"],
     interests: [["personalized", "个性化礼品"], ["home", "家居与桌面"], ["weddings", "婚礼与活动"], ["functional", "实用产品"], ["local", "本地商家"], ["premium", "高端定制"]],
-    methods: [["laser", "激光制作"], ["3d-printing", "3D 打印"], ["not-sure", "帮我选择"]],
+    methods: [["laser", "激光制作"], ["3d-printing", "3D 打印"], ["heat-press", "热压转印"], ["not-sure", "帮我选择"]],
     budgets: [["under-500", "低于 $500"], ["500-3k", "$500–$3K"], ["3-8k", "$3K–$8K"], ["8k+", "$8K+"]],
     time: [["under-5", "每周少于 5 小时"], ["5-15", "每周 5–15 小时"], ["15-30", "每周 15–30 小时"], ["30+", "每周 30 小时以上"]],
     goals: [["first-sale", "完成第一单"], ["side-income", "建立副业收入"], ["scale", "扩大生产"]],
@@ -111,7 +111,7 @@ export function OpportunityFinder() {
               <span className="result-rank">#{index + 1}</span>
               <div className="result-image"><Image src={assetPath(item.image)} alt={locale === "zh" ? item.titleZh : item.title} fill sizes="240px" /></div>
               <div className="result-copy">
-                <span className="card-category">{item.category === "laser" ? <Sparkle weight="bold" /> : <Cube weight="bold" />}{locale === "zh" ? item.processZh : item.process}</span>
+                <span className="card-category">{item.category === "laser" ? <Sparkle weight="bold" /> : item.category === "3d-printing" ? <Cube weight="bold" /> : <TShirt weight="bold" />}{locale === "zh" ? item.processZh : item.process}</span>
                 <h3>{locale === "zh" ? item.titleZh : item.title}</h3>
                 <div className="result-metrics"><span><small>{t.match}</small><b>{item.matchScore}/100</b></span><span><small>{t.gross}</small><b>{formatCurrency(item.grossProfit, 2)}</b></span><span><small>{t.makeTime}</small><b>{item.productionMinutes} {t.minute}</b></span></div>
                 <h4>{t.why}</h4>

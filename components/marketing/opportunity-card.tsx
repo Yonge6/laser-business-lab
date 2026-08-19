@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Cube, Sparkle } from "@phosphor-icons/react";
+import { Cube, Sparkle, TShirt } from "@phosphor-icons/react";
 import type { Opportunity } from "@/lib/opportunities/data";
 import { formatCurrency } from "@/lib/format";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -9,7 +9,7 @@ import { assetPath } from "@/lib/site";
 
 export function OpportunityCard({ opportunity, active, onSelect }: { opportunity: Opportunity; active: boolean; onSelect: () => void }) {
   const { locale } = useLanguage();
-  const isLaser = opportunity.category === "laser";
+  const CategoryIcon = opportunity.category === "laser" ? Sparkle : opportunity.category === "3d-printing" ? Cube : TShirt;
   return (
     <button className={active ? "opportunity-card is-active" : "opportunity-card"} onClick={onSelect} aria-pressed={active}>
       <span className="card-rank">#{String(opportunity.rank).padStart(2, "0")}</span>
@@ -17,7 +17,7 @@ export function OpportunityCard({ opportunity, active, onSelect }: { opportunity
         <Image src={assetPath(opportunity.image)} alt={locale === "zh" ? opportunity.titleZh : opportunity.title} fill sizes="(max-width: 800px) 100vw, 33vw" />
       </span>
       <span className="card-body">
-        <span className="card-category">{isLaser ? <Sparkle weight="bold" /> : <Cube weight="bold" />} {locale === "zh" ? opportunity.processZh : opportunity.process}</span>
+        <span className="card-category"><CategoryIcon weight="bold" /> {locale === "zh" ? opportunity.processZh : opportunity.process}</span>
         <strong className="card-title">{locale === "zh" ? opportunity.titleZh : opportunity.title}</strong>
         <span className="score-label">{locale === "zh" ? "机会评分" : "OPPORTUNITY SCORE"}</span>
         <span className="score-value">{opportunity.score}<small>/100</small></span>

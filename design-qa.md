@@ -1,66 +1,42 @@
-# Laser Business Lab — Design QA
+# Maker Business Lab — Design QA
 
-## Comparison target
+## Scope
 
-- Source visual truth: `/Users/yongyuan/.codex/generated_images/01a01804-062d-7b20-9a41-d043be4efa1a/exec-b22f6067-be1c-421d-b6e4-f15501212e1f.png`
-- Browser-rendered implementation: `/Users/yongyuan/Documents/ChatGPT/Laser Business Lab/qa/home-desktop-viewport-final.png`
-- Combined comparison input: `/Users/yongyuan/Documents/ChatGPT/Laser Business Lab/qa/home-comparison-final.png`
-- Local implementation: `http://localhost:4173/`
-- Route and state: home page, English default, first opportunity active, light theme, unauthenticated
+- Wider opportunity-card product imagery.
+- A clearer selection-to-result relationship below the carousel.
+- Heat Press / 热压转印 as a complete opportunity, ROI, and equipment-matching path.
 
-## Viewport and normalization
+## Visual evidence
 
-- Source pixels: 1435 × 1096.
-- Implementation pixels: 1434 × 1101 at CSS viewport 1434 × 1101 and device pixel ratio 1.
-- Normalization: both images were normalized to 1435 × 1096 and placed in a single 2886 × 1096 side-by-side comparison image with a 16 px neutral gutter.
-- Responsive evidence: `/Users/yongyuan/Documents/ChatGPT/Laser Business Lab/qa/home-mobile-final.png`, CSS viewport 390 × 844, device pixel ratio 1, document scroll width 390 px.
+- Source before card-width change: `qa/card-image-width-source.png`
+- Desktop card implementation: `qa/card-image-width-implementation.png`
+- Normalized side-by-side comparison: `qa/card-image-width-comparison.png`
+- Mobile card implementation: `qa/card-image-width-mobile.png`
+- Selected heat-press opportunity: `qa/heat-press-opportunity-selected.png`
+- Redesigned desktop result panel: `qa/selection-result-redesign.png`
+- Focused desktop result state: `qa/selection-result-redesign-panel.png`
+- Redesigned mobile result panel: `qa/selection-result-redesign-mobile.png`
+- Mobile result details: `qa/selection-result-redesign-mobile-detail.png`
 
-## Findings
+Desktop evidence uses a 1842 × 1225 CSS viewport at DPR 1. Mobile evidence uses a 390 × 844 CSS viewport at DPR 1. The card comparison normalizes source and implementation to the same route, locale, carousel position, and active-card state.
 
-- No actionable P0, P1, or P2 findings remain.
-- Typography: the condensed italic display hierarchy, optical weights, uppercase labels, wrapping, score numerals, and supporting sans text are faithful to the source. The implementation deliberately retains a compact functional navigation above the visual target.
-- Spacing and layout rhythm: the desktop hero/radar split, three-card race grid, slanted card masks, tool CTAs, and game-path strip preserve the source hierarchy. Mobile reflows to a single-column quest while keeping horizontal overflow at zero.
-- Colors and visual tokens: the primary brand token is exactly `#E7310E`; warm paper, ink black, gray rules, active red, and muted states match the reference balance and maintain readable contrast.
-- Image quality and asset fidelity: the three product images are dedicated high-resolution assets with subject-specific crops. The header lockup and racing stripe use source-derived raster assets rather than code-native logo approximations.
-- Copy and content: the English reference message is preserved, with product intelligence expanded to Maker and 3D-printing use cases. Chinese is a complete user-selectable locale while English remains the default.
-- P3 follow-up only: the source uses a larger purely editorial logo/hero and fewer navigation controls. The implementation uses slightly denser proportions so persistent navigation and real product interactions fit above the fold.
+## Findings and decisions
 
-## Focused-region evidence
+- No actionable P0, P1, or P2 visual findings remain.
+- Desktop opportunity cards now use a 640 × 400 frame with an exact 400 × 400 square product image and a separate 240 px information rail. This makes the product materially larger without clipping titles, scores, or price metrics. Tablet uses a 58% image share; mobile remains 44% to protect the narrow information column.
+- The former nested red-outline treatment made the selected result feel like two separate tables. It is replaced by one black task header, a red active-rank rail, one continuous white-to-soft-paper surface, and a centered red connector from the selected-card area.
+- The result header exposes the active rank and total catalog count. Changing a card updates the rank, business estimate, CTA, and marketplace evidence together through one live region.
+- The new heat-press card uses a purpose-built portrait product asset that fills the existing crop cleanly. Heat press has distinct bilingual labels, products, ROI inputs, machine paths, and an external reference link rather than inheriting laser wording.
+- Desktop and mobile carousel controls remain visible and usable. The mobile result stack has no page-level horizontal overflow and preserves the visual connection to the card above.
+- Brand red `#e7310e`, ink, paper, condensed display typography, sharp corners, clipped ranks, and game-task language remain consistent with the established visual system.
 
-The 2886 px-wide original-density combined comparison keeps the header/hero, radar, all three product-card images and metrics, and game-path labels readable in one input. No additional crop was needed. The separate mobile capture verifies the breakpoint, header controls, hero wrapping, CTA stacking, and absence of horizontal page overflow.
+## Functional evidence
 
-## Comparison history
-
-### Iteration 1
-
-- Evidence: `/Users/yongyuan/Documents/ChatGPT/Laser Business Lab/qa/home-comparison-v1.png`
-- Finding: P2 asset-fidelity drift in the header. The first implementation used a library asterisk as the logo mark and a CSS-only red accent instead of the selected racing lockup.
-- Fix: replaced the code-native header mark and CSS-only top accent with source-derived `brand-lockup.png` and `racing-header-stripe.png`, then blended them into the paper surface. Kept Phosphor icons only for standard interface actions.
-
-### Iteration 2
-
-- Evidence: `/Users/yongyuan/Documents/ChatGPT/Laser Business Lab/qa/home-comparison-final.png`
-- Post-fix result: the selected brand lockup, black/red racing stripe, opportunity radar, product imagery, slanted score cards, and game-path composition are visibly aligned. No actionable P0/P1/P2 differences remain.
-
-## Primary interactions tested
-
-- Opportunity cards update the active card and radar state.
-- EN / 中文 toggle updates all visible content and the document language; English is the default.
-- Five-step Opportunity Finder completes and returns a ranked laser + 3D-printing path.
-- Four-step ROI calculator completes and renders margin, annual profit, capacity, and payback.
-- Tumbler calculator renders current and 3×-speed scenarios.
-- Five-step Machine Finder completes with best and alternative OneLaser matches.
-- Tracked `/go/vertigo` route returns HTTP 302 and preserves UTM parameters.
-- Lead and analytics endpoints accept valid requests without requiring Supabase configuration.
-- Browser console errors/warnings checked after final render: none.
-
-## Implementation checklist
-
-- [x] Match the selected red/black/cream racing direction.
-- [x] Use exact brand red `#E7310E`.
-- [x] Preserve English default and full Chinese toggle.
-- [x] Include real Maker opportunity decisions for laser and 3D printing.
-- [x] Verify desktop, mobile, core conversion flows, APIs, redirect tracking, and console.
+- Home DOM exposes seven opportunities and the selection-result live region.
+- Selecting the heat-press tote updates its ROI link to `product=heat-press-tote-bags` and its Etsy market case.
+- Heat-press ROI opens with the correct method title, products, and seeded economics.
+- Equipment matching accepts heat press as a manufacturing method and completes all six steps.
+- The matched growth/multi-process result is “模块化自动热压方案” and includes the xTool WonderPress official reference URL.
 
 ## Final result
 

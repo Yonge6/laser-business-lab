@@ -25,6 +25,7 @@ const copy = {
     profit: "Est. gross profit / item",
     calculateSelected: "Calculate this product",
     compareAll: "Compare all opportunities",
+    resultLink: "Selection results · Updates with the card above",
     marketCase: "Real marketplace example",
     publicSignal: "Public market signal",
     checked: "Checked",
@@ -45,11 +46,11 @@ const copy = {
     toolkitSub: "Start with the decision you need to make today.",
     tools: [
       ["Product opportunity finder", "Rank products by business fit before you invest.", "/opportunities"],
-      ["Product ROI calculator", "Test laser or 3D-printing margin, capacity, and payback using your numbers.", "/calculator/laser-roi"],
+      ["Product ROI calculator", "Test laser, 3D-printing, or heat-press margin, capacity, and payback using your numbers.", "/calculator/laser-roi"],
       ["Maker equipment finder", "Choose a making path, then match business needs to an equipment category.", "/calculator/machine-finder"],
     ],
     estimates: "Opportunity scores and profit figures are directional estimates. Validate demand with small tests before investing.",
-    catalog: "6 market-tested starting ideas",
+    catalog: "7 market-tested starting ideas",
     catalogSub: "Swipe horizontally, then select any card to see its proof and continue into a method-aware ROI check.",
   },
   zh: {
@@ -64,6 +65,7 @@ const copy = {
     profit: "预计单件毛利",
     calculateSelected: "计算这个产品",
     compareAll: "查看全部机会",
+    resultLink: "选择结果 · 随上方卡片实时更新",
     marketCase: "真实电商案例",
     publicSignal: "公开市场信号",
     checked: "核验日期",
@@ -84,11 +86,11 @@ const copy = {
     toolkitSub: "从今天最需要做出的决定开始。",
     tools: [
       ["产品机会发现器", "在投资前按商业适配度给产品排序。", "/opportunities"],
-      ["产品 ROI 计算器", "分别用激光或 3D 打印逻辑测试利润、产能和回本周期。", "/calculator/laser-roi"],
+      ["产品 ROI 计算器", "分别用激光、3D 打印或热压转印逻辑测试利润、产能和回本周期。", "/calculator/laser-roi"],
       ["Maker 设备匹配器", "先选择制造方式，再把业务需求匹配到设备类别。", "/calculator/machine-finder"],
     ],
     estimates: "机会评分与利润数字均为方向性估算。投资前请先用小批量测试验证需求。",
-    catalog: "6 个经过市场信号验证的起步方向",
+    catalog: "7 个经过市场信号验证的起步方向",
     catalogSub: "左右滑动浏览，选择任一卡片查看市场证据，并继续进入对应制造方式的 ROI 测算。",
   },
 };
@@ -163,7 +165,7 @@ export function HomeExperience() {
           <button className="carousel-control carousel-control-prev" type="button" onClick={() => moveCarousel(-1)} disabled={carouselEdges.atStart} aria-label={locale === "zh" ? "查看上一组产品机会" : "View previous product opportunities"} aria-controls="opportunity-carousel-track">
             <ArrowLeft weight="bold" aria-hidden="true" />
           </button>
-          <div ref={carouselRef} id="opportunity-carousel-track" className="opportunity-grid" tabIndex={0} aria-label={locale === "zh" ? "横向滑动浏览 6 个产品机会" : "Swipe horizontally through 6 product opportunities"}>
+          <div ref={carouselRef} id="opportunity-carousel-track" className="opportunity-grid" tabIndex={0} aria-label={locale === "zh" ? `横向滑动浏览 ${opportunities.length} 个产品机会` : `Swipe horizontally through ${opportunities.length} product opportunities`}>
             {opportunities.map((opportunity) => (
               <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
             ))}
@@ -172,37 +174,43 @@ export function HomeExperience() {
             <ArrowRight weight="bold" aria-hidden="true" />
           </button>
         </div>
-        <div className="opportunity-next-step" key={selected.id} aria-live="polite">
-          <div className="selection-rank"><span>{t.selected}</span><strong>#{String(selected.rank).padStart(2, "0")}</strong></div>
-          <div className="selection-copy">
-            <small>{t.nextMission}</small>
-            <h2>{locale === "zh" ? selected.titleZh : selected.title}</h2>
-            <p>{locale === "zh" ? selected.evidenceZh : selected.evidence}</p>
+        <div className="selection-result" key={selected.id} aria-live="polite">
+          <div className="selection-result-header">
+            <div className="selection-result-title"><Target weight="fill" aria-hidden="true" /><span>{t.resultLink}</span></div>
+            <span className="selection-result-count">#{String(selected.rank).padStart(2, "0")} / {String(opportunities.length).padStart(2, "0")}</span>
           </div>
-          <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
-          <div className="selection-actions">
-            <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
-            <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
+          <div className="opportunity-next-step">
+            <div className="selection-rank"><span>{t.selected}</span><strong>#{String(selected.rank).padStart(2, "0")}</strong></div>
+            <div className="selection-copy">
+              <small>{t.nextMission}</small>
+              <h2>{locale === "zh" ? selected.titleZh : selected.title}</h2>
+              <p>{locale === "zh" ? selected.evidenceZh : selected.evidence}</p>
+            </div>
+            <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
+            <div className="selection-actions">
+              <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
+              <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
+            </div>
           </div>
+          <article className="market-proof">
+            <div className="market-proof-label">
+              <Storefront weight="fill" />
+              <span>{t.marketCase}</span>
+              <strong>{marketCase.platform}</strong>
+            </div>
+            <div className="market-proof-case">
+              <small>{t.publicSignal}</small>
+              <h3>{locale === "zh" ? marketCase.titleZh : marketCase.title}</h3>
+              <p>{locale === "zh" ? marketCase.signalZh : marketCase.signal}</p>
+            </div>
+            {marketCase.price ? <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div> : null}
+            <div className="market-proof-source">
+              <a href={marketCase.sourceUrl} target="_blank" rel="noreferrer">{t.viewSource}<ArrowSquareOut weight="bold" /></a>
+              <span>{t.checked}: {marketCase.checkedAt}</span>
+            </div>
+            <p className="market-proof-note">{t.marketNote}</p>
+          </article>
         </div>
-        <article className="market-proof" key={`market-${selected.id}`} aria-live="polite">
-          <div className="market-proof-label">
-            <Storefront weight="fill" />
-            <span>{t.marketCase}</span>
-            <strong>{marketCase.platform}</strong>
-          </div>
-          <div className="market-proof-case">
-            <small>{t.publicSignal}</small>
-            <h3>{locale === "zh" ? marketCase.titleZh : marketCase.title}</h3>
-            <p>{locale === "zh" ? marketCase.signalZh : marketCase.signal}</p>
-          </div>
-          {marketCase.price ? <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div> : null}
-          <div className="market-proof-source">
-            <a href={marketCase.sourceUrl} target="_blank" rel="noreferrer">{t.viewSource}<ArrowSquareOut weight="bold" /></a>
-            <span>{t.checked}: {marketCase.checkedAt}</span>
-          </div>
-          <p className="market-proof-note">{t.marketNote}</p>
-        </article>
       </section>
 
       <section className="game-path-section">

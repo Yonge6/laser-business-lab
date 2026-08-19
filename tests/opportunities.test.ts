@@ -28,6 +28,17 @@ describe("opportunity ranking engine", () => {
     expect(ranked[0].id).toBe("3d-desk-organizers");
   });
 
+  it("keeps heat-pressed personalization viable for a low-budget first sale", () => {
+    const ranked = rankOpportunities({
+      interests: ["personalized", "gifts"],
+      method: "heat-press",
+      budget: "under-500",
+      hoursPerWeek: "under-5",
+      goal: "first-sale",
+    });
+    expect(ranked[0].id).toBe("heat-press-tote-bags");
+  });
+
   it("provides a dated, public marketplace example for every featured opportunity", () => {
     for (const opportunity of opportunities) {
       const marketCase = marketCaseByOpportunity[opportunity.id];

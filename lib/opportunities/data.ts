@@ -1,4 +1,4 @@
-export type OpportunityCategory = "laser" | "3d-printing";
+export type OpportunityCategory = "laser" | "3d-printing" | "heat-press";
 
 export type Opportunity = {
   id: string;
@@ -183,6 +183,32 @@ export const opportunities: Opportunity[] = [
     startingBudget: 3_500,
     evidence: "Layer count, size, and finish support premium bundles while one design can be produced repeatedly.",
     evidenceZh: "层数、尺寸和表面处理可组合成高客单版本，同时同一设计能重复生产。",
+  },
+  {
+    id: "heat-press-tote-bags",
+    rank: 7,
+    title: "Personalized Heat-Press Totes",
+    titleZh: "定制热转印托特包",
+    category: "heat-press",
+    process: "Heat press",
+    processZh: "热压转印",
+    score: 78,
+    sellingPrice: 24,
+    materialCost: 7.8,
+    grossProfit: 16.2,
+    productionMinutes: 6,
+    image: "/images/heat-press-tote.png",
+    demand: 81,
+    margin: 76,
+    competition: 63,
+    skill: 64,
+    speed: 86,
+    tags: ["personalized", "gifts", "events", "fashion", "first-sale", "side-income"],
+    channels: ["Etsy", "School teams", "Local events"],
+    equipmentTags: ["tote bags", "apparel", "heat transfer", "dtf"],
+    startingBudget: 500,
+    evidence: "A standard blank plus a ready-to-press transfer creates short cycles and makes it easy to test designs for events, teams, and local brands.",
+    evidenceZh: "标准化坯料配合即烫转印图，可快速完成单件制作，适合测试活动、团队和本地品牌设计。",
   },
 ];
 
