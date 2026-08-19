@@ -50,7 +50,7 @@ const copy = {
     ],
     estimates: "Opportunity scores and profit figures are directional estimates. Validate demand with small tests before investing.",
     catalog: "6 market-tested starting ideas",
-    catalogSub: "Select any card to see its proof and continue into a method-aware ROI check.",
+    catalogSub: "Swipe horizontally, then select any card to see its proof and continue into a method-aware ROI check.",
   },
   zh: {
     eyebrow: "Maker 商业机会情报",
@@ -89,7 +89,7 @@ const copy = {
     ],
     estimates: "机会评分与利润数字均为方向性估算。投资前请先用小批量测试验证需求。",
     catalog: "6 个经过市场信号验证的起步方向",
-    catalogSub: "选择任一卡片查看市场证据，并继续进入对应制造方式的 ROI 测算。",
+    catalogSub: "左右滑动浏览，选择任一卡片查看市场证据，并继续进入对应制造方式的 ROI 测算。",
   },
 };
 
@@ -123,7 +123,7 @@ export function HomeExperience() {
           <span>{t.catalog}</span>
           <p>{t.catalogSub}</p>
         </div>
-        <div className="opportunity-grid">
+        <div className="opportunity-grid" tabIndex={0} aria-label={locale === "zh" ? "横向滑动浏览 6 个产品机会" : "Swipe horizontally through 6 product opportunities"}>
           {opportunities.map((opportunity) => (
             <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
           ))}
