@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:pages": "NEXT_PUBLIC_BASE_PATH=/laser-business-lab NEXT_PUBLIC_SITE_URL=https://yonge6.github.io/laser-business-lab next build",
+    "build:pages": "NEXT_PUBLIC_SITE_URL=https://maker.wonderelian.com next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

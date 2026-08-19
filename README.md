@@ -1,6 +1,8 @@
 # Maker Business Lab
 
-Live site: [https://yonge6.github.io/laser-business-lab/](https://yonge6.github.io/laser-business-lab/)
+Live site: [https://maker.wonderelian.com/](https://maker.wonderelian.com/)
+
+GitHub Pages fallback: [https://yonge6.github.io/laser-business-lab/](https://yonge6.github.io/laser-business-lab/)
 
 A bilingual, business-first maker platform for answering three questions:
 
