@@ -22,6 +22,14 @@ const hero = {
     description: "Calculate product margin, print capacity, and how long a planned printer investment could take to pay back.",
     descriptionZh: "计算产品毛利、打印产能，以及计划中的 3D 打印机投资需要多久回本。",
   },
+  "heat-press": {
+    eyebrow: "FREE TOOL / HEAT PRESS ROI QUEST",
+    eyebrowZh: "免费工具 / 热压转印 ROI 回本任务",
+    title: "Can a heat-press business make you money?",
+    titleZh: "热压转印生意能为你赚钱吗？",
+    description: "Calculate product margin, pressing capacity, and how long a planned heat-press investment could take to pay back.",
+    descriptionZh: "计算产品毛利、热压产能，以及计划中的热压设备投资需要多久回本。",
+  },
   maker: {
     eyebrow: "FREE TOOL / MAKER ROI QUEST",
     eyebrowZh: "免费工具 / MAKER ROI 回本任务",

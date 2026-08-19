@@ -29,4 +29,18 @@ describe("equipment recommendation engine", () => {
     expect(result.best.method).toBe("3d-printing");
     expect(result.best.name).not.toMatch(/laser/i);
   });
+
+  it("keeps a tote and apparel workflow inside the heat-press path", () => {
+    const result = recommendEquipment({
+      method: "heat-press",
+      products: ["tote bags", "apparel"],
+      priorities: ["easy setup", "versatility"],
+      volume: "10-30",
+      budget: "growth",
+      experience: "growing",
+    });
+    expect(result.best.id).toBe("modular-3d-heat-press");
+    expect(result.best.method).toBe("heat-press");
+    expect(result.best.referenceName).toBe("xTool WonderPress");
+  });
 });

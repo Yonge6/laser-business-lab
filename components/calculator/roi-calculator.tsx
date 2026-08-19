@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, Warning } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, TShirt, Warning } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -15,7 +15,7 @@ import { EmailCapture } from "@/components/results/email-capture";
 import { opportunityById } from "@/lib/opportunities/data";
 import { sitePath } from "@/lib/site";
 
-export type MakerMethod = "laser" | "3d-printing" | "maker";
+export type MakerMethod = "laser" | "3d-printing" | "heat-press" | "maker";
 
 type ProductOption = { value: string; label: string; labelZh: string };
 type BudgetOption = readonly [string, string, string, number];
@@ -32,9 +32,14 @@ const productsByMethod: Record<MakerMethod, ProductOption[]> = {
     ["Display Stands", "Display Stands", "展示支架"], ["Replacement Parts", "Replacement Parts", "替换零件"], ["Custom Accessories", "Custom Accessories", "定制配件"],
     ["Personalized Gifts", "Personalized Gifts", "个性化礼品"], ["Other", "Other", "其他"],
   ].map(([value, label, labelZh]) => ({ value, label, labelZh })),
+  "heat-press": [
+    ["Tote Bags", "Tote bags", "托特包"], ["T-Shirts", "T-shirts", "T 恤"], ["Hoodies", "Hoodies", "卫衣"],
+    ["Pillow Covers", "Pillow covers", "抱枕套"], ["Mugs", "Sublimated mugs", "升华马克杯"], ["Phone Cases", "Sublimated phone cases", "升华手机壳"],
+    ["Badges", "Badges", "徽章"], ["Other", "Other", "其他"],
+  ].map(([value, label, labelZh]) => ({ value, label, labelZh })),
   maker: [
     ["Tumblers", "Laser-engraved tumblers", "激光雕刻保温杯"], ["Signs", "Laser-cut signs", "激光切割标牌"], ["Desk Organizers", "3D-printed desk organizers", "3D 打印桌面收纳"],
-    ["Functional Parts", "3D-printed functional parts", "3D 打印功能零件"], ["Personalized Gifts", "Personalized gifts", "个性化礼品"], ["Other", "Other", "其他"],
+    ["Functional Parts", "3D-printed functional parts", "3D 打印功能零件"], ["Tote Bags", "Heat-pressed tote bags", "热转印托特包"], ["Personalized Gifts", "Personalized gifts", "个性化礼品"], ["Other", "Other", "其他"],
   ].map(([value, label, labelZh]) => ({ value, label, labelZh })),
 };
 
@@ -54,6 +59,13 @@ const printingBudgets = [
   ["8+", "$8,000+", "$8,000 以上", 8_000],
 ] as const satisfies readonly BudgetOption[];
 
+const heatPressBudgets = [
+  ["under-500", "Under $500", "低于 $500", 349],
+  ["500-1", "$500–$1,000", "$500–$1,000", 699],
+  ["1-3", "$1,000–$3,000", "$1,000–$3,000", 1_499],
+  ["3+", "$3,000+", "$3,000 以上", 3_000],
+] as const satisfies readonly BudgetOption[];
+
 const makerBudgets = [
   ["under-500", "Under $500", "低于 $500", 399],
   ["500-3", "$500–$3,000", "$500–$3,000", 1_499],
@@ -61,7 +73,7 @@ const makerBudgets = [
   ["8+", "$8,000+", "$8,000 以上", 8_000],
 ] as const satisfies readonly BudgetOption[];
 
-const budgetsByMethod: Record<MakerMethod, readonly BudgetOption[]> = { laser: laserBudgets, "3d-printing": printingBudgets, maker: makerBudgets };
+const budgetsByMethod: Record<MakerMethod, readonly BudgetOption[]> = { laser: laserBudgets, "3d-printing": printingBudgets, "heat-press": heatPressBudgets, maker: makerBudgets };
 
 const currentMachines = [
   ["none", "No laser yet", "还没有激光设备"],
@@ -83,15 +95,26 @@ const currentPrinters = [
   ["other", "Other", "其他"],
 ] as const satisfies readonly MachineOption[];
 
+const currentHeatPresses = [
+  ["none", "No heat press yet", "还没有热压设备"],
+  ["portable", "Portable / handheld heat press", "便携式 / 手持热压机"],
+  ["manual-flat", "Manual flat heat press", "手动平面热压机"],
+  ["automatic-flat", "Automatic flat heat press", "自动平面热压机"],
+  ["modular", "Modular heat and forming system", "模块化热压与成型系统"],
+  ["production", "Production heat-transfer line", "热转印生产线"],
+  ["other", "Other", "其他"],
+] as const satisfies readonly MachineOption[];
+
 const currentMakerEquipment = [
   ["none", "No production equipment yet", "还没有生产设备"],
   ["laser", "Laser machine", "激光设备"],
   ["3d-printer", "3D printer", "3D 打印机"],
-  ["both", "Laser and 3D printer", "激光设备与 3D 打印机"],
+  ["heat-press", "Heat press", "热压设备"],
+  ["multiple", "Multiple maker machines", "多种 Maker 设备"],
   ["other", "Other", "其他"],
 ] as const satisfies readonly MachineOption[];
 
-const machinesByMethod: Record<MakerMethod, readonly MachineOption[]> = { laser: currentMachines, "3d-printing": currentPrinters, maker: currentMakerEquipment };
+const machinesByMethod: Record<MakerMethod, readonly MachineOption[]> = { laser: currentMachines, "3d-printing": currentPrinters, "heat-press": currentHeatPresses, maker: currentMakerEquipment };
 
 const profileZh: Record<string, string> = {
   "HIGH-MARGIN": "高毛利",
@@ -145,7 +168,7 @@ const copy = {
     hour: "hrs",
     month: "mo",
     path: "Making path",
-    methods: { laser: "Laser", "3d-printing": "3D printing", maker: "Maker" },
+    methods: { laser: "Laser", "3d-printing": "3D printing", "heat-press": "Heat press", maker: "Maker" },
   },
   zh: {
     steps: ["产品", "经济模型", "生产", "设备"],
@@ -187,7 +210,7 @@ const copy = {
     hour: "小时",
     month: "个月",
     path: "制造方式",
-    methods: { laser: "激光制作", "3d-printing": "3D 打印", maker: "Maker 制作" },
+    methods: { laser: "激光制作", "3d-printing": "3D 打印", "heat-press": "热压转印", maker: "Maker 制作" },
   },
 };
 
@@ -195,11 +218,13 @@ const methodCopy = {
   en: {
     laser: { complete: "Your laser business report", budget: "Laser budget", machine: "Planned laser investment", current: "Current laser machine", minutes: "Laser production time per item" },
     "3d-printing": { complete: "Your 3D-printing business report", budget: "3D-printer budget", machine: "Planned printer investment", current: "Current 3D printer", minutes: "Print time per item" },
+    "heat-press": { complete: "Your heat-press business report", budget: "Heat-press budget", machine: "Planned heat-press investment", current: "Current heat-press equipment", minutes: "Pressing time per item" },
     maker: { complete: "Your maker business report", budget: "Equipment budget", machine: "Planned equipment investment", current: "Current equipment", minutes: "Production time per item" },
   },
   zh: {
     laser: { complete: "你的激光商业报告", budget: "激光设备预算", machine: "计划激光设备投资", current: "当前激光设备", minutes: "单件激光生产时间" },
     "3d-printing": { complete: "你的 3D 打印商业报告", budget: "3D 打印机预算", machine: "计划打印机投资", current: "当前 3D 打印机", minutes: "单件打印时间" },
+    "heat-press": { complete: "你的热压转印商业报告", budget: "热压设备预算", machine: "计划热压设备投资", current: "当前热压设备", minutes: "单件热压制作时间" },
     maker: { complete: "你的 Maker 商业报告", budget: "设备预算", machine: "计划设备投资", current: "当前设备", minutes: "单件生产时间" },
   },
 };
@@ -235,7 +260,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   } : initialInput);
   const budgetOptions = budgetsByMethod[method];
   const machineOptions = machinesByMethod[method];
-  const [budget, setBudget] = useState(method === "laser" ? "5-8" : method === "3d-printing" ? "500-1" : "500-3");
+  const [budget, setBudget] = useState(method === "laser" ? "5-8" : method === "3d-printing" || method === "heat-press" ? "500-1" : "500-3");
   const [currentMachine, setCurrentMachine] = useState("none");
   const [complete, setComplete] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -243,8 +268,8 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const t = copy[locale];
   const methodT = methodCopy[locale][method];
   const localizedProduct = locale === "zh" ? productOptions.find((item) => item.value === product)?.labelZh ?? product : productOptions.find((item) => item.value === product)?.label ?? product;
-  const toolName = method === "laser" ? "laser_roi" : method === "3d-printing" ? "3d_printing_roi" : "maker_roi";
-  const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : Target;
+  const toolName = method === "laser" ? "laser_roi" : method === "3d-printing" ? "3d_printing_roi" : method === "heat-press" ? "heat_press_roi" : "maker_roi";
+  const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : method === "heat-press" ? TShirt : Target;
   const set = (key: keyof RoiInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
 
   async function advance() {

@@ -1,4 +1,4 @@
-export type EquipmentMethod = "laser" | "3d-printing";
+export type EquipmentMethod = "laser" | "3d-printing" | "heat-press";
 export type EquipmentBudget = "entry" | "starter" | "growth" | "production";
 export type EquipmentVolume = "occasional" | "1-10" | "10-30" | "30-100" | "100+";
 export type EquipmentExperience = "first" | "beginner" | "growing" | "professional" | "production";
@@ -25,6 +25,8 @@ export type EquipmentProfile = {
   investmentZh: string;
   tags: string[];
   budgetLevel: number;
+  referenceName?: string;
+  referenceUrl?: string;
 };
 
 const profiles: EquipmentProfile[] = [
@@ -37,6 +39,10 @@ const profiles: EquipmentProfile[] = [
   { id: "multi-material-fdm", method: "3d-printing", name: "Multi-material FDM setup", nameZh: "多材料 FDM 方案", category: "Differentiated visual products", categoryZh: "差异化视觉产品", description: "Best when color, personalization, display value, and reduced manual assembly matter.", descriptionZh: "适合重视颜色、个性化、展示效果和减少手工装配的产品。", investment: "Growth investment", investmentZh: "成长级投入", tags: ["display stands", "personalized gifts", "custom accessories", "fine detail", "versatility", "10-30", "growing", "professional"], budgetLevel: 2 },
   { id: "resin-printing", method: "3d-printing", name: "Resin / SLA detail setup", nameZh: "树脂 / SLA 精细打印方案", category: "High-detail 3D printing", categoryZh: "高精细 3D 打印", description: "Optimized for small, detailed display products where surface finish matters most.", descriptionZh: "面向小型精细展示产品，适合把表面质量放在首位的场景。", investment: "Starter to growth investment", investmentZh: "起步至成长级投入", tags: ["display stands", "personalized gifts", "fine detail", "occasional", "1-10", "beginner", "professional"], budgetLevel: 1 },
   { id: "print-farm", method: "3d-printing", name: "Modular print-farm setup", nameZh: "模块化打印农场方案", category: "Scalable 3D-printing output", categoryZh: "可扩展 3D 打印产能", description: "Built for repeat orders, parallel output, uptime, and production-stage operations.", descriptionZh: "适合重复订单、并行产出、设备利用率和生产型运营。", investment: "Production investment", investmentZh: "生产级投入", tags: ["desk organizers", "functional parts", "production runs", "speed", "high-volume production", "30-100", "100+", "professional", "production"], budgetLevel: 3 },
+  { id: "portable-heat-press", method: "heat-press", name: "Portable heat-press starter setup", nameZh: "便携式热压入门方案", category: "Accessible heat-transfer entry", categoryZh: "低门槛热转印入门", description: "A low-commitment way to test small apparel, tote, patch, and transfer ideas before buying an automatic press.", descriptionZh: "适合在购买自动热压机前，以较低投入测试小型服饰、托特包、布章和转印产品。", investment: "Entry investment", investmentZh: "入门级投入", tags: ["apparel", "tote bags", "pillow covers", "heat transfer", "easy setup", "lower upfront investment", "occasional", "1-10", "first", "beginner"], budgetLevel: 0 },
+  { id: "automatic-flat-heat-press", method: "heat-press", name: "Automatic flat heat-press setup", nameZh: "自动平面热压方案", category: "Repeatable apparel and textile production", categoryZh: "稳定的服饰与布艺生产", description: "A balanced path for repeatable DTF, HTV, and sublimation work on shirts, hoodies, tote bags, and flat coated blanks.", descriptionZh: "适合在 T 恤、卫衣、托特包和平面涂层坯料上稳定完成 DTF、HTV 与升华转印。", investment: "Starter to growth investment", investmentZh: "起步至成长级投入", tags: ["apparel", "tote bags", "hoodies", "pillow covers", "dtf", "heat transfer", "speed", "easy setup", "1-10", "10-30", "beginner", "growing"], budgetLevel: 1 },
+  { id: "modular-3d-heat-press", method: "heat-press", name: "Modular auto heat-press system", nameZh: "模块化自动热压方案", category: "Multi-process heat and forming platform", categoryZh: "多工艺热压与成型平台", description: "Combines automatic flat pressing with upgrade paths for DTF curing, 3D sublimation, vacuum forming, and craft heating.", descriptionZh: "把自动平面热压与 DTF 固化、3D 升华、真空成型和创意加热扩展整合在一条路径中。", investment: "Growth investment", investmentZh: "成长级投入", tags: ["apparel", "tote bags", "mugs", "phone cases", "badges", "sublimation blanks", "dtf", "versatility", "fine detail", "10-30", "30-100", "growing", "professional"], budgetLevel: 2, referenceName: "xTool WonderPress", referenceUrl: "https://www.xtool.com/products/xtool-wonderpress-modular-auto-heat-press-for-2d-transfers-and-3d-creations" },
+  { id: "heat-press-production-cell", method: "heat-press", name: "Heat-transfer production cell", nameZh: "热转印生产工作站", category: "High-output transfer production", categoryZh: "高产能转印生产", description: "Built for gang-sheet workflows, parallel pressing, consistent curing, and repeat orders across apparel and promotional goods.", descriptionZh: "面向拼版膜工作流、并行热压、稳定固化，以及服饰和促销品的重复订单。", investment: "Production investment", investmentZh: "生产级投入", tags: ["apparel", "production runs", "dtf", "speed", "high-volume production", "30-100", "100+", "professional", "production"], budgetLevel: 3 },
 ];
 
 const budgetLevels: Record<EquipmentBudget, number> = { entry: 0, starter: 1, growth: 2, production: 3 };

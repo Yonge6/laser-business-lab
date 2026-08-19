@@ -75,6 +75,16 @@ export const marketCases: MarketCase[] = [
     sourceUrl: "https://www.etsy.com/listing/4307358815/multilayer-wooden-wall-art-sunburst",
     checkedAt: "2026-08-19",
   },
+  {
+    opportunityId: "heat-press-tote-bags",
+    platform: "Etsy",
+    title: "Personalized bridesmaid tote with heat-transfer vinyl",
+    titleZh: "热转印乙烯膜定制伴娘托特包",
+    signal: "Star Seller · 4.9 shop rating · 38.4K reviews",
+    signalZh: "明星卖家 · 店铺 4.9 评分 · 38,400+ 条评价",
+    sourceUrl: "https://www.etsy.com/listing/699357267/personalized-bridesmaid-tote-bag-custom",
+    checkedAt: "2026-08-19",
+  },
 ];
 
 export const marketCaseByOpportunity = Object.fromEntries(

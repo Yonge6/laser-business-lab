@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, Cube, Info, Sparkle, Target, Trophy } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, Info, Sparkle, Target, Trophy, TShirt } from "@phosphor-icons/react";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -18,16 +18,18 @@ const productAliases: Record<string, string> = {
   "laser-leather-patches": "leather",
   "3d-geometric-planters": "planters",
   "layered-wood-wall-art": "wood",
+  "heat-press-tote-bags": "tote bags",
 };
 
 const copy = {
   en: {
     title: "Equipment Match Quest",
     questions: ["Which making path are you equipping?", "What do you want to make?", "What matters most?", "How many jobs do you expect?", "What investment level fits?", "Where are you in your maker journey?"],
-    methods: [["laser", "Laser making"], ["3d-printing", "3D printing"]],
+    methods: [["laser", "Laser making"], ["3d-printing", "3D printing"], ["heat-press", "Heat press & transfer"]],
     products: {
       laser: [["tumblers", "Tumblers"], ["acrylic", "Acrylic"], ["wood", "Wood"], ["leather", "Leather"], ["signs", "Signs"], ["awards", "Awards"], ["gifts", "Gifts"], ["large-format products", "Large-format"], ["production runs", "Production runs"]],
       "3d-printing": [["desk organizers", "Desk organizers"], ["planters", "Planters"], ["tool holders", "Tool holders"], ["display stands", "Display stands"], ["functional parts", "Functional parts"], ["replacement parts", "Replacement parts"], ["custom accessories", "Custom accessories"], ["personalized gifts", "Personalized gifts"], ["production runs", "Production runs"]],
+      "heat-press": [["apparel", "Apparel"], ["tote bags", "Tote bags"], ["hoodies", "Hoodies"], ["pillow covers", "Pillow covers"], ["mugs", "Mugs"], ["phone cases", "Phone cases"], ["badges", "Badges"], ["sublimation blanks", "Sublimation blanks"], ["production runs", "Production runs"]],
     },
     priorities: [["speed", "Speed"], ["fine detail", "Fine detail"], ["easy setup", "Easy setup"], ["high-volume production", "High volume"], ["large work area", "Large work area"], ["versatility", "Versatility"], ["lower upfront investment", "Lower investment"]],
     volumes: [["occasional", "Occasional"], ["1-10", "1–10 / day"], ["10-30", "10–30 / day"], ["30-100", "30–100 / day"], ["100+", "100+ / day"]],
@@ -41,10 +43,11 @@ const copy = {
   zh: {
     title: "设备匹配任务",
     questions: ["你要配置哪种制造方式？", "你想制作什么？", "你最看重什么？", "预计每天有多少任务？", "哪种投入级别适合你？", "你处于 Maker 旅程的哪个阶段？"],
-    methods: [["laser", "激光制作"], ["3d-printing", "3D 打印"]],
+    methods: [["laser", "激光制作"], ["3d-printing", "3D 打印"], ["heat-press", "热压转印"]],
     products: {
       laser: [["tumblers", "保温杯"], ["acrylic", "亚克力"], ["wood", "木材"], ["leather", "皮革"], ["signs", "标牌"], ["awards", "奖牌"], ["gifts", "礼品"], ["large-format products", "大幅面"], ["production runs", "批量生产"]],
       "3d-printing": [["desk organizers", "桌面收纳"], ["planters", "花盆"], ["tool holders", "工具收纳"], ["display stands", "展示支架"], ["functional parts", "功能零件"], ["replacement parts", "替换零件"], ["custom accessories", "定制配件"], ["personalized gifts", "个性化礼品"], ["production runs", "批量生产"]],
+      "heat-press": [["apparel", "服饰"], ["tote bags", "托特包"], ["hoodies", "卫衣"], ["pillow covers", "抱枕套"], ["mugs", "马克杯"], ["phone cases", "手机壳"], ["badges", "徽章"], ["sublimation blanks", "升华坯料"], ["production runs", "批量生产"]],
     },
     priorities: [["speed", "速度"], ["fine detail", "精细细节"], ["easy setup", "易于设置"], ["high-volume production", "高产量"], ["large work area", "大工作区域"], ["versatility", "多功能"], ["lower upfront investment", "较低初始投入"]],
     volumes: [["occasional", "偶尔"], ["1-10", "每天 1–10"], ["10-30", "每天 10–30"], ["30-100", "每天 30–100"], ["100+", "每天 100+"]],
@@ -65,7 +68,8 @@ export function MachineFinder() {
   const t = copy[locale];
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<EquipmentAnswers>(() => {
-    const method = searchParams.get("method") === "3d-printing" ? "3d-printing" : "laser";
+    const methodParam = searchParams.get("method");
+    const method: EquipmentMethod = methodParam === "3d-printing" || methodParam === "heat-press" ? methodParam : "laser";
     const productParam = searchParams.get("product");
     const product = productParam ? (productAliases[productParam] ?? productParam) : null;
     return { ...initial, method, products: product ? [product] : [], budget: method === "laser" ? "starter" : "entry" };
@@ -74,7 +78,7 @@ export function MachineFinder() {
   const recommendation = useMemo(() => recommendEquipment(answers), [answers]);
   const options = [t.methods, t.products[answers.method], t.priorities, t.volumes, t.budgets, t.experience][step] as Option[];
   const current: string | string[] = [answers.method, answers.products, answers.priorities, answers.volume, answers.budget, answers.experience][step];
-  const MethodIcon = answers.method === "laser" ? Sparkle : Cube;
+  const MethodIcon = answers.method === "laser" ? Sparkle : answers.method === "3d-printing" ? Cube : TShirt;
 
   function choose(value: string) {
     if (step === 0) setAnswers((state) => ({ ...state, method: value as EquipmentMethod, products: [], priorities: [], budget: value === "laser" ? "starter" : "entry" }));
@@ -98,15 +102,15 @@ export function MachineFinder() {
     return (
       <section className="machine-results shell">
         <header className="machine-result-header"><Trophy weight="fill" /><div><p className="eyebrow">{t.complete}</p><h2>{t.best}</h2><p>{t.disclosure}</p></div></header>
-        <div className="equipment-method-result"><MethodIcon weight="bold" /><span>{locale === "zh" ? "制造方式" : "MAKING PATH"}</span><strong>{answers.method === "laser" ? (locale === "zh" ? "激光制作" : "LASER") : (locale === "zh" ? "3D 打印" : "3D PRINTING")}</strong></div>
+        <div className="equipment-method-result"><MethodIcon weight="bold" /><span>{locale === "zh" ? "制造方式" : "MAKING PATH"}</span><strong>{answers.method === "laser" ? (locale === "zh" ? "激光制作" : "LASER") : answers.method === "3d-printing" ? (locale === "zh" ? "3D 打印" : "3D PRINTING") : (locale === "zh" ? "热压转印" : "HEAT PRESS")}</strong></div>
         <div className="machine-match-grid equipment-match-grid">
           <article className="equipment-match-card primary">
             <div className="equipment-profile-mark"><MethodIcon weight="bold" /></div>
-            <div><span>{locale === "zh" ? recommendation.best.categoryZh : recommendation.best.category}</span><h3>{locale === "zh" ? recommendation.best.nameZh : recommendation.best.name}</h3><p>{locale === "zh" ? recommendation.best.descriptionZh : recommendation.best.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.best.investmentZh : recommendation.best.investment}</strong></p><h4>{t.why}</h4><ul>{(locale === "zh" ? recommendation.reasonsZh : recommendation.reasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul></div>
+            <div><span>{locale === "zh" ? recommendation.best.categoryZh : recommendation.best.category}</span><h3>{locale === "zh" ? recommendation.best.nameZh : recommendation.best.name}</h3><p>{locale === "zh" ? recommendation.best.descriptionZh : recommendation.best.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.best.investmentZh : recommendation.best.investment}</strong></p>{recommendation.best.referenceUrl ? <a className="equipment-reference" href={recommendation.best.referenceUrl} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.best.referenceName}<ArrowSquareOut weight="bold" /></a> : null}<h4>{t.why}</h4><ul>{(locale === "zh" ? recommendation.reasonsZh : recommendation.reasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul></div>
           </article>
           <article className="equipment-match-card alternative">
             <div className="equipment-profile-mark"><MethodIcon weight="bold" /></div>
-            <div><p className="eyebrow">{t.alt}</p><h3>{locale === "zh" ? recommendation.alternative.nameZh : recommendation.alternative.name}</h3><p>{locale === "zh" ? recommendation.alternative.descriptionZh : recommendation.alternative.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.alternative.investmentZh : recommendation.alternative.investment}</strong></p></div>
+            <div><p className="eyebrow">{t.alt}</p><h3>{locale === "zh" ? recommendation.alternative.nameZh : recommendation.alternative.name}</h3><p>{locale === "zh" ? recommendation.alternative.descriptionZh : recommendation.alternative.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.alternative.investmentZh : recommendation.alternative.investment}</strong></p>{recommendation.alternative.referenceUrl ? <a className="equipment-reference" href={recommendation.alternative.referenceUrl} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.alternative.referenceName}<ArrowSquareOut weight="bold" /></a> : null}</div>
           </article>
         </div>
         <div className="recommendation-explainer"><Info weight="bold" /><p>{t.explainer}</p></div>
