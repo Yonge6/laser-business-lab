@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Target } from "@phosphor-icons/react";
+import { ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
@@ -10,6 +10,7 @@ import { OpportunityCard } from "@/components/marketing/opportunity-card";
 import { OpportunityRadar } from "@/components/marketing/opportunity-radar";
 import { assetPath } from "@/lib/site";
 import { formatCurrency } from "@/lib/format";
+import { marketCaseByOpportunity } from "@/lib/opportunities/market-cases";
 
 const copy = {
   en: {
@@ -24,6 +25,11 @@ const copy = {
     profit: "Est. gross profit / item",
     calculateSelected: "Calculate this product",
     compareAll: "Compare all opportunities",
+    marketCase: "Real marketplace example",
+    publicSignal: "Public market signal",
+    checked: "Checked",
+    viewSource: "View live listing",
+    marketNote: "Marketplace signals change over time and do not guarantee demand or earnings.",
     path: "Your game path",
     steps: [
       ["Discover", "Find high-potential products."],
@@ -56,6 +62,11 @@ const copy = {
     profit: "预计单件毛利",
     calculateSelected: "计算这个产品",
     compareAll: "查看全部机会",
+    marketCase: "真实电商案例",
+    publicSignal: "公开市场信号",
+    checked: "核验日期",
+    viewSource: "查看在售商品",
+    marketNote: "平台数据会随时间变化，仅用于市场参考，不代表需求或收益承诺。",
     path: "你的游戏路径",
     steps: [
       ["发现", "寻找高潜力产品。"],
@@ -84,6 +95,7 @@ export function HomeExperience() {
   const { locale } = useLanguage();
   const [selected, setSelected] = useState(opportunities[0]);
   const t = copy[locale];
+  const marketCase = marketCaseByOpportunity[selected.id];
 
   return (
     <main>
@@ -121,6 +133,24 @@ export function HomeExperience() {
             <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
           </div>
         </div>
+        <article className="market-proof" key={`market-${selected.id}`} aria-live="polite">
+          <div className="market-proof-label">
+            <Storefront weight="fill" />
+            <span>{t.marketCase}</span>
+            <strong>{marketCase.platform}</strong>
+          </div>
+          <div className="market-proof-case">
+            <small>{t.publicSignal}</small>
+            <h3>{locale === "zh" ? marketCase.titleZh : marketCase.title}</h3>
+            <p>{locale === "zh" ? marketCase.signalZh : marketCase.signal}</p>
+          </div>
+          {marketCase.price ? <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div> : null}
+          <div className="market-proof-source">
+            <a href={marketCase.sourceUrl} target="_blank" rel="noreferrer">{t.viewSource}<ArrowSquareOut weight="bold" /></a>
+            <span>{t.checked}: {marketCase.checkedAt}</span>
+          </div>
+          <p className="market-proof-note">{t.marketNote}</p>
+        </article>
       </section>
 
       <section className="game-path-section">

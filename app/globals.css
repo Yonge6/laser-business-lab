@@ -119,6 +119,21 @@ img { display: block; max-width: 100%; }
 .selection-more { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--ink); font-family: var(--font-display), sans-serif; font-size: 13px; font-weight: 800; text-transform: uppercase; }
 .selection-more:hover { color: var(--red); }
 .selection-more svg { width: 17px; height: 17px; }
+.market-proof { margin-top: 12px; display: grid; grid-template-columns: 160px minmax(0, 1fr) auto 210px; align-items: center; gap: 22px; border: 1px solid var(--line-dark); border-left: 8px solid var(--red); background: var(--paper-strong); padding: 18px 22px 14px; animation: mission-in .25s ease-out; }
+.market-proof-label { align-self: stretch; display: grid; grid-template-columns: 32px 1fr; grid-template-rows: auto 1fr; align-items: center; column-gap: 8px; border-right: 1px solid var(--line); padding-right: 18px; }
+.market-proof-label svg { grid-row: 1 / 3; width: 28px; height: 28px; color: var(--red); }
+.market-proof-label span, .market-proof-case small, .market-proof-price span { color: var(--red); font-family: var(--font-display), sans-serif; font-size: 10px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
+.market-proof-label strong { font-family: var(--font-display), sans-serif; font-size: 22px; font-style: italic; text-transform: uppercase; }
+.market-proof-case h3 { margin: 3px 0 4px; font-family: var(--font-display), sans-serif; font-size: 22px; font-style: italic; line-height: 1; text-transform: uppercase; }
+.market-proof-case p { margin: 0; color: var(--muted); font-size: 13px; }
+.market-proof-price { display: flex; flex-direction: column; min-width: 150px; border-left: 1px solid var(--line); padding-left: 20px; }
+.market-proof-price strong { font-family: var(--font-display), sans-serif; font-size: 23px; font-style: italic; }
+.market-proof-source { display: grid; justify-items: end; gap: 7px; }
+.market-proof-source a { display: inline-flex; align-items: center; gap: 8px; color: var(--red); font-family: var(--font-display), sans-serif; font-size: 14px; font-weight: 900; text-transform: uppercase; }
+.market-proof-source a:hover { color: var(--red-dark); text-decoration: underline; text-underline-offset: 4px; }
+.market-proof-source svg { width: 18px; height: 18px; }
+.market-proof-source span { color: var(--muted); font-size: 10px; }
+.market-proof-note { grid-column: 2 / -1; margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
 @keyframes mission-in { from { opacity: .55; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .opportunity-card.is-active .process-tab { background: var(--red); }
 
@@ -174,6 +189,9 @@ img { display: block; max-width: 100%; }
   .opportunity-grid { overflow-x: auto; grid-template-columns: repeat(3, minmax(380px, 1fr)); padding-bottom: 18px; }
   .opportunity-next-step { grid-template-columns: 110px minmax(0, 1fr) 150px; }
   .selection-actions { grid-column: 2 / 4; grid-template-columns: minmax(220px, 1fr) minmax(180px, .7fr); padding: 0 22px 20px 0; }
+  .market-proof { grid-template-columns: 140px minmax(0, 1fr) auto; }
+  .market-proof-source { grid-column: 2 / 4; display: flex; justify-content: space-between; align-items: center; }
+  .market-proof-note { grid-column: 2 / 4; }
   .game-path-grid { grid-template-columns: 150px 1fr; }
   .level-panel { grid-column: 1 / 3; max-width: 420px; padding-bottom: 28px; }
 }
@@ -209,6 +227,11 @@ img { display: block; max-width: 100%; }
   .selection-profit { grid-column: 1 / 3; border: 0; border-top: 1px solid var(--line); padding: 14px 18px 0; }
   .selection-profit strong { font-size: 32px; }
   .selection-actions { grid-column: 1 / 3; grid-template-columns: 1fr; padding: 0 18px 18px; }
+  .market-proof { margin: 12px 14px 0; grid-template-columns: 1fr; gap: 14px; padding: 18px; }
+  .market-proof-label { grid-template-columns: 32px 1fr; border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 14px; }
+  .market-proof-price { border-left: 0; padding-left: 0; }
+  .market-proof-source { grid-column: auto; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .market-proof-note { grid-column: auto; }
   .game-path-grid { display: block; padding-block: 28px; }
   .path-flag { width: 180px; height: 70px; box-shadow: none; margin-bottom: 32px; }
   .game-steps { overflow-x: auto; grid-template-columns: repeat(4, minmax(120px, 1fr)); padding-bottom: 20px; }
