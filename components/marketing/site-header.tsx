@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { List, X } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -32,6 +33,7 @@ const copy = {
 
 export function SiteHeader() {
   const { locale, setLocale } = useLanguage();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const t = copy[locale];
   const nav = [
@@ -42,15 +44,24 @@ export function SiteHeader() {
     [t.about, "/about"],
   ];
 
+  function isActive(href: string) {
+    if (href === "/calculator/machine-finder") return pathname.startsWith(href);
+    if (href === "/calculator") return pathname.startsWith(href) && !pathname.startsWith("/calculator/machine-finder");
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
   return (
     <header className="site-header">
       <div className="shell header-inner">
-        <Link className="brand" href="/" aria-label={locale === "zh" ? "Laser Business Lab 首页" : "Laser Business Lab home"}>
+        <Link className="brand" href="/" aria-label={locale === "zh" ? "Maker Business Lab 首页" : "Maker Business Lab home"}>
           <span className="brand-mark-source" aria-hidden="true"><Image src={assetPath("/images/brand-lockup.png")} alt="" width={392} height={62} priority /></span>
-          <span className="brand-lockup"><strong>LASER BUSINESS LAB</strong><small>{t.tagline}</small></span>
+          <span className="brand-lockup"><strong>MAKER BUSINESS LAB</strong><small>{t.tagline}</small></span>
         </Link>
         <nav className={open ? "main-nav is-open" : "main-nav"} aria-label={locale === "zh" ? "主导航" : "Primary navigation"}>
-          {nav.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>)}
+          {nav.map(([label, href]) => {
+            const active = isActive(href);
+            return <Link key={href} href={href} className={active ? "is-active" : undefined} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>{label}</Link>;
+          })}
           <Link className="nav-cta" href="/opportunities" onClick={() => setOpen(false)}>{t.start}</Link>
         </nav>
         <div className="header-actions">
