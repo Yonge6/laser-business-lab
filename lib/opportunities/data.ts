@@ -27,10 +27,9 @@ export type Opportunity = {
   evidenceZh: string;
 };
 
-export const opportunities: Opportunity[] = [
+const opportunityCatalog: Omit<Opportunity, "rank">[] = [
   {
     id: "personalized-tumblers",
-    rank: 1,
     title: "Personalized Tumblers",
     titleZh: "个性化保温杯",
     category: "laser",
@@ -56,7 +55,6 @@ export const opportunities: Opportunity[] = [
   },
   {
     id: "3d-desk-organizers",
-    rank: 2,
     title: "3D-Printed Desk Organizers",
     titleZh: "3D 打印桌面收纳",
     category: "3d-printing",
@@ -82,7 +80,6 @@ export const opportunities: Opportunity[] = [
   },
   {
     id: "acrylic-wedding-signs",
-    rank: 3,
     title: "Acrylic Wedding Signs",
     titleZh: "亚克力婚礼标牌",
     category: "laser",
@@ -108,7 +105,6 @@ export const opportunities: Opportunity[] = [
   },
   {
     id: "laser-leather-patches",
-    rank: 4,
     title: "Custom Leather Patches",
     titleZh: "定制皮革章",
     category: "laser",
@@ -134,7 +130,6 @@ export const opportunities: Opportunity[] = [
   },
   {
     id: "3d-geometric-planters",
-    rank: 5,
     title: "3D-Printed Planters",
     titleZh: "3D 打印几何花盆",
     category: "3d-printing",
@@ -160,7 +155,6 @@ export const opportunities: Opportunity[] = [
   },
   {
     id: "layered-wood-wall-art",
-    rank: 6,
     title: "Layered Wood Wall Art",
     titleZh: "分层木艺壁饰",
     category: "laser",
@@ -186,7 +180,6 @@ export const opportunities: Opportunity[] = [
   },
   {
     id: "heat-press-tote-bags",
-    rank: 7,
     title: "Personalized Heat-Press Totes",
     titleZh: "定制热转印托特包",
     category: "heat-press",
@@ -211,5 +204,9 @@ export const opportunities: Opportunity[] = [
     evidenceZh: "标准化坯料配合即烫转印图，可快速完成单件制作，适合测试活动、团队和本地品牌设计。",
   },
 ];
+
+export const opportunities: Opportunity[] = [...opportunityCatalog]
+  .sort((a, b) => b.score - a.score)
+  .map((opportunity, index) => ({ ...opportunity, rank: index + 1 }));
 
 export const opportunityById = Object.fromEntries(opportunities.map((item) => [item.id, item])) as Record<string, Opportunity>;

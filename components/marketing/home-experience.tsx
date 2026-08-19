@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
@@ -101,7 +101,9 @@ export function HomeExperience() {
   const { locale } = useLanguage();
   const [selected, setSelected] = useState(opportunities[0]);
   const [carouselEdges, setCarouselEdges] = useState({ atStart: true, atEnd: false });
+  const [selectionPointerX, setSelectionPointerX] = useState<number | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const selectionResultRef = useRef<HTMLDivElement>(null);
   const t = copy[locale];
   const marketCase = marketCaseByOpportunity[selected.id];
 
@@ -114,20 +116,38 @@ export function HomeExperience() {
     setCarouselEdges((current) => current.atStart === atStart && current.atEnd === atEnd ? current : { atStart, atEnd });
   }, []);
 
+  const updateSelectionPointer = useCallback(() => {
+    const carousel = carouselRef.current;
+    const result = selectionResultRef.current;
+    const activeCard = carousel?.querySelector<HTMLElement>(".opportunity-card.is-active");
+    if (!activeCard || !result) return;
+
+    const cardBounds = activeCard.getBoundingClientRect();
+    const resultBounds = result.getBoundingClientRect();
+    const cardCenter = cardBounds.left + cardBounds.width / 2 - resultBounds.left;
+    setSelectionPointerX(Math.max(28, Math.min(resultBounds.width - 28, cardCenter)));
+  }, []);
+
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
-    updateCarouselEdges();
-    const resizeObserver = new ResizeObserver(updateCarouselEdges);
+    const syncCarouselState = () => {
+      updateCarouselEdges();
+      updateSelectionPointer();
+    };
+
+    syncCarouselState();
+    const resizeObserver = new ResizeObserver(syncCarouselState);
     resizeObserver.observe(carousel);
-    carousel.addEventListener("scroll", updateCarouselEdges, { passive: true });
+    if (selectionResultRef.current) resizeObserver.observe(selectionResultRef.current);
+    carousel.addEventListener("scroll", syncCarouselState, { passive: true });
 
     return () => {
       resizeObserver.disconnect();
-      carousel.removeEventListener("scroll", updateCarouselEdges);
+      carousel.removeEventListener("scroll", syncCarouselState);
     };
-  }, [updateCarouselEdges]);
+  }, [selected.id, updateCarouselEdges, updateSelectionPointer]);
 
   const moveCarousel = (direction: -1 | 1) => {
     const carousel = carouselRef.current;
@@ -174,7 +194,10 @@ export function HomeExperience() {
             <ArrowRight weight="bold" aria-hidden="true" />
           </button>
         </div>
-        <div className="selection-result" key={selected.id} aria-live="polite">
+        <div ref={selectionResultRef} className="selection-result" aria-live="polite">
+          <span className="selection-result-pointer" style={selectionPointerX === null ? undefined : { left: selectionPointerX }} aria-hidden="true">
+            <ArrowDown weight="bold" />
+          </span>
           <div className="selection-result-header">
             <div className="selection-result-title"><Target weight="fill" aria-hidden="true" /><span>{t.resultLink}</span></div>
             <span className="selection-result-count">#{String(selected.rank).padStart(2, "0")} / {String(opportunities.length).padStart(2, "0")}</span>
