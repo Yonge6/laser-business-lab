@@ -10,6 +10,7 @@ import { formatCurrency } from "@/lib/format";
 import { trackEvent } from "@/lib/analytics/client";
 import { EmailCapture } from "@/components/results/email-capture";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
+import { assetPath } from "@/lib/site";
 
 const initial: OpportunityAnswers = {
   interests: [],
@@ -39,6 +40,10 @@ const copy = {
     match: "Match score",
     why: "Why it fits",
     xp: "+100 XP — Opportunity path complete",
+    level: "LEVEL 01 / DISCOVER",
+    gross: "GROSS PROFIT",
+    makeTime: "MAKE TIME",
+    minute: "min",
   },
   zh: {
     title: "机会探索任务",
@@ -59,6 +64,10 @@ const copy = {
     match: "匹配分",
     why: "为什么适合",
     xp: "+100 XP — 已完成机会路径",
+    level: "等级 01 / 发现",
+    gross: "单件毛利",
+    makeTime: "制作时间",
+    minute: "分钟",
   },
 };
 
@@ -100,11 +109,11 @@ export function OpportunityFinder() {
           {results.map((item, index) => (
             <article key={item.id} className={index === 0 ? "ranked-item top" : "ranked-item"}>
               <span className="result-rank">#{index + 1}</span>
-              <div className="result-image"><Image src={item.image} alt={locale === "zh" ? item.titleZh : item.title} fill sizes="240px" /></div>
+              <div className="result-image"><Image src={assetPath(item.image)} alt={locale === "zh" ? item.titleZh : item.title} fill sizes="240px" /></div>
               <div className="result-copy">
                 <span className="card-category">{item.category === "laser" ? <Sparkle weight="bold" /> : <Cube weight="bold" />}{locale === "zh" ? item.processZh : item.process}</span>
                 <h3>{locale === "zh" ? item.titleZh : item.title}</h3>
-                <div className="result-metrics"><span><small>{t.match}</small><b>{item.matchScore}/100</b></span><span><small>{locale === "zh" ? "单件毛利" : "GROSS PROFIT"}</small><b>{formatCurrency(item.grossProfit, 2)}</b></span><span><small>{locale === "zh" ? "制作时间" : "MAKE TIME"}</small><b>{item.productionMinutes} min</b></span></div>
+                <div className="result-metrics"><span><small>{t.match}</small><b>{item.matchScore}/100</b></span><span><small>{t.gross}</small><b>{formatCurrency(item.grossProfit, 2)}</b></span><span><small>{t.makeTime}</small><b>{item.productionMinutes} {t.minute}</b></span></div>
                 <h4>{t.why}</h4>
                 <ul>{(locale === "zh" ? item.matchReasonsZh : item.matchReasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul>
                 <Link className="button button-ghost" href={`/calculator/laser-roi?product=${item.id}`}>{t.calculator}<ArrowRight weight="bold" /></Link>
@@ -129,7 +138,7 @@ export function OpportunityFinder() {
         <small>{t.intro}</small>
       </aside>
       <div className="quest-question">
-        <p className="eyebrow">LEVEL 01 / DISCOVER</p>
+        <p className="eyebrow">{t.level}</p>
         <h2>{t.questions[step]}</h2>
         <div className="choice-grid">
           {options.map(([value, label]) => {

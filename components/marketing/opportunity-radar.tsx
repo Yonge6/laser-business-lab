@@ -18,7 +18,7 @@ export function OpportunityRadar({ opportunity }: { opportunity: Opportunity }) 
   ];
 
   return (
-    <div className="radar-wrap" aria-label={`${opportunity.title} opportunity radar`}>
+    <div className="radar-wrap" aria-label={`${locale === "zh" ? opportunity.titleZh : opportunity.title} ${locale === "zh" ? "机会雷达" : "opportunity radar"}`}>
       <div className="radar-title"><span>{locale === "zh" ? "机会雷达" : "OPPORTUNITY RADAR"}</span></div>
       <ResponsiveContainer width="100%" height={260}>
         <RadarChart data={data} outerRadius="68%">

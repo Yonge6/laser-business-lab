@@ -46,8 +46,12 @@ img { display: block; max-width: 100%; }
 }
 
 .header-inner { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
-.brand { display: flex; align-items: center; min-width: 310px; }
-.brand-logo { width: 310px; height: auto; mix-blend-mode: multiply; }
+.brand { display: flex; align-items: center; gap: 8px; min-width: 310px; }
+.brand-mark-source { position: relative; width: 44px; height: 50px; overflow: hidden; flex: 0 0 auto; }
+.brand-mark-source img { position: absolute; top: 0; left: 0; width: 316px; max-width: none; height: auto; mix-blend-mode: multiply; }
+.brand-lockup { display: flex; flex-direction: column; line-height: 1; }
+.brand-lockup strong { font-family: var(--font-display), sans-serif; font-size: 24px; font-weight: 900; font-style: italic; letter-spacing: .02em; }
+.brand-lockup small { margin-top: 6px; font-family: var(--font-display), sans-serif; color: var(--muted); text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
 .main-nav { display: flex; align-items: center; gap: 24px; margin-left: auto; font-family: var(--font-display), sans-serif; font-weight: 700; text-transform: uppercase; font-size: 14px; letter-spacing: .04em; }
 .main-nav a { border-bottom: 2px solid transparent; padding: 10px 0; }
 .main-nav a:hover { border-color: var(--red); }
@@ -159,7 +163,10 @@ img { display: block; max-width: 100%; }
   .shell { width: min(100% - 28px, 640px); }
   .header-inner { min-height: 70px; }
   .brand { min-width: 0; }
-  .brand-logo { width: 218px; }
+  .brand-mark-source { width: 32px; height: 38px; }
+  .brand-mark-source img { width: 240px; }
+  .brand-lockup strong { font-size: 18px; }
+  .brand-lockup small { display: none; }
   .language-switch span { display: none; }
   .language-switch button { display: none; }
   .language-switch button.active { display: block; }

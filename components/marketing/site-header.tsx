@@ -5,6 +5,7 @@ import Image from "next/image";
 import { List, X } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
+import { assetPath } from "@/lib/site";
 
 const copy = {
   en: {
@@ -44,15 +45,16 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="shell header-inner">
-        <Link className="brand" href="/" aria-label="Laser Business Lab home">
-          <Image className="brand-logo" src="/images/brand-lockup.png" alt="Laser Business Lab — Turn skills into profitable products" width={392} height={62} priority />
+        <Link className="brand" href="/" aria-label={locale === "zh" ? "Laser Business Lab 首页" : "Laser Business Lab home"}>
+          <span className="brand-mark-source" aria-hidden="true"><Image src={assetPath("/images/brand-lockup.png")} alt="" width={392} height={62} priority /></span>
+          <span className="brand-lockup"><strong>LASER BUSINESS LAB</strong><small>{t.tagline}</small></span>
         </Link>
-        <nav className={open ? "main-nav is-open" : "main-nav"} aria-label="Primary navigation">
+        <nav className={open ? "main-nav is-open" : "main-nav"} aria-label={locale === "zh" ? "主导航" : "Primary navigation"}>
           {nav.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>)}
           <Link className="nav-cta" href="/opportunities" onClick={() => setOpen(false)}>{t.start}</Link>
         </nav>
         <div className="header-actions">
-          <div className="language-switch" aria-label="Language">
+          <div className="language-switch" aria-label={locale === "zh" ? "语言" : "Language"}>
             <button className={locale === "en" ? "active" : ""} onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
             <span>/</span>
             <button className={locale === "zh" ? "active" : ""} onClick={() => setLocale("zh")} aria-pressed={locale === "zh"}>中文</button>

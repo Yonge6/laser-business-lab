@@ -1,12 +1,29 @@
-export function PageHero({ eyebrow, title, description, marker }: { eyebrow: string; title: string; description: string; marker: string }) {
+"use client";
+
+import { useLanguage } from "@/components/providers/language-provider";
+
+type PageHeroProps = {
+  eyebrow: string;
+  eyebrowZh: string;
+  title: string;
+  titleZh: string;
+  description: string;
+  descriptionZh: string;
+  marker: string;
+  markerZh?: string;
+};
+
+export function PageHero({ eyebrow, eyebrowZh, title, titleZh, description, descriptionZh, marker, markerZh }: PageHeroProps) {
+  const { locale } = useLanguage();
+  const zh = locale === "zh";
   return (
     <section className="page-hero shell">
       <div>
-        <p className="eyebrow">{eyebrow}</p>
-        <h1>{title}</h1>
-        <p>{description}</p>
+        <p className="eyebrow">{zh ? eyebrowZh : eyebrow}</p>
+        <h1>{zh ? titleZh : title}</h1>
+        <p>{zh ? descriptionZh : description}</p>
       </div>
-      <span className="page-marker">{marker}</span>
+      <span className="page-marker">{zh ? markerZh ?? marker : marker}</span>
     </section>
   );
 }

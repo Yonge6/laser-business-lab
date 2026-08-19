@@ -23,10 +23,13 @@ export function captureAttribution(): Attribution | null {
   return next;
 }
 
-export function buildOutboundHref(machine: string, context: { tool?: string; result?: string } = {}) {
+export function buildOutboundHref(machineUrl: string, machine: string, context: { tool?: string; result?: string } = {}) {
   const params = attributionToSearchParams(readAttribution());
+  params.set("utm_content", machine);
+  params.set("ref", "laserbusinesslab");
   if (context.tool) params.set("tool", context.tool);
   if (context.result) params.set("tool_result", context.result);
-  const query = params.toString();
-  return `/go/${encodeURIComponent(machine)}${query ? `?${query}` : ""}`;
+  const url = new URL(machineUrl);
+  params.forEach((value, key) => url.searchParams.set(key, value));
+  return url.toString();
 }

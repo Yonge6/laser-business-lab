@@ -9,7 +9,7 @@ export type SharedReport = {
 };
 
 function toBase64(value: string) {
-  if (typeof Buffer !== "undefined") return Buffer.from(value, "utf8").toString("base64url");
+  if (typeof window === "undefined" && typeof Buffer !== "undefined") return Buffer.from(value, "utf8").toString("base64url");
   const bytes = new TextEncoder().encode(value);
   let binary = "";
   bytes.forEach((byte) => (binary += String.fromCharCode(byte)));
@@ -17,9 +17,10 @@ function toBase64(value: string) {
 }
 
 function fromBase64(value: string) {
-  if (typeof Buffer !== "undefined") return Buffer.from(value, "base64url").toString("utf8");
+  if (typeof window === "undefined" && typeof Buffer !== "undefined") return Buffer.from(value, "base64url").toString("utf8");
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
-  const binary = atob(normalized);
+  const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+  const binary = atob(padded);
   return new TextDecoder().decode(Uint8Array.from(binary, (character) => character.charCodeAt(0)));
 }
 

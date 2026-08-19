@@ -30,6 +30,10 @@ const copy = {
     units: "tumblers / shift",
     note: "Capacity is theoretical and does not represent expected demand or guaranteed sales.",
     cta: "See the drinkware production match",
+    inputsStep: "01 / INPUTS",
+    speedQuest: "SPEED QUEST",
+    minute: "min",
+    hour: "h",
   },
   zh: {
     inputs: "你的杯子业务数字",
@@ -50,6 +54,10 @@ const copy = {
     units: "杯 / 班次",
     note: "产能为理论值，不代表预期需求或销售保证。",
     cta: "查看适合杯子生产的设备",
+    inputsStep: "01 / 输入",
+    speedQuest: "效率任务",
+    minute: "分钟",
+    hour: "小时",
   },
 };
 
@@ -63,15 +71,15 @@ export function TumblerCalculator() {
   return (
     <section className="tumbler-layout shell">
       <div className="tumbler-inputs">
-        <p className="eyebrow">01 / INPUTS</p><h2>{t.inputs}</h2>
-        <div className="field-grid"><NumberField label={t.blank} value={input.blankCost} onChange={set("blankCost")} prefix="$" step={.5} /><NumberField label={t.price} value={input.sellingPrice} onChange={set("sellingPrice")} prefix="$" step={1} /><NumberField label={t.time} value={input.engravingMinutes} onChange={set("engravingMinutes")} suffix="min" min={.1} step={.5} /><NumberField label={t.orders} value={input.ordersPerDay} onChange={set("ordersPerDay")} /><NumberField label={t.days} value={input.workingDays} onChange={set("workingDays")} max={31} /></div>
+        <p className="eyebrow">{t.inputsStep}</p><h2>{t.inputs}</h2>
+        <div className="field-grid"><NumberField label={t.blank} value={input.blankCost} onChange={set("blankCost")} prefix="$" step={.5} /><NumberField label={t.price} value={input.sellingPrice} onChange={set("sellingPrice")} prefix="$" step={1} /><NumberField label={t.time} value={input.engravingMinutes} onChange={set("engravingMinutes")} suffix={t.minute} min={.1} step={.5} /><NumberField label={t.orders} value={input.ordersPerDay} onChange={set("ordersPerDay")} /><NumberField label={t.days} value={input.workingDays} onChange={set("workingDays")} max={31} /></div>
       </div>
       <div className="tumbler-report">
         <div className="report-main"><span>{t.profit}</span><strong>{formatCurrency(result.profitPerTumbler, 2)}</strong><small>{t.gross}</small></div>
-        <div className="metric-board"><div><small>{t.daily}</small><b>{formatCurrency(result.dailyRevenue)}</b></div><div><small>{t.monthly}</small><b>{formatCurrency(result.monthlyRevenue)}</b></div><div><small>{t.gross}</small><b>{formatCurrency(result.monthlyGrossProfit)}</b></div><div><small>{t.hours}</small><b>{formatNumber(result.productionHours, 1)} h</b></div><div><small>{t.shift}</small><b>{formatNumber(result.outputPerShift)}</b></div></div>
+        <div className="metric-board"><div><small>{t.daily}</small><b>{formatCurrency(result.dailyRevenue)}</b></div><div><small>{t.monthly}</small><b>{formatCurrency(result.monthlyRevenue)}</b></div><div><small>{t.gross}</small><b>{formatCurrency(result.monthlyGrossProfit)}</b></div><div><small>{t.hours}</small><b>{formatNumber(result.productionHours, 1)} {t.hour}</b></div><div><small>{t.shift}</small><b>{formatNumber(result.outputPerShift)}</b></div></div>
       </div>
       <div className="speed-scenario">
-        <header><Lightning weight="fill" /><div><p className="eyebrow">SPEED QUEST</p><h2>{t.faster}</h2></div></header>
+        <header><Lightning weight="fill" /><div><p className="eyebrow">{t.speedQuest}</p><h2>{t.faster}</h2></div></header>
         <div className="scenario-grid"><div><span>{t.current}</span><strong>{formatNumber(result.outputPerShift)}</strong><small>{t.units}</small></div><TrendUp weight="bold" /><div className="fast"><span>{t.efficiency}</span><strong>{formatNumber(result.highEfficiencyOutputPerShift)}</strong><small>{t.units}</small></div></div>
         <p>{t.note}</p>
         <TrackedMachineLink machine="vertigo" tool="tumbler_profit" result="drinkware-high-efficiency">{t.cta}</TrackedMachineLink>
