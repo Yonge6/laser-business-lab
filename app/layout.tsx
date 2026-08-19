@@ -19,7 +19,7 @@ const body = Noto_Sans_SC({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://laserbusinesslab.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maker.wonderelian.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
