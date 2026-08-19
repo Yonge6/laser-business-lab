@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { rankOpportunities } from "@/lib/opportunities/engine";
+import { opportunities } from "@/lib/opportunities/data";
+import { marketCaseByOpportunity } from "@/lib/opportunities/market-cases";
 
 describe("opportunity ranking engine", () => {
   it("prioritizes laser personalization for a side-income maker", () => {
@@ -24,5 +26,15 @@ describe("opportunity ranking engine", () => {
       goal: "first-sale",
     });
     expect(ranked[0].id).toBe("3d-desk-organizers");
+  });
+
+  it("provides a dated, public marketplace example for every featured opportunity", () => {
+    for (const opportunity of opportunities) {
+      const marketCase = marketCaseByOpportunity[opportunity.id];
+      expect(marketCase.sourceUrl).toMatch(/^https:\/\/www\.etsy\.com\/listing\//);
+      expect(marketCase.checkedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(marketCase.signal).not.toBe("");
+      expect(marketCase.signalZh).not.toBe("");
+    }
   });
 });
