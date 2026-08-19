@@ -100,7 +100,7 @@ img { display: block; max-width: 100%; }
 .carousel-control:disabled { background: var(--paper-strong); border-color: var(--line-dark); color: var(--line-dark); box-shadow: none; cursor: not-allowed; opacity: .72; }
 .carousel-control-prev { left: max(12px, calc((100vw - 1320px) / 2 - 76px)); }
 .carousel-control-next { right: max(12px, calc((100vw - 1320px) / 2 - 76px)); }
-.opportunity-card { appearance: none; border: 1px solid var(--line-dark); padding: 0; background: var(--paper-strong); position: relative; min-width: 0; height: 400px; display: grid; grid-template-columns: 45% 55%; text-align: left; cursor: pointer; overflow: hidden; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); scroll-snap-align: start; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.opportunity-card { appearance: none; border: 1px solid var(--line-dark); padding: 0; background: var(--paper-strong); position: relative; min-width: 0; height: 400px; display: grid; grid-template-columns: 52% 48%; text-align: left; cursor: pointer; overflow: hidden; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%); scroll-snap-align: start; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .opportunity-card:hover, .opportunity-card.is-active { transform: translateY(-7px); border-color: var(--red); box-shadow: var(--shadow); z-index: 2; }
 .card-rank { position: absolute; z-index: 3; top: 0; left: 0; min-width: 90px; height: 56px; display: grid; place-items: center; background: var(--red); color: white; font-family: var(--font-display), sans-serif; font-size: 34px; font-weight: 900; font-style: italic; clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%); }
 .card-media { position: relative; min-width: 0; overflow: hidden; }
@@ -200,6 +200,7 @@ img { display: block; max-width: 100%; }
   .menu-button { display: grid; }
   .hero-section { grid-template-columns: 1fr 420px; gap: 30px; }
   .opportunity-grid { grid-auto-columns: min(420px, 78vw); }
+  .opportunity-card { grid-template-columns: 48% 52%; }
   .opportunity-next-step { grid-template-columns: 110px minmax(0, 1fr) 150px; }
   .selection-actions { grid-column: 2 / 4; grid-template-columns: minmax(220px, 1fr) minmax(180px, .7fr); padding: 0 22px 20px 0; }
   .market-proof { grid-template-columns: 140px minmax(0, 1fr) auto; }
