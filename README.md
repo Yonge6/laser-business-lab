@@ -1,12 +1,14 @@
 # Laser Business Lab
 
+Live site: [https://yonge6.github.io/laser-business-lab/](https://yonge6.github.io/laser-business-lab/)
+
 A bilingual, business-first maker platform for answering three questions:
 
 1. What product should I make and sell?
 2. Can the numbers work for my business?
 3. Which production setup fits the job?
 
-The MVP is laser-first and already models 3D-printing opportunities. It includes an opportunity finder, laser ROI calculator, tumbler profit calculator, deterministic machine finder, shareable reports, first/last-touch attribution, tracked OneLaser redirects, email capture, and optional GA4/PostHog/Supabase integrations.
+The MVP is laser-first and already models 3D-printing opportunities. It includes an opportunity finder, laser ROI calculator, tumbler profit calculator, deterministic machine finder, shareable reports, first/last-touch attribution, attributed equipment links, email capture, and optional GA4/PostHog integrations.
 
 ## Run locally
 
@@ -17,6 +19,13 @@ pnpm run dev
 
 Open `http://localhost:3000`. English is the default language; use the header switch for Chinese.
 
+To preview the GitHub Pages build locally:
+
+```bash
+pnpm run build:pages
+pnpm exec serve out
+```
+
 ## Validate
 
 ```bash
@@ -24,21 +33,27 @@ pnpm test
 pnpm run typecheck
 pnpm run lint
 pnpm run build
+pnpm run build:pages
 ```
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. The site remains fully usable without external services; analytics and persistence become active only when their variables are present.
+Copy `.env.example` to `.env.local`. The site remains fully usable without external services; analytics and optional remote form/event delivery become active only when their variables are present.
 
 - `NEXT_PUBLIC_GA_ID`: GA4 measurement ID.
 - `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`: optional product analytics.
-- `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`: server-only persistence.
+- `NEXT_PUBLIC_LEAD_ENDPOINT`: optional external endpoint for email capture.
+- `NEXT_PUBLIC_EVENT_ENDPOINT`: optional external endpoint for first-party event delivery.
 
-Apply [supabase/schema.sql](supabase/schema.sql) before enabling Supabase. Never expose the service role key in a `NEXT_PUBLIC_*` variable.
+Without a lead endpoint, email requests are saved only in that browser so the public static site never pretends a remote submission succeeded.
 
 ## Attribution and outbound flow
 
-First and last UTM touch are stored for 90 days. Equipment links pass through `/go/:machine`, record the click when Supabase is configured, preserve source UTMs, add `ref=laserbusinesslab`, and return a temporary redirect to the configured official product URL.
+First and last UTM touch are stored for 90 days. Equipment links open the configured official product URL directly, preserve source UTMs, add `ref=laserbusinesslab`, and emit a client-side analytics event when analytics is configured.
+
+## GitHub Pages deployment
+
+Every push to `main` runs lint, type checks, tests, and both production builds. After those checks pass, GitHub Actions publishes the static `out/` artifact to GitHub Pages. The configured `/laser-business-lab` base path is applied only to the Pages build.
 
 ## Important limitations
 

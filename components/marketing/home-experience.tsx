@@ -8,6 +8,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
 import { OpportunityCard } from "@/components/marketing/opportunity-card";
 import { OpportunityRadar } from "@/components/marketing/opportunity-radar";
+import { assetPath } from "@/lib/site";
 
 const copy = {
   en: {
@@ -76,7 +77,7 @@ export function HomeExperience() {
   return (
     <main>
       <section className="hero-section shell">
-        <Image className="hero-racing-stripe" src="/images/racing-header-stripe.png" alt="" width={709} height={38} aria-hidden="true" priority />
+        <Image className="hero-racing-stripe" src={assetPath("/images/racing-header-stripe.png")} alt="" width={709} height={38} aria-hidden="true" priority />
         <div className="hero-copy">
           <p className="eyebrow">{t.eyebrow}</p>
           <h1>{t.heroA}<br /><em>{t.heroB}</em></h1>
@@ -90,7 +91,7 @@ export function HomeExperience() {
         <OpportunityRadar opportunity={selected} />
       </section>
 
-      <section className="opportunity-grid shell" aria-label="Featured maker opportunities">
+      <section className="opportunity-grid shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
         {opportunities.map((opportunity) => (
           <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
         ))}
@@ -123,7 +124,7 @@ export function HomeExperience() {
       </section>
 
       <section className="toolkit-section shell">
-        <p className="eyebrow">02 / BUILD YOUR PLAN</p>
+        <p className="eyebrow">{locale === "zh" ? "02 / 制定你的计划" : "02 / BUILD YOUR PLAN"}</p>
         <div className="section-heading">
           <h2>{t.toolkit}</h2>
           <p>{t.toolkitSub}</p>

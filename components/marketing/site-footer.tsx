@@ -37,7 +37,7 @@ export function SiteFooter() {
           <p>{t.disclosure}</p>
           <p>{t.estimates}</p>
         </div>
-        <nav aria-label="Legal">
+        <nav aria-label={locale === "zh" ? "法律信息" : "Legal"}>
           <Link href="/about">{t.about}</Link>
           <Link href="/privacy">{t.privacy}</Link>
           <Link href="/disclaimer">{t.disclaimer}</Link>

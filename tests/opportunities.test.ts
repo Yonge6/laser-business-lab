@@ -12,6 +12,7 @@ describe("opportunity ranking engine", () => {
     });
     expect(ranked[0].id).toBe("personalized-tumblers");
     expect(ranked[0].matchReasons.length).toBeGreaterThan(0);
+    expect(ranked[0].matchReasonsZh.join(" ")).not.toMatch(/\b(personalized|gifts)\b/);
   });
 
   it("keeps 3D printing viable for a low-budget functional-product start", () => {

@@ -28,6 +28,16 @@ const timeWeight: Record<OpportunityAnswers["hoursPerWeek"], number> = {
   "30+": 480,
 };
 
+const interestLabelsZh: Record<string, string> = {
+  personalized: "个性化礼品",
+  gifts: "礼品",
+  home: "家居与桌面",
+  weddings: "婚礼与活动",
+  functional: "实用产品",
+  local: "本地商家",
+  premium: "高端定制",
+};
+
 export function rankOpportunities(answers: OpportunityAnswers): RankedOpportunity[] {
   const ceiling = budgetCeiling[answers.budget];
   const preferredMinutes = timeWeight[answers.hoursPerWeek];
@@ -50,7 +60,7 @@ export function rankOpportunities(answers: OpportunityAnswers): RankedOpportunit
       score += matchingInterests.length * 7;
       if (matchingInterests.length) {
         reasons.push(`Fits ${matchingInterests.join(" and ")} demand.`);
-        reasonsZh.push(`符合${matchingInterests.join("、")}方向。`);
+        reasonsZh.push(`符合${matchingInterests.map((interest) => interestLabelsZh[interest] ?? interest).join("、")}方向。`);
       }
 
       if (item.startingBudget <= ceiling) {

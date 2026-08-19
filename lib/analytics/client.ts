@@ -25,10 +25,13 @@ export async function trackEvent(event: AnalyticsEventName, properties: Analytic
     posthog.capture(event, enriched);
   }
 
-  void fetch("/api/events", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ event, properties: enriched, attribution }),
-    keepalive: true,
-  }).catch(() => undefined);
+  const endpoint = process.env.NEXT_PUBLIC_EVENT_ENDPOINT;
+  if (endpoint) {
+    void fetch(endpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ event, properties: enriched, attribution }),
+      keepalive: true,
+    }).catch(() => undefined);
+  }
 }

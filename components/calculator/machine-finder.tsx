@@ -32,6 +32,8 @@ const copy = {
     currentPrice: "Current starting price checked Aug 19, 2026",
     disclosure: "Recommendation is based on your selected use cases and our deterministic rules—not a paid ranking.",
     restart: "Change my answers",
+    complete: "MATCH COMPLETE +100 XP",
+    step: "EQUIPMENT MATCH / STEP",
   },
   zh: {
     title: "设备匹配任务",
@@ -48,9 +50,11 @@ const copy = {
     alt: "有力备选",
     why: "为什么匹配",
     see: "前往 OneLaser 查看",
-    currentPrice: "当前起售价核对于 2026 年 8 月 19 日",
+    currentPrice: "当前起售价核对日期：2026 年 8 月 19 日",
     disclosure: "推荐基于你选择的用途与确定性规则，并非付费排名。",
     restart: "修改答案",
+    complete: "匹配完成 +100 XP",
+    step: "设备匹配 / 步骤",
   },
 };
 
@@ -84,15 +88,15 @@ export function MachineFinder() {
   if (complete) {
     return (
       <section className="machine-results shell">
-        <header className="machine-result-header"><Trophy weight="fill" /><div><p className="eyebrow">MATCH COMPLETE +100 XP</p><h2>{t.best}</h2><p>{t.disclosure}</p></div></header>
+        <header className="machine-result-header"><Trophy weight="fill" /><div><p className="eyebrow">{t.complete}</p><h2>{t.best}</h2><p>{t.disclosure}</p></div></header>
         <div className="machine-match-grid">
           <article className="machine-match primary">
             <div className="machine-image"><Image src={recommendation.best.image} alt={recommendation.best.name} fill sizes="(max-width: 760px) 100vw, 50vw" /></div>
-            <div><span>{recommendation.best.category}</span><h3>{recommendation.best.name}</h3><p className="machine-price">{formatCurrency(recommendation.best.price)}<small>{t.currentPrice}</small></p><h4>{t.why}</h4><ul>{recommendation.reasons.map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul><TrackedMachineLink machine={recommendation.best.id} tool="machine_finder" result={recommendation.best.id}>{t.see}</TrackedMachineLink></div>
+            <div><span>{locale === "zh" ? recommendation.best.categoryZh : recommendation.best.category}</span><h3>{recommendation.best.name}</h3><p className="machine-price">{formatCurrency(recommendation.best.price)}<small>{t.currentPrice}</small></p><h4>{t.why}</h4><ul>{(locale === "zh" ? recommendation.reasonsZh : recommendation.reasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul><TrackedMachineLink machine={recommendation.best.id} tool="machine_finder" result={recommendation.best.id}>{t.see}</TrackedMachineLink></div>
           </article>
           <article className="machine-match alternative">
             <div className="machine-image"><Image src={recommendation.alternative.image} alt={recommendation.alternative.name} fill sizes="(max-width: 760px) 100vw, 33vw" /></div>
-            <div><p className="eyebrow">{t.alt}</p><h3>{recommendation.alternative.name}</h3><p>{recommendation.alternative.strengths.join(" · ")}</p><TrackedMachineLink machine={recommendation.alternative.id} tool="machine_finder" result={recommendation.alternative.id} className="button button-ghost">{t.see}</TrackedMachineLink></div>
+            <div><p className="eyebrow">{t.alt}</p><h3>{recommendation.alternative.name}</h3><p>{(locale === "zh" ? recommendation.alternative.strengthsZh : recommendation.alternative.strengths).join(" · ")}</p><TrackedMachineLink machine={recommendation.alternative.id} tool="machine_finder" result={recommendation.alternative.id} className="button button-ghost">{t.see}</TrackedMachineLink></div>
           </article>
         </div>
         <div className="recommendation-explainer"><Info weight="bold" /><p>{locale === "zh" ? "分数由产品适配、优先级、产量、预算和经验共同计算。机器数据可通过配置修改，不写死在界面中。" : "Scores combine product fit, priorities, volume, budget, and experience. Machine data and rule weights are configurable outside the UI."}</p></div>
@@ -106,7 +110,7 @@ export function MachineFinder() {
   return (
     <section className="finder-shell shell">
       <aside className="quest-sidebar"><Target weight="bold" /><p>{t.title}</p><strong>{String(step + 1).padStart(2, "0")} / 05</strong><div className="quest-progress"><span style={{ width: `${((step + 1) / 5) * 100}%` }} /></div><small>{locale === "zh" ? "选择你的业务需求，而不是品牌或型号。" : "Choose business needs—not brands or model names."}</small></aside>
-      <div className="quest-question"><p className="eyebrow">EQUIPMENT MATCH / STEP {step + 1}</p><h2>{t.questions[step]}</h2><div className="choice-grid">{options.map(([value, label]) => { const selected = Array.isArray(current) ? current.includes(value) : current === value; return <button className={selected ? "choice-card selected" : "choice-card"} key={value} onClick={() => choose(value)}><span>{selected ? <Check weight="bold" /> : null}</span><strong>{label}</strong></button>; })}</div><div className="quest-nav"><button className="button button-ghost" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}><ArrowLeft weight="bold" />{t.back}</button><button className="button button-primary" onClick={advance} disabled={(step === 0 && !answers.products.length) || (step === 1 && !answers.priorities.length)}>{step === 4 ? t.reveal : t.next}<ArrowRight weight="bold" /></button></div></div>
+      <div className="quest-question"><p className="eyebrow">{t.step} {step + 1}</p><h2>{t.questions[step]}</h2><div className="choice-grid">{options.map(([value, label]) => { const selected = Array.isArray(current) ? current.includes(value) : current === value; return <button className={selected ? "choice-card selected" : "choice-card"} key={value} onClick={() => choose(value)}><span>{selected ? <Check weight="bold" /> : null}</span><strong>{label}</strong></button>; })}</div><div className="quest-nav"><button className="button button-ghost" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}><ArrowLeft weight="bold" />{t.back}</button><button className="button button-primary" onClick={advance} disabled={(step === 0 && !answers.products.length) || (step === 1 && !answers.priorities.length)}>{step === 4 ? t.reveal : t.next}<ArrowRight weight="bold" /></button></div></div>
     </section>
   );
 }

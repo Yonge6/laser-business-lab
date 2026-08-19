@@ -12,16 +12,38 @@ import { trackEvent } from "@/lib/analytics/client";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { EmailCapture } from "@/components/results/email-capture";
 import { opportunityById } from "@/lib/opportunities/data";
+import { sitePath } from "@/lib/site";
 
 const products = ["Tumblers", "Signs", "Acrylic Products", "Awards & Trophies", "Leather Goods", "Personalized Gifts", "Wood Products", "Promotional Products", "Other"];
 const productsZh = ["保温杯", "标牌", "亚克力产品", "奖杯与奖牌", "皮革制品", "个性化礼品", "木制品", "促销产品", "其他"];
 const budgets = [
-  ["under-3", "Under $3,000", 2_500],
-  ["3-5", "$3,000–$5,000", 4_000],
-  ["5-8", "$5,000–$8,000", 5_599],
-  ["8-15", "$8,000–$15,000", 10_999],
-  ["15+", "$15,000+", 15_000],
+  ["under-3", "Under $3,000", "低于 $3,000", 2_500],
+  ["3-5", "$3,000–$5,000", "$3,000–$5,000", 4_000],
+  ["5-8", "$5,000–$8,000", "$5,000–$8,000", 5_599],
+  ["8-15", "$8,000–$15,000", "$8,000–$15,000", 10_999],
+  ["15+", "$15,000+", "$15,000 以上", 15_000],
 ] as const;
+
+const currentMachines = [
+  ["none", "No laser yet", "还没有激光设备"],
+  ["diode", "Entry-level diode", "入门级二极管激光机"],
+  ["desktop-co2", "Desktop CO₂", "桌面式 CO₂ 激光机"],
+  ["glass-co2", "Glass-tube CO₂", "玻璃管 CO₂ 激光机"],
+  ["rf-co2", "RF CO₂", "RF CO₂ 激光机"],
+  ["fiber", "Fiber", "光纤激光机"],
+  ["other", "Other", "其他"],
+] as const;
+
+const profileZh: Record<string, string> = {
+  "HIGH-MARGIN": "高毛利",
+  "HEALTHY-MARGIN": "健康毛利",
+  "MARGIN-WATCH": "关注毛利",
+  "HIGH-VOLUME": "高销量",
+  "MEDIUM-VOLUME": "中等销量",
+  "EARLY-STAGE": "起步阶段",
+  "CAPACITY-AVAILABLE": "仍有可用产能",
+  "SPEED-SENSITIVE": "效率敏感",
+};
 
 const copy = {
   en: {
@@ -57,6 +79,11 @@ const copy = {
     share: "Copy share link",
     copied: "Link copied",
     reset: "Edit my numbers",
+    mission: "MISSION COMPLETE +100 XP",
+    step: "STEP",
+    minute: "min",
+    hour: "hrs",
+    month: "mo",
   },
   zh: {
     steps: ["产品", "经济模型", "生产", "设备"],
@@ -91,6 +118,11 @@ const copy = {
     share: "复制分享链接",
     copied: "链接已复制",
     reset: "修改数字",
+    mission: "任务完成 +100 XP",
+    step: "步骤",
+    minute: "分钟",
+    hour: "小时",
+    month: "个月",
   },
 };
 
@@ -119,11 +151,12 @@ export function RoiCalculator() {
     productionMinutes: selectedOpportunity.productionMinutes,
   } : initialInput);
   const [budget, setBudget] = useState("5-8");
-  const [currentMachine, setCurrentMachine] = useState("No laser yet");
+  const [currentMachine, setCurrentMachine] = useState("none");
   const [complete, setComplete] = useState(false);
   const [copied, setCopied] = useState(false);
   const result = useMemo(() => calculateRoi(input), [input]);
   const t = copy[locale];
+  const localizedProduct = locale === "zh" ? selectedOpportunity?.titleZh ?? productsZh[products.indexOf(product)] ?? product : product;
   const set = (key: keyof RoiInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
 
   async function advance() {
@@ -157,8 +190,20 @@ export function RoiCalculator() {
         profiles: result.profiles,
       },
     });
-    const url = `${window.location.origin}/report/${reportId}`;
-    await navigator.clipboard.writeText(url);
+    const url = new URL(sitePath("/report/"), window.location.origin);
+    url.searchParams.set("id", reportId);
+    try {
+      await navigator.clipboard.writeText(url.toString());
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = url.toString();
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      textArea.remove();
+    }
     setCopied(true);
     await trackEvent("share_result", { tool: "laser_roi", product_category: product });
   }
@@ -166,7 +211,7 @@ export function RoiCalculator() {
   if (complete) {
     return (
       <section className="business-report shell">
-        <header className="report-header"><div><p className="eyebrow">MISSION COMPLETE +100 XP</p><h2>{t.complete}</h2><p>{product}</p></div><TrendUp weight="bold" /></header>
+        <header className="report-header"><div><p className="eyebrow">{t.mission}</p><h2>{t.complete}</h2><p>{localizedProduct}</p></div><TrendUp weight="bold" /></header>
         <div className="report-grid">
           <div className="report-main">
             <span>{t.potential}</span>
@@ -175,12 +220,12 @@ export function RoiCalculator() {
           </div>
           <div className="report-stat"><strong>{formatCurrency(result.grossProfitPerItem, 2)}</strong><span>{t.profit}</span></div>
           <div className="report-stat"><strong>{formatCurrency(result.annualGrossProfit)}</strong><span>{t.annual}</span></div>
-          <div className="report-stat"><strong>{formatNumber(result.productionHours, 1)} hrs</strong><span>{t.production}</span></div>
-          <div className="report-stat"><strong>{result.paybackMonths ? `${formatNumber(result.paybackMonths, 1)} mo` : "—"}</strong><span>{t.payback}</span></div>
+          <div className="report-stat"><strong>{formatNumber(result.productionHours, 1)} {t.hour}</strong><span>{t.production}</span></div>
+          <div className="report-stat"><strong>{result.paybackMonths ? `${formatNumber(result.paybackMonths, 1)} ${t.month}` : "—"}</strong><span>{t.payback}</span></div>
           <div className="report-stat"><strong>{formatNumber(result.capacityUtilization, 0)}%</strong><span>{t.utilization}</span></div>
         </div>
         {!result.isProfitable ? <div className="profit-warning"><Warning weight="bold" />{t.negative}</div> : null}
-        <div className="profile-block"><span>{t.profile}</span><div>{result.profiles.map((profile) => <b key={profile}>{profile}</b>)}</div></div>
+        <div className="profile-block"><span>{t.profile}</span><div>{result.profiles.map((profile) => <b key={profile}>{locale === "zh" ? profileZh[profile] ?? profile : profile}</b>)}</div></div>
         <div className="report-actions">
           <button className="button button-primary" onClick={share}>{copied ? <Check weight="bold" /> : <ShareNetwork weight="bold" />}{copied ? t.copied : t.share}</button>
           <button className="button button-ghost" onClick={() => setComplete(false)}>{t.reset}</button>
@@ -196,12 +241,12 @@ export function RoiCalculator() {
       <div className="calculator-card">
         <ol className="calculator-steps">{t.steps.map((label, index) => <li key={label} className={index === step ? "active" : index < step ? "done" : ""}><span>{index < step ? <Check weight="bold" /> : index + 1}</span><b>{label}</b></li>)}</ol>
         <div className="calculator-question">
-          <p className="eyebrow">STEP {String(step + 1).padStart(2, "0")} / 04</p>
+          <p className="eyebrow">{t.step} {String(step + 1).padStart(2, "0")} / 04</p>
           <h2>{t.questions[step]}</h2>
           {step === 0 ? <div className="choice-grid product-choices">{products.map((item, index) => <button key={item} className={product === item ? "choice-card selected" : "choice-card"} onClick={() => setProduct(item)}><span>{product === item ? <Check weight="bold" /> : null}</span><strong>{locale === "zh" ? productsZh[index] : item}</strong></button>)}</div> : null}
           {step === 1 ? <div className="field-grid"><NumberField label={t.labels.selling} value={input.sellingPrice} onChange={set("sellingPrice")} prefix="$" step={1} /><NumberField label={t.labels.material} value={input.materialCost} onChange={set("materialCost")} prefix="$" step={.5} /><NumberField label={t.labels.packaging} value={input.packagingCost} onChange={set("packagingCost")} prefix="$" step={.5} /></div> : null}
-          {step === 2 ? <div className="field-grid"><NumberField label={t.labels.minutes} value={input.productionMinutes} onChange={set("productionMinutes")} suffix="min" min={.1} /><NumberField label={t.labels.orders} value={input.monthlyOrders} onChange={set("monthlyOrders")} min={0} /><NumberField label={t.labels.days} value={input.workingDays} onChange={set("workingDays")} max={31} /><NumberField label={t.labels.hours} value={input.hoursPerDay} onChange={set("hoursPerDay")} max={24} step={.5} /></div> : null}
-          {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{t.labels.budget}</span><select value={budget} onChange={(event) => { const next = budgets.find((item) => item[0] === event.target.value)!; setBudget(event.target.value); set("machinePrice")(next[2]); }}>{budgets.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><NumberField label={t.labels.machine} value={input.machinePrice} onChange={set("machinePrice")} prefix="$" step={100} /><label className="select-field"><span className="field-label">{t.labels.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{["No laser yet", "Entry-level diode", "Desktop CO2", "Glass-tube CO2", "RF CO2", "Fiber", "Other"].map((item) => <option key={item}>{item}</option>)}</select></label></div> : null}
+          {step === 2 ? <div className="field-grid"><NumberField label={t.labels.minutes} value={input.productionMinutes} onChange={set("productionMinutes")} suffix={t.minute} min={.1} /><NumberField label={t.labels.orders} value={input.monthlyOrders} onChange={set("monthlyOrders")} min={0} /><NumberField label={t.labels.days} value={input.workingDays} onChange={set("workingDays")} max={31} /><NumberField label={t.labels.hours} value={input.hoursPerDay} onChange={set("hoursPerDay")} max={24} step={.5} /></div> : null}
+          {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{t.labels.budget}</span><select value={budget} onChange={(event) => { const next = budgets.find((item) => item[0] === event.target.value)!; setBudget(event.target.value); set("machinePrice")(next[3]); }}>{budgets.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label><NumberField label={t.labels.machine} value={input.machinePrice} onChange={set("machinePrice")} prefix="$" step={100} /><label className="select-field"><span className="field-label">{t.labels.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{currentMachines.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label></div> : null}
           <div className="quest-nav"><button className="button button-ghost" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}><ArrowLeft weight="bold" />{t.back}</button><button className="button button-primary" onClick={advance}>{step === 3 ? t.report : t.next}<ArrowRight weight="bold" /></button></div>
         </div>
       </div>
@@ -209,7 +254,7 @@ export function RoiCalculator() {
         <p>{t.live}</p>
         <div><span>{t.profit}</span><strong>{formatCurrency(result.grossProfitPerItem, 2)}</strong></div>
         <div><span>{t.monthly}</span><strong>{formatCurrency(result.monthlyGrossProfit)}</strong></div>
-        <div><span>{t.payback}</span><strong>{result.paybackMonths ? `${formatNumber(result.paybackMonths, 1)} mo` : "—"}</strong></div>
+        <div><span>{t.payback}</span><strong>{result.paybackMonths ? `${formatNumber(result.paybackMonths, 1)} ${t.month}` : "—"}</strong></div>
         <div><span>{t.margin}</span><strong>{formatNumber(result.marginPercent, 0)}%</strong></div>
         {!result.isProfitable ? <p className="profit-warning"><Warning weight="bold" />{t.negative}</p> : null}
       </aside>
