@@ -133,7 +133,7 @@ export function HomeExperience() {
     if (!carousel || !firstCard) return;
 
     const gap = Number.parseFloat(window.getComputedStyle(carousel).columnGap) || 16;
-    const cardsPerMove = window.innerWidth > 1100 ? 3 : 1;
+    const cardsPerMove = window.innerWidth > 1100 ? 2 : 1;
     carousel.scrollBy({ left: direction * (firstCard.offsetWidth + gap) * cardsPerMove, behavior: "smooth" });
   };
 
