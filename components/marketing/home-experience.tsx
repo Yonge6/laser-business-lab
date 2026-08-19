@@ -24,6 +24,7 @@ const copy = {
     nextMission: "Next mission: validate the business",
     profit: "Est. gross profit / item",
     calculateSelected: "Calculate this product",
+    matchEquipment: "Match production equipment",
     compareAll: "Compare all opportunities",
     resultLink: "Selection results · Updates with the card above",
     marketCase: "Real marketplace example",
@@ -64,6 +65,7 @@ const copy = {
     nextMission: "下一项任务：验证商业模型",
     profit: "预计单件毛利",
     calculateSelected: "计算这个产品",
+    matchEquipment: "匹配生产设备",
     compareAll: "查看全部机会",
     resultLink: "选择结果 · 随上方卡片实时更新",
     marketCase: "真实电商案例",
@@ -212,6 +214,7 @@ export function HomeExperience() {
             <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
             <div className="selection-actions">
               <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
+              <Link className="selection-more" href={`/calculator/machine-finder?method=${selected.category}&product=${selected.id}`}>{t.matchEquipment}<Hammer weight="bold" /></Link>
               <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
             </div>
           </div>

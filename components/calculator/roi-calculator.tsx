@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, TShirt, Warning } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/components/providers/language-provider";
 import { NumberField } from "@/components/calculator/number-field";
@@ -14,6 +14,8 @@ import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { EmailCapture } from "@/components/results/email-capture";
 import { opportunityById } from "@/lib/opportunities/data";
 import { sitePath } from "@/lib/site";
+import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
+import { oneLaserDestinations } from "@/lib/commerce/onelaser";
 
 export type MakerMethod = "laser" | "3d-printing" | "heat-press" | "maker";
 
@@ -270,7 +272,18 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const localizedProduct = locale === "zh" ? productOptions.find((item) => item.value === product)?.labelZh ?? product : productOptions.find((item) => item.value === product)?.label ?? product;
   const toolName = method === "laser" ? "laser_roi" : method === "3d-printing" ? "3d_printing_roi" : method === "heat-press" ? "heat_press_roi" : "maker_roi";
   const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : method === "heat-press" ? TShirt : Target;
+  const roiRecommendationId = `roi_${selectedOpportunity?.id ?? "laser_lineup"}`;
   const set = (key: keyof RoiInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
+
+  useEffect(() => {
+    if (!complete || method !== "laser") return;
+    void trackEvent("recommendation_view", {
+      tool: "laser_roi",
+      brand: "OneLaser",
+      recommendation: roiRecommendationId,
+      placement: "roi_report",
+    });
+  }, [complete, method, roiRecommendationId]);
 
   async function advance() {
     if (step < 3) {
@@ -344,6 +357,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
           {method !== "maker" ? <Link className="button button-ghost" href={`/calculator/machine-finder?method=${method}&product=${encodeURIComponent(selectedOpportunity?.id ?? product)}`}>{t.equipment}<ArrowRight weight="bold" /></Link> : null}
           <button className="button button-ghost" onClick={() => setComplete(false)}>{t.reset}</button>
         </div>
+        {method === "laser" ? <OneLaserRecommendation compact profileId={roiRecommendationId} productName="OneLaser laser machine lineup" destination={oneLaserDestinations.machines} fit="Use the ROI result as your budget guardrail, then compare real laser work areas, materials, safety, workflow, and current availability." fitZh="先把 ROI 结果作为预算边界，再比较真实激光设备的工作区域、材料范围、安全性、工作流与当前供货。" placement="roi_report" /> : null}
         <EmailCapture tool={toolName} result={product} />
         <EstimateDisclaimer />
       </section>

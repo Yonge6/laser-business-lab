@@ -3,10 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { List, X } from "@phosphor-icons/react";
+import { List } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { assetPath } from "@/lib/site";
+import { SiteDrawer } from "@/components/marketing/site-drawer";
+import { trackEvent } from "@/lib/analytics/client";
 
 const copy = {
   en: {
@@ -18,7 +20,8 @@ const copy = {
     learn: "Learn",
     about: "About",
     start: "Start quest",
-    menu: "Open navigation",
+    menu: "Open menu",
+    menuLabel: "Menu",
   },
   zh: {
     tagline: "把技能变成可盈利的产品",
@@ -29,14 +32,15 @@ const copy = {
     learn: "学习",
     about: "关于",
     start: "开始任务",
-    menu: "打开导航",
+    menu: "打开菜单",
+    menuLabel: "菜单",
   },
 };
 
 export function SiteHeader() {
   const { locale, setLocale } = useLanguage();
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const t = copy[locale];
   const nav = [
     [t.home, "/"],
@@ -61,12 +65,12 @@ export function SiteHeader() {
           <span className="brand-mark-source" aria-hidden="true"><Image src={assetPath("/images/brand-lockup.png")} alt="" width={392} height={62} priority /></span>
           <span className="brand-lockup"><strong>MAKER BUSINESS LAB</strong><small>{t.tagline}</small></span>
         </Link>
-        <nav className={open ? "main-nav is-open" : "main-nav"} aria-label={locale === "zh" ? "主导航" : "Primary navigation"}>
+        <nav className="main-nav" aria-label={locale === "zh" ? "主导航" : "Primary navigation"}>
           {nav.map(([label, href]) => {
             const active = isActive(href);
-            return <Link key={href} href={href} className={active ? "is-active" : undefined} aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>{label}</Link>;
+            return <Link key={href} href={href} className={active ? "is-active" : undefined} aria-current={active ? "page" : undefined}>{label}</Link>;
           })}
-          <Link className="nav-cta" href="/opportunities" onClick={() => setOpen(false)}>{t.start}</Link>
+          <Link className="nav-cta" href="/opportunities">{t.start}</Link>
         </nav>
         <div className="header-actions">
           <div className="language-switch" aria-label={locale === "zh" ? "语言" : "Language"}>
@@ -74,11 +78,12 @@ export function SiteHeader() {
             <span>/</span>
             <button className={locale === "zh" ? "active" : ""} onClick={() => setLocale("zh")} aria-pressed={locale === "zh"}>中文</button>
           </div>
-          <button className="menu-button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={t.menu}>
-            {open ? <X /> : <List />}
+          <button className="menu-button" onClick={() => { setDrawerOpen(true); void trackEvent("drawer_open", { path: pathname }); }} aria-expanded={drawerOpen} aria-haspopup="dialog" aria-label={t.menu}>
+            <List weight="bold" /><span>{t.menuLabel}</span>
           </button>
         </div>
       </div>
+      <SiteDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </header>
   );
 }
