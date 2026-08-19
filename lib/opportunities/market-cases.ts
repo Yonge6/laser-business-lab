@@ -44,6 +44,37 @@ export const marketCases: MarketCase[] = [
     sourceUrl: "https://www.etsy.com/listing/759547412/personalized-acrylic-wedding-welcome",
     checkedAt: "2026-08-19",
   },
+  {
+    opportunityId: "laser-leather-patches",
+    platform: "Etsy",
+    title: "Custom laser-engraved leather patches",
+    titleZh: "定制激光雕刻真皮章",
+    signal: "64 item reviews · 7.8K shop sales",
+    signalZh: "64 条商品评价 · 店铺 7,800+ 笔销量",
+    price: "$11.00",
+    sourceUrl: "https://www.etsy.com/listing/867100012/custom-leather-patches-laser-engraved",
+    checkedAt: "2026-08-19",
+  },
+  {
+    opportunityId: "3d-geometric-planters",
+    platform: "Etsy",
+    title: "3D-printed indoor planter with drainage",
+    titleZh: "带排水结构的 3D 打印室内花盆",
+    signal: "5 item reviews · 24.6K shop sales",
+    signalZh: "5 条商品评价 · 店铺 24,600+ 笔销量",
+    sourceUrl: "https://www.etsy.com/listing/1695765063/indoor-blue-planter-pot-3d-printed",
+    checkedAt: "2026-08-19",
+  },
+  {
+    opportunityId: "layered-wood-wall-art",
+    platform: "Etsy",
+    title: "Multi-layer laser-cut wood wall art",
+    titleZh: "多层激光切割木艺壁饰",
+    signal: "1,412 favorites · 2.4K shop sales",
+    signalZh: "1,412 次收藏 · 店铺 2,400+ 笔销量",
+    sourceUrl: "https://www.etsy.com/listing/4307358815/multilayer-wooden-wall-art-sunburst",
+    checkedAt: "2026-08-19",
+  },
 ];
 
 export const marketCaseByOpportunity = Object.fromEntries(

@@ -45,10 +45,12 @@ const copy = {
     toolkitSub: "Start with the decision you need to make today.",
     tools: [
       ["Product opportunity finder", "Rank products by business fit before you invest.", "/opportunities"],
-      ["Laser ROI calculator", "Test margin, capacity, and payback using your numbers.", "/calculator/laser-roi"],
-      ["Machine finder", "Match business needs to equipment with explainable rules.", "/calculator/machine-finder"],
+      ["Product ROI calculator", "Test laser or 3D-printing margin, capacity, and payback using your numbers.", "/calculator/laser-roi"],
+      ["Maker equipment finder", "Choose a making path, then match business needs to an equipment category.", "/calculator/machine-finder"],
     ],
     estimates: "Opportunity scores and profit figures are directional estimates. Validate demand with small tests before investing.",
+    catalog: "6 market-tested starting ideas",
+    catalogSub: "Select any card to see its proof and continue into a method-aware ROI check.",
   },
   zh: {
     eyebrow: "Maker 商业机会情报",
@@ -82,10 +84,12 @@ const copy = {
     toolkitSub: "从今天最需要做出的决定开始。",
     tools: [
       ["产品机会发现器", "在投资前按商业适配度给产品排序。", "/opportunities"],
-      ["激光 ROI 计算器", "用你的真实数字测试利润、产能和回本周期。", "/calculator/laser-roi"],
-      ["设备匹配器", "用可解释规则把业务需求匹配到设备。", "/calculator/machine-finder"],
+      ["产品 ROI 计算器", "分别用激光或 3D 打印逻辑测试利润、产能和回本周期。", "/calculator/laser-roi"],
+      ["Maker 设备匹配器", "先选择制造方式，再把业务需求匹配到设备类别。", "/calculator/machine-finder"],
     ],
     estimates: "机会评分与利润数字均为方向性估算。投资前请先用小批量测试验证需求。",
+    catalog: "6 个经过市场信号验证的起步方向",
+    catalogSub: "选择任一卡片查看市场证据，并继续进入对应制造方式的 ROI 测算。",
   },
 };
 
@@ -115,6 +119,10 @@ export function HomeExperience() {
       </section>
 
       <section className="opportunity-showcase shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
+        <div className="opportunity-catalog-heading">
+          <span>{t.catalog}</span>
+          <p>{t.catalogSub}</p>
+        </div>
         <div className="opportunity-grid">
           {opportunities.map((opportunity) => (
             <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />

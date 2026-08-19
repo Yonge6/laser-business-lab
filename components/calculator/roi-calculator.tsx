@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, ShareNetwork, TrendUp, Warning } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, Warning } from "@phosphor-icons/react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -14,15 +15,53 @@ import { EmailCapture } from "@/components/results/email-capture";
 import { opportunityById } from "@/lib/opportunities/data";
 import { sitePath } from "@/lib/site";
 
-const products = ["Tumblers", "Signs", "Acrylic Products", "Awards & Trophies", "Leather Goods", "Personalized Gifts", "Wood Products", "Promotional Products", "Other"];
-const productsZh = ["保温杯", "标牌", "亚克力产品", "奖杯与奖牌", "皮革制品", "个性化礼品", "木制品", "促销产品", "其他"];
-const budgets = [
+export type MakerMethod = "laser" | "3d-printing" | "maker";
+
+type ProductOption = { value: string; label: string; labelZh: string };
+type BudgetOption = readonly [string, string, string, number];
+type MachineOption = readonly [string, string, string];
+
+const productsByMethod: Record<MakerMethod, ProductOption[]> = {
+  laser: [
+    ["Tumblers", "Tumblers", "保温杯"], ["Signs", "Signs", "标牌"], ["Acrylic Products", "Acrylic Products", "亚克力产品"],
+    ["Awards & Trophies", "Awards & Trophies", "奖杯与奖牌"], ["Leather Goods", "Leather Goods", "皮革制品"], ["Personalized Gifts", "Personalized Gifts", "个性化礼品"],
+    ["Wood Products", "Wood Products", "木制品"], ["Promotional Products", "Promotional Products", "促销产品"], ["Other", "Other", "其他"],
+  ].map(([value, label, labelZh]) => ({ value, label, labelZh })),
+  "3d-printing": [
+    ["Desk Organizers", "Desk Organizers", "桌面收纳"], ["Planters", "Planters", "花盆"], ["Tool Holders", "Tool Holders", "工具收纳"],
+    ["Display Stands", "Display Stands", "展示支架"], ["Replacement Parts", "Replacement Parts", "替换零件"], ["Custom Accessories", "Custom Accessories", "定制配件"],
+    ["Personalized Gifts", "Personalized Gifts", "个性化礼品"], ["Other", "Other", "其他"],
+  ].map(([value, label, labelZh]) => ({ value, label, labelZh })),
+  maker: [
+    ["Tumblers", "Laser-engraved tumblers", "激光雕刻保温杯"], ["Signs", "Laser-cut signs", "激光切割标牌"], ["Desk Organizers", "3D-printed desk organizers", "3D 打印桌面收纳"],
+    ["Functional Parts", "3D-printed functional parts", "3D 打印功能零件"], ["Personalized Gifts", "Personalized gifts", "个性化礼品"], ["Other", "Other", "其他"],
+  ].map(([value, label, labelZh]) => ({ value, label, labelZh })),
+};
+
+const laserBudgets = [
   ["under-3", "Under $3,000", "低于 $3,000", 2_500],
   ["3-5", "$3,000–$5,000", "$3,000–$5,000", 4_000],
   ["5-8", "$5,000–$8,000", "$5,000–$8,000", 5_599],
   ["8-15", "$8,000–$15,000", "$8,000–$15,000", 10_999],
   ["15+", "$15,000+", "$15,000 以上", 15_000],
-] as const;
+] as const satisfies readonly BudgetOption[];
+
+const printingBudgets = [
+  ["under-500", "Under $500", "低于 $500", 399],
+  ["500-1", "$500–$1,000", "$500–$1,000", 799],
+  ["1-3", "$1,000–$3,000", "$1,000–$3,000", 1_499],
+  ["3-8", "$3,000–$8,000", "$3,000–$8,000", 4_999],
+  ["8+", "$8,000+", "$8,000 以上", 8_000],
+] as const satisfies readonly BudgetOption[];
+
+const makerBudgets = [
+  ["under-500", "Under $500", "低于 $500", 399],
+  ["500-3", "$500–$3,000", "$500–$3,000", 1_499],
+  ["3-8", "$3,000–$8,000", "$3,000–$8,000", 5_599],
+  ["8+", "$8,000+", "$8,000 以上", 8_000],
+] as const satisfies readonly BudgetOption[];
+
+const budgetsByMethod: Record<MakerMethod, readonly BudgetOption[]> = { laser: laserBudgets, "3d-printing": printingBudgets, maker: makerBudgets };
 
 const currentMachines = [
   ["none", "No laser yet", "还没有激光设备"],
@@ -32,7 +71,27 @@ const currentMachines = [
   ["rf-co2", "RF CO₂", "RF CO₂ 激光机"],
   ["fiber", "Fiber", "光纤激光机"],
   ["other", "Other", "其他"],
-] as const;
+] as const satisfies readonly MachineOption[];
+
+const currentPrinters = [
+  ["none", "No 3D printer yet", "还没有 3D 打印机"],
+  ["open-fdm", "Open-frame FDM printer", "开放式 FDM 打印机"],
+  ["enclosed-fdm", "Enclosed FDM printer", "封闭式 FDM 打印机"],
+  ["multi-material", "Multi-material system", "多材料打印系统"],
+  ["resin", "Resin / SLA printer", "树脂 / SLA 打印机"],
+  ["farm", "Multiple printers / print farm", "多机 / 打印农场"],
+  ["other", "Other", "其他"],
+] as const satisfies readonly MachineOption[];
+
+const currentMakerEquipment = [
+  ["none", "No production equipment yet", "还没有生产设备"],
+  ["laser", "Laser machine", "激光设备"],
+  ["3d-printer", "3D printer", "3D 打印机"],
+  ["both", "Laser and 3D printer", "激光设备与 3D 打印机"],
+  ["other", "Other", "其他"],
+] as const satisfies readonly MachineOption[];
+
+const machinesByMethod: Record<MakerMethod, readonly MachineOption[]> = { laser: currentMachines, "3d-printing": currentPrinters, maker: currentMakerEquipment };
 
 const profileZh: Record<string, string> = {
   "HIGH-MARGIN": "高毛利",
@@ -66,11 +125,11 @@ const copy = {
       orders: "Orders per month",
       days: "Working days per month",
       hours: "Hours available per day",
-      budget: "Laser budget",
-      machine: "Planned machine investment",
-      current: "Current machine",
+      budget: "Equipment budget",
+      machine: "Planned equipment investment",
+      current: "Current equipment",
     },
-    complete: "Your laser business report",
+    complete: "Your maker business report",
     potential: "Estimated business potential",
     annual: "Annual gross profit",
     production: "Production time",
@@ -79,11 +138,14 @@ const copy = {
     share: "Copy share link",
     copied: "Link copied",
     reset: "Edit my numbers",
+    equipment: "Match equipment for this path",
     mission: "MISSION COMPLETE +100 XP",
     step: "STEP",
     minute: "min",
     hour: "hrs",
     month: "mo",
+    path: "Making path",
+    methods: { laser: "Laser", "3d-printing": "3D printing", maker: "Maker" },
   },
   zh: {
     steps: ["产品", "经济模型", "生产", "设备"],
@@ -105,11 +167,11 @@ const copy = {
       orders: "每月订单量",
       days: "每月工作天数",
       hours: "每天可用小时",
-      budget: "激光设备预算",
+      budget: "设备预算",
       machine: "计划设备投资",
       current: "当前设备",
     },
-    complete: "你的激光商业报告",
+    complete: "你的 Maker 商业报告",
     potential: "预计商业潜力",
     annual: "年度毛利润",
     production: "生产时间",
@@ -118,11 +180,27 @@ const copy = {
     share: "复制分享链接",
     copied: "链接已复制",
     reset: "修改数字",
+    equipment: "匹配这条路径的设备",
     mission: "任务完成 +100 XP",
     step: "步骤",
     minute: "分钟",
     hour: "小时",
     month: "个月",
+    path: "制造方式",
+    methods: { laser: "激光制作", "3d-printing": "3D 打印", maker: "Maker 制作" },
+  },
+};
+
+const methodCopy = {
+  en: {
+    laser: { complete: "Your laser business report", budget: "Laser budget", machine: "Planned laser investment", current: "Current laser machine", minutes: "Laser production time per item" },
+    "3d-printing": { complete: "Your 3D-printing business report", budget: "3D-printer budget", machine: "Planned printer investment", current: "Current 3D printer", minutes: "Print time per item" },
+    maker: { complete: "Your maker business report", budget: "Equipment budget", machine: "Planned equipment investment", current: "Current equipment", minutes: "Production time per item" },
+  },
+  zh: {
+    laser: { complete: "你的激光商业报告", budget: "激光设备预算", machine: "计划激光设备投资", current: "当前激光设备", minutes: "单件激光生产时间" },
+    "3d-printing": { complete: "你的 3D 打印商业报告", budget: "3D 打印机预算", machine: "计划打印机投资", current: "当前 3D 打印机", minutes: "单件打印时间" },
+    maker: { complete: "你的 Maker 商业报告", budget: "设备预算", machine: "计划设备投资", current: "当前设备", minutes: "单件生产时间" },
   },
 };
 
@@ -137,11 +215,15 @@ const initialInput: RoiInput = {
   machinePrice: 5_599,
 };
 
-export function RoiCalculator() {
+export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const { locale } = useLanguage();
   const searchParams = useSearchParams();
   const selectedOpportunity = opportunityById[searchParams.get("product") ?? ""];
-  const [product, setProduct] = useState(selectedOpportunity?.title ?? "Tumblers");
+  const baseProductOptions = productsByMethod[method];
+  const productOptions = selectedOpportunity && !baseProductOptions.some((item) => item.value === selectedOpportunity.title)
+    ? [{ value: selectedOpportunity.title, label: selectedOpportunity.title, labelZh: selectedOpportunity.titleZh }, ...baseProductOptions]
+    : baseProductOptions;
+  const [product, setProduct] = useState(selectedOpportunity?.title ?? productOptions[0].value);
   const [step, setStep] = useState(0);
   const [input, setInput] = useState<RoiInput>(() => selectedOpportunity ? {
     ...initialInput,
@@ -149,24 +231,30 @@ export function RoiCalculator() {
     materialCost: selectedOpportunity.materialCost,
     packagingCost: 0,
     productionMinutes: selectedOpportunity.productionMinutes,
+    machinePrice: selectedOpportunity.startingBudget,
   } : initialInput);
-  const [budget, setBudget] = useState("5-8");
+  const budgetOptions = budgetsByMethod[method];
+  const machineOptions = machinesByMethod[method];
+  const [budget, setBudget] = useState(method === "laser" ? "5-8" : method === "3d-printing" ? "500-1" : "500-3");
   const [currentMachine, setCurrentMachine] = useState("none");
   const [complete, setComplete] = useState(false);
   const [copied, setCopied] = useState(false);
   const result = useMemo(() => calculateRoi(input), [input]);
   const t = copy[locale];
-  const localizedProduct = locale === "zh" ? selectedOpportunity?.titleZh ?? productsZh[products.indexOf(product)] ?? product : product;
+  const methodT = methodCopy[locale][method];
+  const localizedProduct = locale === "zh" ? productOptions.find((item) => item.value === product)?.labelZh ?? product : productOptions.find((item) => item.value === product)?.label ?? product;
+  const toolName = method === "laser" ? "laser_roi" : method === "3d-printing" ? "3d_printing_roi" : "maker_roi";
+  const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : Target;
   const set = (key: keyof RoiInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
 
   async function advance() {
     if (step < 3) {
-      await trackEvent("calculator_step_completed", { tool: "laser_roi", step: step + 1, product_category: product });
+      await trackEvent("calculator_step_completed", { tool: toolName, step: step + 1, product_category: product, method });
       setStep((value) => value + 1);
       return;
     }
     setComplete(true);
-    await trackEvent("calculator_complete", { tool: "laser_roi", product_category: product, budget_range: budget, calculator_input: input, calculator_result: result });
+    await trackEvent("calculator_complete", { tool: toolName, product_category: product, category: method, budget_range: budget, calculator_input: input, calculator_result: result });
   }
 
   async function share() {
@@ -205,13 +293,13 @@ export function RoiCalculator() {
       textArea.remove();
     }
     setCopied(true);
-    await trackEvent("share_result", { tool: "laser_roi", product_category: product });
+    await trackEvent("share_result", { tool: toolName, product_category: product, category: method });
   }
 
   if (complete) {
     return (
       <section className="business-report shell">
-        <header className="report-header"><div><p className="eyebrow">{t.mission}</p><h2>{t.complete}</h2><p>{localizedProduct}</p></div><TrendUp weight="bold" /></header>
+        <header className="report-header"><div><p className="eyebrow">{t.mission}</p><h2>{methodT.complete}</h2><p>{localizedProduct}</p></div><TrendUp weight="bold" /></header>
         <div className="report-grid">
           <div className="report-main">
             <span>{t.potential}</span>
@@ -228,9 +316,10 @@ export function RoiCalculator() {
         <div className="profile-block"><span>{t.profile}</span><div>{result.profiles.map((profile) => <b key={profile}>{locale === "zh" ? profileZh[profile] ?? profile : profile}</b>)}</div></div>
         <div className="report-actions">
           <button className="button button-primary" onClick={share}>{copied ? <Check weight="bold" /> : <ShareNetwork weight="bold" />}{copied ? t.copied : t.share}</button>
+          {method !== "maker" ? <Link className="button button-ghost" href={`/calculator/machine-finder?method=${method}&product=${encodeURIComponent(selectedOpportunity?.id ?? product)}`}>{t.equipment}<ArrowRight weight="bold" /></Link> : null}
           <button className="button button-ghost" onClick={() => setComplete(false)}>{t.reset}</button>
         </div>
-        <EmailCapture tool="laser_roi" result={product} />
+        <EmailCapture tool={toolName} result={product} />
         <EstimateDisclaimer />
       </section>
     );
@@ -239,14 +328,15 @@ export function RoiCalculator() {
   return (
     <section className="calculator-shell shell">
       <div className="calculator-card">
+        <div className={`method-context method-${method}`}><MethodIcon weight="bold" /><span>{t.path}</span><strong>{t.methods[method]}</strong></div>
         <ol className="calculator-steps">{t.steps.map((label, index) => <li key={label} className={index === step ? "active" : index < step ? "done" : ""}><span>{index < step ? <Check weight="bold" /> : index + 1}</span><b>{label}</b></li>)}</ol>
         <div className="calculator-question">
           <p className="eyebrow">{t.step} {String(step + 1).padStart(2, "0")} / 04</p>
           <h2>{t.questions[step]}</h2>
-          {step === 0 ? <div className="choice-grid product-choices">{products.map((item, index) => <button key={item} className={product === item ? "choice-card selected" : "choice-card"} onClick={() => setProduct(item)}><span>{product === item ? <Check weight="bold" /> : null}</span><strong>{locale === "zh" ? productsZh[index] : item}</strong></button>)}</div> : null}
+          {step === 0 ? <div className="choice-grid product-choices">{productOptions.map((item) => <button key={item.value} className={product === item.value ? "choice-card selected" : "choice-card"} onClick={() => setProduct(item.value)}><span>{product === item.value ? <Check weight="bold" /> : null}</span><strong>{locale === "zh" ? item.labelZh : item.label}</strong></button>)}</div> : null}
           {step === 1 ? <div className="field-grid"><NumberField label={t.labels.selling} value={input.sellingPrice} onChange={set("sellingPrice")} prefix="$" step={1} /><NumberField label={t.labels.material} value={input.materialCost} onChange={set("materialCost")} prefix="$" step={.5} /><NumberField label={t.labels.packaging} value={input.packagingCost} onChange={set("packagingCost")} prefix="$" step={.5} /></div> : null}
-          {step === 2 ? <div className="field-grid"><NumberField label={t.labels.minutes} value={input.productionMinutes} onChange={set("productionMinutes")} suffix={t.minute} min={.1} /><NumberField label={t.labels.orders} value={input.monthlyOrders} onChange={set("monthlyOrders")} min={0} /><NumberField label={t.labels.days} value={input.workingDays} onChange={set("workingDays")} max={31} /><NumberField label={t.labels.hours} value={input.hoursPerDay} onChange={set("hoursPerDay")} max={24} step={.5} /></div> : null}
-          {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{t.labels.budget}</span><select value={budget} onChange={(event) => { const next = budgets.find((item) => item[0] === event.target.value)!; setBudget(event.target.value); set("machinePrice")(next[3]); }}>{budgets.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label><NumberField label={t.labels.machine} value={input.machinePrice} onChange={set("machinePrice")} prefix="$" step={100} /><label className="select-field"><span className="field-label">{t.labels.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{currentMachines.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label></div> : null}
+          {step === 2 ? <div className="field-grid"><NumberField label={methodT.minutes} value={input.productionMinutes} onChange={set("productionMinutes")} suffix={t.minute} min={.1} /><NumberField label={t.labels.orders} value={input.monthlyOrders} onChange={set("monthlyOrders")} min={0} /><NumberField label={t.labels.days} value={input.workingDays} onChange={set("workingDays")} max={31} /><NumberField label={t.labels.hours} value={input.hoursPerDay} onChange={set("hoursPerDay")} max={24} step={.5} /></div> : null}
+          {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{methodT.budget}</span><select value={budget} onChange={(event) => { const next = budgetOptions.find((item) => item[0] === event.target.value)!; setBudget(event.target.value); set("machinePrice")(next[3]); }}>{budgetOptions.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label><NumberField label={methodT.machine} value={input.machinePrice} onChange={set("machinePrice")} prefix="$" step={100} /><label className="select-field"><span className="field-label">{methodT.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{machineOptions.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label></div> : null}
           <div className="quest-nav"><button className="button button-ghost" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}><ArrowLeft weight="bold" />{t.back}</button><button className="button button-primary" onClick={advance}>{step === 3 ? t.report : t.next}<ArrowRight weight="bold" /></button></div>
         </div>
       </div>

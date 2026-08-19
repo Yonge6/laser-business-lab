@@ -7,7 +7,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 const copy = {
   en: {
     line: "Business intelligence for people who make things.",
-    disclosure: "Maker Business Lab may recommend OneLaser products. Some outbound links are tracked and may be affiliated with OneLaser.",
+    disclosure: "Marketplace and equipment references are provided for comparison. Recommendations use visible criteria—not paid rankings.",
     estimates: "All profit, demand, and capacity figures are estimates—not financial or business advice.",
     privacy: "Privacy",
     disclaimer: "Disclaimer",
@@ -15,7 +15,7 @@ const copy = {
   },
   zh: {
     line: "为 Maker 提供商业选择情报。",
-    disclosure: "Maker Business Lab 可能推荐 OneLaser 产品。部分外链会被追踪，并可能与 OneLaser 存在关联。",
+    disclosure: "电商与设备资料仅用于比较参考。推荐基于可见条件，并非付费排名。",
     estimates: "所有利润、需求和产能数据均为估算，不构成财务或商业建议。",
     privacy: "隐私",
     disclaimer: "免责声明",
