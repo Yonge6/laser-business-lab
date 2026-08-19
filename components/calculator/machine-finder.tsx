@@ -2,12 +2,13 @@
 
 import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, Info, Sparkle, Target, Trophy, TShirt } from "@phosphor-icons/react";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { recommendEquipment, type EquipmentAnswers, type EquipmentBudget, type EquipmentExperience, type EquipmentMethod, type EquipmentVolume } from "@/lib/equipment/engine";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { EmailCapture } from "@/components/results/email-capture";
 import { trackEvent } from "@/lib/analytics/client";
+import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
 
 const initial: EquipmentAnswers = { method: "laser", products: [], priorities: [], volume: "10-30", budget: "starter", experience: "growing" };
 
@@ -79,6 +80,17 @@ export function MachineFinder() {
   const options = [t.methods, t.products[answers.method], t.priorities, t.volumes, t.budgets, t.experience][step] as Option[];
   const current: string | string[] = [answers.method, answers.products, answers.priorities, answers.volume, answers.budget, answers.experience][step];
   const MethodIcon = answers.method === "laser" ? Sparkle : answers.method === "3d-printing" ? Cube : TShirt;
+  const oneLaserMatch = recommendation.best.oneLaser;
+
+  useEffect(() => {
+    if (!complete || !oneLaserMatch) return;
+    void trackEvent("recommendation_view", {
+      tool: "equipment_match",
+      brand: "OneLaser",
+      recommendation: recommendation.best.id,
+      placement: "machine_finder_result",
+    });
+  }, [complete, oneLaserMatch, recommendation.best.id]);
 
   function choose(value: string) {
     if (step === 0) setAnswers((state) => ({ ...state, method: value as EquipmentMethod, products: [], priorities: [], budget: value === "laser" ? "starter" : "entry" }));
@@ -113,6 +125,7 @@ export function MachineFinder() {
             <div><p className="eyebrow">{t.alt}</p><h3>{locale === "zh" ? recommendation.alternative.nameZh : recommendation.alternative.name}</h3><p>{locale === "zh" ? recommendation.alternative.descriptionZh : recommendation.alternative.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.alternative.investmentZh : recommendation.alternative.investment}</strong></p>{recommendation.alternative.referenceUrl ? <a className="equipment-reference" href={recommendation.alternative.referenceUrl} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.alternative.referenceName}<ArrowSquareOut weight="bold" /></a> : null}</div>
           </article>
         </div>
+        {oneLaserMatch ? <OneLaserRecommendation profileId={recommendation.best.id} productName={oneLaserMatch.productName} destination={oneLaserMatch.destination} fit={oneLaserMatch.fit} fitZh={oneLaserMatch.fitZh} placement="machine_finder_result" /> : null}
         <div className="recommendation-explainer"><Info weight="bold" /><p>{t.explainer}</p></div>
         <button className="button button-ghost" onClick={() => { setComplete(false); setStep(0); }}>{t.restart}</button>
         <EmailCapture tool="equipment_match" result={recommendation.best.id} />

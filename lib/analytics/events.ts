@@ -9,6 +9,8 @@ export type AnalyticsEventName =
   | "machine_finder_complete"
   | "recommendation_view"
   | "recommendation_click"
+  | "drawer_open"
+  | "drawer_link_click"
   | "email_capture"
   | "share_result";
 

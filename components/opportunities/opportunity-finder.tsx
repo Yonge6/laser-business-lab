@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Cube, Sparkle, Target, TShirt } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Check, Cube, Hammer, Sparkle, Target, TShirt } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { rankOpportunities, type OpportunityAnswers } from "@/lib/opportunities/engine";
@@ -37,6 +37,7 @@ const copy = {
     resultSub: "Start with the top opportunity, then validate demand before buying more equipment.",
     restart: "Run a new quest",
     calculator: "Calculate this product",
+    equipment: "Match equipment",
     match: "Match score",
     why: "Why it fits",
     xp: "+100 XP — Opportunity path complete",
@@ -61,6 +62,7 @@ const copy = {
     resultSub: "从第一名机会开始，先验证需求，再追加设备投资。",
     restart: "重新探索",
     calculator: "计算这个产品",
+    equipment: "匹配生产设备",
     match: "匹配分",
     why: "为什么适合",
     xp: "+100 XP — 已完成机会路径",
@@ -116,7 +118,10 @@ export function OpportunityFinder() {
                 <div className="result-metrics"><span><small>{t.match}</small><b>{item.matchScore}/100</b></span><span><small>{t.gross}</small><b>{formatCurrency(item.grossProfit, 2)}</b></span><span><small>{t.makeTime}</small><b>{item.productionMinutes} {t.minute}</b></span></div>
                 <h4>{t.why}</h4>
                 <ul>{(locale === "zh" ? item.matchReasonsZh : item.matchReasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul>
-                <Link className="button button-ghost" href={`/calculator/laser-roi?product=${item.id}`}>{t.calculator}<ArrowRight weight="bold" /></Link>
+                <div className="result-cta-row">
+                  <Link className="button button-ghost" href={`/calculator/laser-roi?product=${item.id}`}>{t.calculator}<ArrowRight weight="bold" /></Link>
+                  <Link className="result-equipment-link" href={`/calculator/machine-finder?method=${item.category}&product=${item.id}`}>{t.equipment}<Hammer weight="bold" /></Link>
+                </div>
               </div>
             </article>
           ))}
