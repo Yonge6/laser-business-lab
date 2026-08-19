@@ -1,0 +1,67 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { List, X } from "@phosphor-icons/react";
+import { useState } from "react";
+import { useLanguage } from "@/components/providers/language-provider";
+
+const copy = {
+  en: {
+    tagline: "Turn skills into profitable products",
+    opportunities: "Opportunities",
+    calculators: "Calculators",
+    equipment: "Equipment",
+    learn: "Learn",
+    about: "About",
+    start: "Start quest",
+    menu: "Open navigation",
+  },
+  zh: {
+    tagline: "把技能变成可盈利的产品",
+    opportunities: "机会发现",
+    calculators: "利润计算",
+    equipment: "设备匹配",
+    learn: "学习",
+    about: "关于",
+    start: "开始任务",
+    menu: "打开导航",
+  },
+};
+
+export function SiteHeader() {
+  const { locale, setLocale } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const t = copy[locale];
+  const nav = [
+    [t.opportunities, "/opportunities"],
+    [t.calculators, "/calculator"],
+    [t.equipment, "/calculator/machine-finder"],
+    [t.learn, "/learn"],
+    [t.about, "/about"],
+  ];
+
+  return (
+    <header className="site-header">
+      <div className="shell header-inner">
+        <Link className="brand" href="/" aria-label="Laser Business Lab home">
+          <Image className="brand-logo" src="/images/brand-lockup.png" alt="Laser Business Lab — Turn skills into profitable products" width={392} height={62} priority />
+        </Link>
+        <nav className={open ? "main-nav is-open" : "main-nav"} aria-label="Primary navigation">
+          {nav.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)}>{label}</Link>)}
+          <Link className="nav-cta" href="/opportunities" onClick={() => setOpen(false)}>{t.start}</Link>
+        </nav>
+        <div className="header-actions">
+          <div className="language-switch" aria-label="Language">
+            <button className={locale === "en" ? "active" : ""} onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
+            <span>/</span>
+            <button className={locale === "zh" ? "active" : ""} onClick={() => setLocale("zh")} aria-pressed={locale === "zh"}>中文</button>
+          </div>
+          <button className="menu-button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={t.menu}>
+            {open ? <X /> : <List />}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
