@@ -26,6 +26,23 @@ function reportRequest(overrides: Record<string, unknown> = {}, origin = "https:
   });
 }
 
+function vercelReportRequest(overrides: Record<string, unknown> = {}, origin = "https://maker.wonderelian.com") {
+  return new Request("https://maker-business-lab-report-email.vercel.app/api/reports", {
+    method: "POST",
+    headers: { origin, "content-type": "application/json" },
+    body: JSON.stringify({
+      email: "maker@example.com",
+      tool: "machine_finder",
+      result: "XRF",
+      reportUrl: "https://maker.wonderelian.com/report/?id=abc",
+      locale: "en",
+      requestId: "request-123456",
+      company: "",
+      ...overrides,
+    }),
+  });
+}
+
 describe("report email worker", () => {
   afterEach(() => vi.unstubAllGlobals());
 
@@ -63,5 +80,15 @@ describe("report email worker", () => {
 
     expect(response.status).toBe(400);
     expect(resend).not.toHaveBeenCalled();
+  });
+
+  it("accepts the Vercel function route", async () => {
+    const resend = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id: "email_vercel" }), { status: 200 }));
+    vi.stubGlobal("fetch", resend);
+
+    const response = await handleReportEmail(vercelReportRequest(), env);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ delivered: true, id: "email_vercel" });
   });
 });
