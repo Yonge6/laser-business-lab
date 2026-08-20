@@ -82,13 +82,14 @@ async function rateLimitKey(email: string) {
 export async function handleReportEmail(request: Request, env: ReportEmailEnv) {
   const allowedOrigins = new Set(env.ALLOWED_ORIGINS.split(",").map((value) => value.trim()).filter(Boolean));
   const origin = request.headers.get("origin") ?? "";
+  const pathname = new URL(request.url).pathname;
 
-  if (request.method === "GET" && new URL(request.url).pathname === "/health") {
+  if (request.method === "GET" && (pathname === "/health" || pathname === "/api/health")) {
     return json({ ok: true }, 200);
   }
   if (!origin || !allowedOrigins.has(origin)) return json({ error: "origin_not_allowed" }, 403);
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
-  if (request.method !== "POST" || new URL(request.url).pathname !== "/reports") return json({ error: "not_found" }, 404, origin);
+  if (request.method !== "POST" || (pathname !== "/reports" && pathname !== "/api/reports")) return json({ error: "not_found" }, 404, origin);
   if (Number(request.headers.get("content-length") ?? 0) > 12_000) return json({ error: "payload_too_large" }, 413, origin);
 
   let rawPayload: unknown;
