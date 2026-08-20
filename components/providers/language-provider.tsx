@@ -1,8 +1,10 @@
 "use client";
 
-import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from "react";
 
-export type Locale = "en" | "zh";
+import { localeStorageKey, readSessionLocale, type Locale } from "@/lib/locale-preference";
+
+export type { Locale } from "@/lib/locale-preference";
 
 type LanguageContextValue = {
   locale: Locale;
@@ -23,14 +25,18 @@ function subscribeLocale(callback: () => void) {
 }
 
 function getLocaleSnapshot(): Locale {
-  return window.localStorage.getItem("lbl_locale") === "zh" ? "zh" : "en";
+  return readSessionLocale(window.sessionStorage);
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const locale = useSyncExternalStore<Locale>(subscribeLocale, getLocaleSnapshot, () => "en");
 
+  useEffect(() => {
+    window.localStorage.removeItem(localeStorageKey);
+  }, []);
+
   const setLocale = (next: Locale) => {
-    window.localStorage.setItem("lbl_locale", next);
+    window.sessionStorage.setItem(localeStorageKey, next);
     document.documentElement.lang = next === "zh" ? "zh-CN" : "en";
     window.dispatchEvent(new Event(localeEvent));
   };

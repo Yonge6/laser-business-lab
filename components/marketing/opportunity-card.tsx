@@ -11,7 +11,7 @@ export function OpportunityCard({ opportunity, active, onSelect }: { opportunity
   const { locale } = useLanguage();
   const CategoryIcon = opportunity.category === "laser" ? Sparkle : opportunity.category === "3d-printing" ? Cube : TShirt;
   return (
-    <button className={active ? "opportunity-card is-active" : "opportunity-card"} onClick={onSelect} aria-pressed={active}>
+    <button className={active ? "opportunity-card is-active" : "opportunity-card"} data-opportunity-id={opportunity.id} onClick={onSelect} aria-pressed={active}>
       <span className="card-rank">#{String(opportunity.rank).padStart(2, "0")}</span>
       <span className="card-media">
         <Image src={assetPath(opportunity.image)} alt={locale === "zh" ? opportunity.titleZh : opportunity.title} fill sizes="(max-width: 800px) 100vw, 33vw" />

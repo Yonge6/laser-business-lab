@@ -44,10 +44,21 @@ Copy `.env.example` to `.env.local`. The site remains fully usable without exter
 
 - `NEXT_PUBLIC_GA_ID`: GA4 measurement ID.
 - `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`: optional product analytics.
-- `NEXT_PUBLIC_LEAD_ENDPOINT`: optional external endpoint for email capture.
+- `NEXT_PUBLIC_LEAD_ENDPOINT`: report-email Worker endpoint, for example `https://maker-business-lab-report-email.<account>.workers.dev/reports`.
 - `NEXT_PUBLIC_EVENT_ENDPOINT`: optional external endpoint for first-party event delivery.
 
 Without a lead endpoint, email requests are saved only in that browser so the public static site never pretends a remote submission succeeded.
+
+### Report email delivery
+
+The deployable backend lives in `services/report-email`. It validates allowed origins and report URLs, rejects bot honeypots, rate-limits requests, and sends through Resend without exposing the API key to the static site.
+
+1. Verify `send.wonderelian.com` in Resend and create a Resend API key.
+2. In `services/report-email`, run `pnpm dlx wrangler secret put RESEND_API_KEY`, then `pnpm dlx wrangler deploy`.
+3. Set the GitHub Actions repository variable `NEXT_PUBLIC_LEAD_ENDPOINT` to the deployed `/reports` URL.
+4. Push to `main` and submit one real report as an end-to-end delivery check.
+
+The Worker uses `reports@send.wonderelian.com` as the sender. Change `FROM_EMAIL` in `wrangler.jsonc` only if the verified Resend domain differs.
 
 ## Attribution and outbound flow
 
