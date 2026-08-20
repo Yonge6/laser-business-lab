@@ -9,6 +9,8 @@ import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { EmailCapture } from "@/components/results/email-capture";
 import { trackEvent } from "@/lib/analytics/client";
 import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
+import { buildBambuUrl } from "@/lib/commerce/bambu";
+import { buildXToolUrl } from "@/lib/commerce/xtool";
 
 const initial: EquipmentAnswers = { method: "laser", products: [], priorities: [], volume: "10-30", budget: "starter", experience: "growing" };
 
@@ -81,6 +83,11 @@ export function MachineFinder() {
   const current: string | string[] = [answers.method, answers.products, answers.priorities, answers.volume, answers.budget, answers.experience][step];
   const MethodIcon = answers.method === "laser" ? Sparkle : answers.method === "3d-printing" ? Cube : TShirt;
   const oneLaserMatch = recommendation.best.oneLaser;
+  const referenceUrl = (profile: typeof recommendation.best) => profile.method === "3d-printing"
+    ? buildBambuUrl(`machine_finder_${profile.id}`, "machine_finder_result")
+    : profile.method === "heat-press"
+      ? buildXToolUrl(`machine_finder_${profile.id}`, "machine_finder_result")
+      : profile.referenceUrl;
 
   useEffect(() => {
     if (!complete || !oneLaserMatch) return;
@@ -118,11 +125,11 @@ export function MachineFinder() {
         <div className="machine-match-grid equipment-match-grid">
           <article className="equipment-match-card primary">
             <div className="equipment-profile-mark"><MethodIcon weight="bold" /></div>
-            <div><span>{locale === "zh" ? recommendation.best.categoryZh : recommendation.best.category}</span><h3>{locale === "zh" ? recommendation.best.nameZh : recommendation.best.name}</h3><p>{locale === "zh" ? recommendation.best.descriptionZh : recommendation.best.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.best.investmentZh : recommendation.best.investment}</strong></p>{recommendation.best.referenceUrl ? <a className="equipment-reference" href={recommendation.best.referenceUrl} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.best.referenceName}<ArrowSquareOut weight="bold" /></a> : null}<h4>{t.why}</h4><ul>{(locale === "zh" ? recommendation.reasonsZh : recommendation.reasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul></div>
+            <div><span>{locale === "zh" ? recommendation.best.categoryZh : recommendation.best.category}</span><h3>{locale === "zh" ? recommendation.best.nameZh : recommendation.best.name}</h3><p>{locale === "zh" ? recommendation.best.descriptionZh : recommendation.best.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.best.investmentZh : recommendation.best.investment}</strong></p>{referenceUrl(recommendation.best) ? <a className="equipment-reference" href={referenceUrl(recommendation.best)} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.best.referenceName}<ArrowSquareOut weight="bold" /></a> : null}<h4>{t.why}</h4><ul>{(locale === "zh" ? recommendation.reasonsZh : recommendation.reasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul></div>
           </article>
           <article className="equipment-match-card alternative">
             <div className="equipment-profile-mark"><MethodIcon weight="bold" /></div>
-            <div><p className="eyebrow">{t.alt}</p><h3>{locale === "zh" ? recommendation.alternative.nameZh : recommendation.alternative.name}</h3><p>{locale === "zh" ? recommendation.alternative.descriptionZh : recommendation.alternative.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.alternative.investmentZh : recommendation.alternative.investment}</strong></p>{recommendation.alternative.referenceUrl ? <a className="equipment-reference" href={recommendation.alternative.referenceUrl} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.alternative.referenceName}<ArrowSquareOut weight="bold" /></a> : null}</div>
+            <div><p className="eyebrow">{t.alt}</p><h3>{locale === "zh" ? recommendation.alternative.nameZh : recommendation.alternative.name}</h3><p>{locale === "zh" ? recommendation.alternative.descriptionZh : recommendation.alternative.description}</p><p className="equipment-investment"><small>{t.investment}</small><strong>{locale === "zh" ? recommendation.alternative.investmentZh : recommendation.alternative.investment}</strong></p>{referenceUrl(recommendation.alternative) ? <a className="equipment-reference" href={referenceUrl(recommendation.alternative)} target="_blank" rel="noreferrer">{locale === "zh" ? "参考设备" : "REFERENCE EXAMPLE"}: {recommendation.alternative.referenceName}<ArrowSquareOut weight="bold" /></a> : null}</div>
           </article>
         </div>
         {oneLaserMatch ? <OneLaserRecommendation profileId={recommendation.best.id} productName={oneLaserMatch.productName} destination={oneLaserMatch.destination} fit={oneLaserMatch.fit} fitZh={oneLaserMatch.fitZh} placement="machine_finder_result" /> : null}

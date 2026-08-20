@@ -11,6 +11,11 @@ import { OpportunityRadar } from "@/components/marketing/opportunity-radar";
 import { assetPath } from "@/lib/site";
 import { formatCurrency } from "@/lib/format";
 import { marketCaseByOpportunity } from "@/lib/opportunities/market-cases";
+import { findCenteredItemId } from "@/lib/opportunities/carousel-selection";
+import { buildOneLaserUrl, oneLaserDestinations } from "@/lib/commerce/onelaser";
+import { trackEvent } from "@/lib/analytics/client";
+import { buildBambuUrl } from "@/lib/commerce/bambu";
+import { buildXToolUrl } from "@/lib/commerce/xtool";
 
 const copy = {
   en: {
@@ -25,6 +30,9 @@ const copy = {
     profit: "Est. gross profit / item",
     calculateSelected: "Calculate this product",
     matchEquipment: "Match production equipment",
+    viewOneLaser: "View matched OneLaser",
+    viewBambu: "Compare Bambu Lab printers",
+    viewXTool: "View xTool WonderPress",
     compareAll: "Compare all opportunities",
     resultLink: "Selection results · Updates with the card above",
     marketCase: "Real marketplace example",
@@ -52,7 +60,7 @@ const copy = {
     ],
     estimates: "Opportunity scores and profit figures are directional estimates. Validate demand with small tests before investing.",
     catalog: "7 market-tested starting ideas",
-    catalogSub: "Swipe horizontally, then select any card to see its proof and continue into a method-aware ROI check.",
+    catalogSub: "Swipe horizontally. The centered card is selected automatically and updates the evidence below.",
   },
   zh: {
     eyebrow: "Maker 商业机会情报",
@@ -66,6 +74,9 @@ const copy = {
     profit: "预计单件毛利",
     calculateSelected: "计算这个产品",
     matchEquipment: "匹配生产设备",
+    viewOneLaser: "在 OneLaser 查看匹配设备",
+    viewBambu: "查看拓竹打印机",
+    viewXTool: "查看 xTool WonderPress",
     compareAll: "查看全部机会",
     resultLink: "选择结果 · 随上方卡片实时更新",
     marketCase: "真实电商案例",
@@ -93,7 +104,7 @@ const copy = {
     ],
     estimates: "机会评分与利润数字均为方向性估算。投资前请先用小批量测试验证需求。",
     catalog: "7 个经过市场信号验证的起步方向",
-    catalogSub: "左右滑动浏览，选择任一卡片查看市场证据，并继续进入对应制造方式的 ROI 测算。",
+    catalogSub: "左右滑动浏览，居中的卡片会自动选中，并实时更新下方市场证据。",
   },
 };
 
@@ -106,8 +117,22 @@ export function HomeExperience() {
   const [selectionPointerX, setSelectionPointerX] = useState<number | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const selectionResultRef = useRef<HTMLDivElement>(null);
+  const scrollFrameRef = useRef<number | null>(null);
+  const manualSelectionRef = useRef<string | null>(null);
   const t = copy[locale];
   const marketCase = marketCaseByOpportunity[selected.id];
+  const oneLaserDestination = selected.category === "laser"
+    ? selected.id === "personalized-tumblers" ? oneLaserDestinations.vertigo : oneLaserDestinations.xrf
+    : null;
+  const matchedEquipmentUrl = oneLaserDestination ? buildOneLaserUrl(oneLaserDestination, {
+    campaign: "equipment_match",
+    content: `home_${selected.id}`,
+    placement: "home_opportunity",
+  }) : selected.category === "3d-printing"
+    ? buildBambuUrl(`home_${selected.id}`)
+    : buildXToolUrl(`home_${selected.id}`);
+  const matchedEquipmentBrand = selected.category === "laser" ? "OneLaser" : selected.category === "3d-printing" ? "Bambu Lab" : "xTool";
+  const matchedEquipmentLabel = selected.category === "3d-printing" ? t.viewBambu : selected.category === "heat-press" ? t.viewXTool : t.viewOneLaser;
 
   const updateCarouselEdges = useCallback(() => {
     const carousel = carouselRef.current;
@@ -130,26 +155,77 @@ export function HomeExperience() {
     setSelectionPointerX(Math.max(28, Math.min(resultBounds.width - 28, cardCenter)));
   }, []);
 
+  const selectCenteredCard = useCallback(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const viewport = carousel.getBoundingClientRect();
+    const cards = Array.from(carousel.querySelectorAll<HTMLElement>(".opportunity-card[data-opportunity-id]"));
+    const atStart = carousel.scrollLeft <= 2;
+    const atEnd = carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 2;
+    const manualSelectionId = manualSelectionRef.current;
+    if (manualSelectionId) {
+      const targetCard = cards.find((card) => card.dataset.opportunityId === manualSelectionId);
+      if (targetCard) {
+        const targetBounds = targetCard.getBoundingClientRect();
+        const targetCenter = targetBounds.left + targetBounds.width / 2;
+        const viewportCenter = viewport.left + viewport.width / 2;
+        const targetIsFirstAtStart = targetCard === cards[0] && atStart;
+        const targetIsLastAtEnd = targetCard === cards.at(-1) && atEnd;
+        if (Math.abs(targetCenter - viewportCenter) <= 4 || targetIsFirstAtStart || targetIsLastAtEnd) {
+          manualSelectionRef.current = null;
+        }
+      }
+      return;
+    }
+    const centeredId = atStart
+      ? cards[0]?.dataset.opportunityId
+      : atEnd
+        ? cards.at(-1)?.dataset.opportunityId
+        : findCenteredItemId(viewport.left, viewport.width, cards.map((card) => {
+      const bounds = card.getBoundingClientRect();
+      return { id: card.dataset.opportunityId ?? "", left: bounds.left, width: bounds.width };
+    }).filter((card) => card.id));
+    const centeredOpportunity = opportunities.find((opportunity) => opportunity.id === centeredId);
+    if (centeredOpportunity) {
+      setSelected((current) => current.id === centeredOpportunity.id ? current : centeredOpportunity);
+    }
+  }, []);
+
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
     const syncCarouselState = () => {
       updateCarouselEdges();
+      selectCenteredCard();
       updateSelectionPointer();
+    };
+
+    const scheduleCarouselSync = () => {
+      if (scrollFrameRef.current !== null) cancelAnimationFrame(scrollFrameRef.current);
+      scrollFrameRef.current = requestAnimationFrame(() => {
+        scrollFrameRef.current = null;
+        syncCarouselState();
+      });
     };
 
     syncCarouselState();
     const resizeObserver = new ResizeObserver(syncCarouselState);
     resizeObserver.observe(carousel);
     if (selectionResultRef.current) resizeObserver.observe(selectionResultRef.current);
-    carousel.addEventListener("scroll", syncCarouselState, { passive: true });
+    carousel.addEventListener("scroll", scheduleCarouselSync, { passive: true });
 
     return () => {
+      if (scrollFrameRef.current !== null) cancelAnimationFrame(scrollFrameRef.current);
       resizeObserver.disconnect();
-      carousel.removeEventListener("scroll", syncCarouselState);
+      carousel.removeEventListener("scroll", scheduleCarouselSync);
     };
-  }, [selected.id, updateCarouselEdges, updateSelectionPointer]);
+  }, [selectCenteredCard, updateCarouselEdges, updateSelectionPointer]);
+
+  useEffect(() => {
+    updateSelectionPointer();
+  }, [selected.id, updateSelectionPointer]);
 
   const moveCarousel = (direction: -1 | 1) => {
     const carousel = carouselRef.current;
@@ -161,6 +237,23 @@ export function HomeExperience() {
     carousel.scrollBy({ left: direction * (firstCard.offsetWidth + gap) * cardsPerMove, behavior: "smooth" });
   };
 
+  const selectCard = (opportunity: (typeof opportunities)[number]) => {
+    manualSelectionRef.current = opportunity.id;
+    setSelected(opportunity);
+    const card = carouselRef.current?.querySelector<HTMLElement>(`[data-opportunity-id="${opportunity.id}"]`);
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
+
+  const trackHomeEquipmentClick = () => {
+    void trackEvent("recommendation_click", {
+      tool: "home_opportunity",
+      brand: matchedEquipmentBrand ?? "unknown",
+      recommendation: selected.category === "3d-printing" ? "bambu_printer_comparison" : selected.category === "heat-press" ? "wonderpress" : selected.id === "personalized-tumblers" ? "vertigo" : "xrf",
+      placement: "home_opportunity",
+      destination: "product",
+    });
+  };
+
   return (
     <main>
       <section className="hero-section shell">
@@ -170,17 +263,15 @@ export function HomeExperience() {
           <h1>{t.heroA}<br /><em>{t.heroB}</em></h1>
           <div className="speed-stripe" aria-hidden="true" />
           <p className="hero-sub">{t.sub}</p>
-          <div className="hero-actions">
-            <Link className="button button-primary" href="/opportunities">{t.find}<ArrowRight weight="bold" /></Link>
-            <Link className="button button-ghost" href="/calculator/laser-roi">{t.calculate}<Calculator weight="bold" /></Link>
-          </div>
         </div>
         <OpportunityRadar opportunity={selected} />
       </section>
 
       <section className="opportunity-showcase shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
         <div className="opportunity-catalog-heading">
-          <span>{t.catalog}</span>
+          <div className="opportunity-catalog-copy">
+            <span>{t.catalog}</span>
+          </div>
           <p>{t.catalogSub}</p>
         </div>
         <div className="opportunity-carousel">
@@ -189,7 +280,7 @@ export function HomeExperience() {
           </button>
           <div ref={carouselRef} id="opportunity-carousel-track" className="opportunity-grid" tabIndex={0} aria-label={locale === "zh" ? `横向滑动浏览 ${opportunities.length} 个产品机会` : `Swipe horizontally through ${opportunities.length} product opportunities`}>
             {opportunities.map((opportunity) => (
-              <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => setSelected(opportunity)} />
+              <OpportunityCard key={opportunity.id} opportunity={opportunity} active={selected.id === opportunity.id} onSelect={() => selectCard(opportunity)} />
             ))}
           </div>
           <button className="carousel-control carousel-control-next" type="button" onClick={() => moveCarousel(1)} disabled={carouselEdges.atEnd} aria-label={locale === "zh" ? "查看下一组产品机会" : "View next product opportunities"} aria-controls="opportunity-carousel-track">
@@ -214,7 +305,7 @@ export function HomeExperience() {
             <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
             <div className="selection-actions">
               <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
-              <Link className="selection-more" href={`/calculator/machine-finder?method=${selected.category}&product=${selected.id}`}>{t.matchEquipment}<Hammer weight="bold" /></Link>
+              <a className="selection-more" href={matchedEquipmentUrl} target="_blank" rel="noreferrer" onClick={trackHomeEquipmentClick}>{matchedEquipmentLabel}<ArrowSquareOut weight="bold" /></a>
               <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
             </div>
           </div>
@@ -236,6 +327,10 @@ export function HomeExperience() {
             </div>
             <p className="market-proof-note">{t.marketNote}</p>
           </article>
+        </div>
+        <div className="opportunity-bottom-actions">
+          <Link className="button button-primary" href="/opportunities">{t.find}<ArrowRight weight="bold" /></Link>
+          <Link className="button button-ghost" href="/calculator/laser-roi">{t.calculate}<Calculator weight="bold" /></Link>
         </div>
       </section>
 

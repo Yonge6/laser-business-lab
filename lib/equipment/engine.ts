@@ -1,3 +1,7 @@
+import { oneLaserDestinations } from "@/lib/commerce/onelaser";
+import { BAMBU_PRINTERS_URL } from "@/lib/commerce/bambu";
+import { XTOOL_WONDERPRESS_URL } from "@/lib/commerce/xtool";
+
 export type EquipmentMethod = "laser" | "3d-printing" | "heat-press";
 export type EquipmentBudget = "entry" | "starter" | "growth" | "production";
 export type EquipmentVolume = "occasional" | "1-10" | "10-30" | "30-100" | "100+";
@@ -36,8 +40,7 @@ export type EquipmentProfile = {
 };
 
 const profiles: EquipmentProfile[] = [
-  { id: "diode-laser", method: "laser", name: "Diode laser starter setup", nameZh: "二极管激光入门方案", category: "Accessible laser entry", categoryZh: "低门槛激光入门", description: "Best for testing wood, leather, and gift demand with a lower initial commitment.", descriptionZh: "适合以较低初始投入测试木材、皮革和礼品需求。", investment: "Entry investment", investmentZh: "入门级投入", tags: ["wood", "leather", "gifts", "easy setup", "lower upfront investment", "occasional", "first", "beginner"], budgetLevel: 0, oneLaser: { productName: "OneLaser machine lineup", destination: oneLaserDestinations.machines, fit: "Use the OneLaser lineup as an upgrade benchmark after an entry-level demand test proves repeat orders.", fitZh: "先用入门设备验证重复订单，再把 OneLaser 产品线作为升级比较基准。" } },
-  { id: "desktop-co2", method: "laser", name: "Enclosed desktop CO₂ setup", nameZh: "封闭式桌面 CO₂ 方案", category: "Versatile laser production", categoryZh: "多用途激光生产", description: "A balanced path for acrylic, signs, wood, gifts, and repeatable small-batch work.", descriptionZh: "适合亚克力、标牌、木制品、礼品和可重复的小批量生产。", investment: "Starter to growth investment", investmentZh: "起步至成长级投入", tags: ["acrylic", "signs", "wood", "gifts", "versatility", "fine detail", "easy setup", "1-10", "10-30", "beginner", "growing"], budgetLevel: 1, oneLaser: { productName: "OneLaser XT", destination: oneLaserDestinations.xt, fit: "A concrete enclosed desktop option to compare for acrylic, wood, signs, and repeatable small-batch production.", fitZh: "可作为亚克力、木材、标牌和稳定小批量生产的封闭式桌面设备进行具体比较。" } },
+  { id: "xrf-desktop", method: "laser", name: "OneLaser XRF desktop RF setup", nameZh: "OneLaser XRF 桌面式 RF 方案", category: "Precision desktop laser production", categoryZh: "高精度桌面激光生产", description: "A versatile enclosed RF path for detailed engraving, acrylic, wood, gifts, and repeatable small-batch work.", descriptionZh: "适合精细雕刻、亚克力、木材、礼品和可重复小批量生产的封闭式 RF 路径。", investment: "Starter investment", investmentZh: "起步级投入", tags: ["acrylic", "signs", "wood", "leather", "gifts", "awards", "versatility", "fine detail", "easy setup", "lower upfront investment", "occasional", "1-10", "10-30", "first", "beginner", "growing"], budgetLevel: 1, oneLaser: { productName: "OneLaser XRF", destination: oneLaserDestinations.xrf, fit: "The OneLaser entry recommendation for an enclosed desktop workflow with RF detail, broad material coverage, and room to grow.", fitZh: "OneLaser 入门推荐：封闭式桌面工作流兼顾 RF 精细度、材料范围与后续成长空间。" } },
   { id: "fiber-laser", method: "laser", name: "Vertical RF drinkware setup", nameZh: "立式 RF 杯类雕刻方案", category: "Fast drinkware personalization", categoryZh: "高速杯类个性化", description: "Built for coated drinkware, fine marks, integrated rotary handling, and short cycle times.", descriptionZh: "适合涂层杯、精细雕刻、集成旋转夹持和短周期生产。", investment: "Growth investment", investmentZh: "成长级投入", tags: ["tumblers", "awards", "fine detail", "speed", "drinkware", "10-30", "30-100", "growing", "professional"], budgetLevel: 2, oneLaser: { productName: "OneLaser VertiGo", destination: oneLaserDestinations.vertigo, fit: "The closest OneLaser checkpoint for a tumbler-focused path that prioritizes speed, fine detail, and repeatable rotary handling.", fitZh: "与你的杯类业务路径最接近，重点对应速度、精细雕刻和可重复的旋转夹持工作流。" } },
   { id: "production-co2", method: "laser", name: "Large-format production CO₂ setup", nameZh: "大幅面生产型 CO₂ 方案", category: "High-output laser production", categoryZh: "高产能激光生产", description: "Designed for large signs, production runs, higher throughput, and shop-scale workflows.", descriptionZh: "面向大型标牌、批量订单、更高产能和工作室级流程。", investment: "Production investment", investmentZh: "生产级投入", tags: ["large-format products", "production runs", "speed", "high-volume production", "large work area", "30-100", "100+", "professional", "production"], budgetLevel: 3, oneLaser: { productName: "OneLaser Cobra 14", destination: oneLaserDestinations.cobra14, fit: "A real large-format CO₂ machine to compare when work area, cutting power, and production throughput drive the decision.", fitZh: "当工作区域、切割功率和生产吞吐量决定选择时，可用它进行真实的大幅面 CO₂ 设备比较。" } },
   { id: "open-fdm", method: "3d-printing", name: "Open-frame FDM starter setup", nameZh: "开放式 FDM 入门方案", category: "Accessible 3D-printing entry", categoryZh: "低门槛 3D 打印入门", description: "A practical way to test organizers, planters, and simple accessories before scaling.", descriptionZh: "适合在扩大投入前测试收纳、花盆和简单配件需求。", investment: "Entry investment", investmentZh: "入门级投入", tags: ["desk organizers", "planters", "custom accessories", "easy setup", "lower upfront investment", "occasional", "1-10", "first", "beginner"], budgetLevel: 0 },
@@ -52,6 +55,12 @@ const profiles: EquipmentProfile[] = [
 ];
 
 const budgetLevels: Record<EquipmentBudget, number> = { entry: 0, starter: 1, growth: 2, production: 3 };
+
+function withOfficialReference(profile: EquipmentProfile): EquipmentProfile {
+  if (profile.method === "3d-printing") return { ...profile, referenceName: "Bambu Lab printers", referenceUrl: BAMBU_PRINTERS_URL };
+  if (profile.method === "heat-press") return { ...profile, referenceName: "xTool WonderPress", referenceUrl: XTOOL_WONDERPRESS_URL };
+  return profile;
+}
 
 function score(profile: EquipmentProfile, answers: EquipmentAnswers) {
   const tagScore = [...answers.products, ...answers.priorities, answers.volume, answers.experience]
@@ -76,10 +85,13 @@ function reasonsFor(profile: EquipmentProfile, answers: EquipmentAnswers, zh: bo
 export function recommendEquipment(answers: EquipmentAnswers) {
   const ranked = profiles
     .filter((profile) => profile.method === answers.method)
-    .map((profile) => ({ profile, score: score(profile, answers) }))
+    .map((profile) => ({ profile: withOfficialReference(profile), score: score(profile, answers) }))
     .sort((a, b) => b.score - a.score);
-  const best = ranked[0].profile;
-  const alternative = ranked[1].profile;
+  const tumblerProfile = answers.method === "laser" && answers.products.includes("tumblers")
+    ? profiles.find((profile) => profile.id === "fiber-laser")
+    : undefined;
+  const best = withOfficialReference(tumblerProfile ?? ranked[0].profile);
+  const alternative = ranked.find(({ profile }) => profile.id !== best.id)?.profile ?? best;
   return {
     best,
     alternative,
@@ -87,4 +99,3 @@ export function recommendEquipment(answers: EquipmentAnswers) {
     reasonsZh: reasonsFor(best, answers, true),
   };
 }
-import { oneLaserDestinations } from "@/lib/commerce/onelaser";

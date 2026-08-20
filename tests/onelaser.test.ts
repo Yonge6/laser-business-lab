@@ -41,6 +41,21 @@ describe("OneLaser conversion path", () => {
     expect(result.best.oneLaser?.destination).toBe(oneLaserDestinations.vertigo);
   });
 
+  it("keeps discontinued XT out of OneLaser destinations", () => {
+    expect(JSON.stringify(oneLaserDestinations)).not.toMatch(/onelaser-xt|\"xt\"/i);
+  });
+
+  it("builds a tracked homepage product link", () => {
+    const result = new URL(buildOneLaserUrl(oneLaserDestinations.xrf, {
+      campaign: "equipment_match",
+      content: "home_laser-leather-patches",
+      placement: "home_opportunity",
+    }));
+
+    expect(result.pathname).toBe("/products/onelaser-xrf-desktop-laser-machine");
+    expect(result.searchParams.get("mbl_placement")).toBe("home_opportunity");
+  });
+
   it("keeps non-laser recommendations free of OneLaser sales links", () => {
     const result = recommendEquipment({
       method: "3d-printing",

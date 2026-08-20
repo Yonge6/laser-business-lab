@@ -267,12 +267,46 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const [complete, setComplete] = useState(false);
   const [copied, setCopied] = useState(false);
   const result = useMemo(() => calculateRoi(input), [input]);
+  const reportId = useMemo(() => encodeReport({
+    version: 1,
+    kind: "roi",
+    product,
+    input: {
+      sellingPrice: input.sellingPrice,
+      materialCost: input.materialCost,
+      packagingCost: input.packagingCost,
+      monthlyOrders: input.monthlyOrders,
+      productionMinutes: input.productionMinutes,
+      machinePrice: input.machinePrice,
+    },
+    result: {
+      grossProfitPerItem: result.grossProfitPerItem,
+      monthlyGrossProfit: result.monthlyGrossProfit,
+      productionHours: result.productionHours,
+      paybackMonths: result.paybackMonths,
+      profiles: result.profiles,
+    },
+  }), [input, product, result]);
   const t = copy[locale];
   const methodT = methodCopy[locale][method];
   const localizedProduct = locale === "zh" ? productOptions.find((item) => item.value === product)?.labelZh ?? product : productOptions.find((item) => item.value === product)?.label ?? product;
   const toolName = method === "laser" ? "laser_roi" : method === "3d-printing" ? "3d_printing_roi" : method === "heat-press" ? "heat_press_roi" : "maker_roi";
   const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : method === "heat-press" ? TShirt : Target;
-  const roiRecommendationId = `roi_${selectedOpportunity?.id ?? "laser_lineup"}`;
+  const isTumblerProduct = method === "laser" && product.toLowerCase().includes("tumbler");
+  const roiOneLaser = isTumblerProduct ? {
+    id: "roi_vertigo",
+    productName: "OneLaser VertiGo",
+    destination: oneLaserDestinations.vertigo,
+    fit: "A dedicated vertical RF workflow for drinkware, with integrated rotary handling built around fast, repeatable tumbler engraving.",
+    fitZh: "面向杯类的专用立式 RF 工作流，集成旋转夹持，适合快速、可重复的保温杯雕刻。",
+  } : {
+    id: "roi_xrf",
+    productName: "OneLaser XRF",
+    destination: oneLaserDestinations.xrf,
+    fit: "The OneLaser entry recommendation for an enclosed desktop RF workflow with fine detail and broad maker-product coverage.",
+    fitZh: "OneLaser 入门推荐：封闭式桌面 RF 工作流兼顾精细雕刻与广泛的 Maker 产品覆盖。",
+  };
+  const roiRecommendationId = roiOneLaser.id;
   const set = (key: keyof RoiInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
 
   useEffect(() => {
@@ -296,26 +330,6 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   }
 
   async function share() {
-    const reportId = encodeReport({
-      version: 1,
-      kind: "roi",
-      product,
-      input: {
-        sellingPrice: input.sellingPrice,
-        materialCost: input.materialCost,
-        packagingCost: input.packagingCost,
-        monthlyOrders: input.monthlyOrders,
-        productionMinutes: input.productionMinutes,
-        machinePrice: input.machinePrice,
-      },
-      result: {
-        grossProfitPerItem: result.grossProfitPerItem,
-        monthlyGrossProfit: result.monthlyGrossProfit,
-        productionHours: result.productionHours,
-        paybackMonths: result.paybackMonths,
-        profiles: result.profiles,
-      },
-    });
     const url = new URL(sitePath("/report/"), window.location.origin);
     url.searchParams.set("id", reportId);
     try {
@@ -357,8 +371,8 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
           {method !== "maker" ? <Link className="button button-ghost" href={`/calculator/machine-finder?method=${method}&product=${encodeURIComponent(selectedOpportunity?.id ?? product)}`}>{t.equipment}<ArrowRight weight="bold" /></Link> : null}
           <button className="button button-ghost" onClick={() => setComplete(false)}>{t.reset}</button>
         </div>
-        {method === "laser" ? <OneLaserRecommendation compact profileId={roiRecommendationId} productName="OneLaser laser machine lineup" destination={oneLaserDestinations.machines} fit="Use the ROI result as your budget guardrail, then compare real laser work areas, materials, safety, workflow, and current availability." fitZh="先把 ROI 结果作为预算边界，再比较真实激光设备的工作区域、材料范围、安全性、工作流与当前供货。" placement="roi_report" /> : null}
-        <EmailCapture tool={toolName} result={product} />
+        {method === "laser" ? <OneLaserRecommendation compact profileId={roiRecommendationId} productName={roiOneLaser.productName} destination={roiOneLaser.destination} fit={roiOneLaser.fit} fitZh={roiOneLaser.fitZh} placement="roi_report" /> : null}
+        <EmailCapture tool={toolName} result={product} reportPath={`${sitePath("/report/")}?id=${reportId}`} />
         <EstimateDisclaimer />
       </section>
     );
