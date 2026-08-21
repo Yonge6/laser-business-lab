@@ -22,7 +22,15 @@ describe("outbound link attribution", () => {
     expect(withElianSource("mailto:hello@example.com")).toBe("mailto:hello@example.com");
   });
 
-  it("attributes every marketplace product example", () => {
-    expect(marketCases.every(({ sourceUrl }) => new URL(sourceUrl).searchParams.get("utm_source") === "elian")).toBe(true);
+  it("attributes every marketplace product example and search path", () => {
+    expect(marketCases.every(({ sourceUrl, searchUrl }) => [sourceUrl, searchUrl].every((href) => new URL(href).searchParams.get("utm_source") === "elian"))).toBe(true);
+  });
+
+  it("builds a distinct Etsy search query for every opportunity", () => {
+    expect(marketCases.every(({ searchUrl }) => {
+      const url = new URL(searchUrl);
+      return url.origin === "https://www.etsy.com" && url.pathname === "/search" && Boolean(url.searchParams.get("q"));
+    })).toBe(true);
+    expect(new Set(marketCases.map(({ searchUrl }) => new URL(searchUrl).searchParams.get("q"))).size).toBe(marketCases.length);
   });
 });

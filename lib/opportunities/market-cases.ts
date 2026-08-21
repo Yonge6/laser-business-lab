@@ -10,10 +10,15 @@ export type MarketCase = {
   signalZh: string;
   price?: string;
   sourceUrl: string;
+  searchUrl: string;
   checkedAt: string;
 };
 
-const rawMarketCases: MarketCase[] = [
+type MarketCaseInput = Omit<MarketCase, "searchUrl"> & {
+  searchQuery: string;
+};
+
+const rawMarketCases: MarketCaseInput[] = [
   {
     opportunityId: "personalized-tumblers",
     platform: "Etsy",
@@ -22,6 +27,7 @@ const rawMarketCases: MarketCase[] = [
     signal: "2.1K item reviews · 6,192 favorites",
     signalZh: "2,100+ 条商品评价 · 6,192 次收藏",
     sourceUrl: "https://www.etsy.com/listing/1691101525/personalized-20-oz-tumbler-custom-name",
+    searchQuery: "personalized laser engraved tumbler",
     checkedAt: "2026-08-19",
   },
   {
@@ -32,6 +38,7 @@ const rawMarketCases: MarketCase[] = [
     signal: "Star Seller · 5.0 rating · 328 shop sales",
     signalZh: "明星卖家 · 5.0 评分 · 店铺 328 笔销量",
     sourceUrl: "https://www.etsy.com/listing/4394931482/modern-desk-organizer-3d-printed-pen",
+    searchQuery: "3D printed desk organizer",
     checkedAt: "2026-08-19",
   },
   {
@@ -43,6 +50,7 @@ const rawMarketCases: MarketCase[] = [
     signalZh: "263 条商品评价 · 9,165 次收藏",
     price: "$147.10–$196.14",
     sourceUrl: "https://www.etsy.com/listing/759547412/personalized-acrylic-wedding-welcome",
+    searchQuery: "personalized acrylic wedding welcome sign",
     checkedAt: "2026-08-19",
   },
   {
@@ -54,6 +62,7 @@ const rawMarketCases: MarketCase[] = [
     signalZh: "64 条商品评价 · 店铺 7,800+ 笔销量",
     price: "$11.00",
     sourceUrl: "https://www.etsy.com/listing/867100012/custom-leather-patches-laser-engraved",
+    searchQuery: "custom laser engraved leather patch",
     checkedAt: "2026-08-19",
   },
   {
@@ -64,6 +73,7 @@ const rawMarketCases: MarketCase[] = [
     signal: "5 item reviews · 24.6K shop sales",
     signalZh: "5 条商品评价 · 店铺 24,600+ 笔销量",
     sourceUrl: "https://www.etsy.com/listing/1695765063/indoor-blue-planter-pot-3d-printed",
+    searchQuery: "3D printed geometric planter",
     checkedAt: "2026-08-19",
   },
   {
@@ -74,6 +84,7 @@ const rawMarketCases: MarketCase[] = [
     signal: "1,412 favorites · 2.4K shop sales",
     signalZh: "1,412 次收藏 · 店铺 2,400+ 笔销量",
     sourceUrl: "https://www.etsy.com/listing/4307358815/multilayer-wooden-wall-art-sunburst",
+    searchQuery: "layered laser cut wood wall art",
     checkedAt: "2026-08-19",
   },
   {
@@ -84,14 +95,21 @@ const rawMarketCases: MarketCase[] = [
     signal: "Star Seller · 4.9 shop rating · 38.4K reviews",
     signalZh: "明星卖家 · 店铺 4.9 评分 · 38,400+ 条评价",
     sourceUrl: "https://www.etsy.com/listing/699357267/personalized-bridesmaid-tote-bag-custom",
+    searchQuery: "personalized heat transfer tote bag",
     checkedAt: "2026-08-19",
   },
 ];
 
-export const marketCases = rawMarketCases.map((marketCase) => ({
-  ...marketCase,
-  sourceUrl: withElianSource(marketCase.sourceUrl),
-}));
+export const marketCases: MarketCase[] = rawMarketCases.map(({ searchQuery, ...marketCase }) => {
+  const searchUrl = new URL("https://www.etsy.com/search");
+  searchUrl.searchParams.set("q", searchQuery);
+
+  return {
+    ...marketCase,
+    sourceUrl: withElianSource(marketCase.sourceUrl),
+    searchUrl: withElianSource(searchUrl.toString()),
+  };
+});
 
 export const marketCaseByOpportunity = Object.fromEntries(
   marketCases.map((marketCase) => [marketCase.opportunityId, marketCase]),
