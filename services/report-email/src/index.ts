@@ -4,6 +4,7 @@ type RateLimiter = {
 
 export type ReportEmailEnv = {
   RESEND_API_KEY: string;
+  RESEND_CONTACTS_API_KEY?: string;
   ALLOWED_ORIGINS: string;
   FROM_EMAIL: string;
   OWNER_EMAIL?: string;
@@ -18,6 +19,7 @@ type ReportRequest = {
   locale: "en" | "zh";
   requestId: string;
   company?: string;
+  marketingConsent?: boolean;
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,6 +58,7 @@ function parsePayload(value: unknown, allowedOrigins: Set<string>): ReportReques
   if (typeof payload.result !== "string" || !payload.result.trim() || payload.result.length > 256) return null;
   if (payload.locale !== "en" && payload.locale !== "zh") return null;
   if (typeof payload.requestId !== "string" || !/^[a-zA-Z0-9-]{8,80}$/.test(payload.requestId)) return null;
+  if (payload.marketingConsent !== undefined && typeof payload.marketingConsent !== "boolean") return null;
   if (typeof payload.reportUrl !== "string" || payload.reportUrl.length > 3_000) return null;
   try {
     const reportUrl = new URL(payload.reportUrl);
@@ -71,7 +74,29 @@ function parsePayload(value: unknown, allowedOrigins: Set<string>): ReportReques
     reportUrl: payload.reportUrl,
     locale: payload.locale,
     requestId: payload.requestId,
+    marketingConsent: payload.marketingConsent === true,
   };
+}
+
+async function subscribeMarketingContact(email: string, apiKey: string) {
+  const headers = {
+    authorization: `Bearer ${apiKey}`,
+    "content-type": "application/json",
+  };
+  const createResponse = await fetch("https://api.resend.com/contacts", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ email, unsubscribed: false }),
+  });
+  if (createResponse.ok) return true;
+  if (createResponse.status !== 409) return false;
+
+  const updateResponse = await fetch(`https://api.resend.com/contacts/${encodeURIComponent(email)}`, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify({ unsubscribed: false }),
+  });
+  return updateResponse.ok;
 }
 
 async function rateLimitKey(email: string) {
@@ -132,7 +157,10 @@ export async function handleReportEmail(request: Request, env: ReportEmailEnv) {
   });
   if (!resendResponse.ok) return json({ error: "delivery_failed" }, 502, origin);
   const delivered = await resendResponse.json() as { id?: string };
-  return json({ delivered: true, id: delivered.id }, 200, origin);
+  const marketingSubscribed = payload.marketingConsent && env.RESEND_CONTACTS_API_KEY
+    ? await subscribeMarketingContact(payload.email, env.RESEND_CONTACTS_API_KEY).catch(() => false)
+    : false;
+  return json({ delivered: true, id: delivered.id, marketingSubscribed }, 200, origin);
 }
 
 const worker = {

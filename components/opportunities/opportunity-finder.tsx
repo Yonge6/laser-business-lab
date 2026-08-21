@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Cube, Hammer, Sparkle, Target, TShirt } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, Sparkle, Target, TShirt } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { rankOpportunities, type OpportunityAnswers } from "@/lib/opportunities/engine";
@@ -11,13 +11,14 @@ import { trackEvent } from "@/lib/analytics/client";
 import { EmailCapture } from "@/components/results/email-capture";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { assetPath } from "@/lib/site";
+import { getOpportunityEquipmentRecommendation } from "@/lib/commerce/opportunity-equipment";
 
 const initial: OpportunityAnswers = {
   interests: [],
   method: "not-sure",
-  budget: "500-3k",
+  budget: "3-8k",
   hoursPerWeek: "5-15",
-  goal: "first-sale",
+  goal: "side-income",
 };
 
 const copy = {
@@ -37,7 +38,7 @@ const copy = {
     resultSub: "Start with the top opportunity, then validate demand before buying more equipment.",
     restart: "Run a new quest",
     calculator: "Calculate this product",
-    equipment: "Match equipment",
+    equipment: "Recommended",
     match: "Match score",
     why: "Why it fits",
     xp: "+100 XP — Opportunity path complete",
@@ -62,7 +63,7 @@ const copy = {
     resultSub: "从第一名机会开始，先验证需求，再追加设备投资。",
     restart: "重新探索",
     calculator: "计算这个产品",
-    equipment: "匹配生产设备",
+    equipment: "推荐设备",
     match: "匹配分",
     why: "为什么适合",
     xp: "+100 XP — 已完成机会路径",
@@ -108,8 +109,9 @@ export function OpportunityFinder() {
       <section className="finder-results shell">
         <div className="result-intro"><p className="eyebrow">{t.xp}</p><h2>{t.resultTitle}</h2><p>{t.resultSub}</p></div>
         <div className="ranked-results">
-          {results.map((item, index) => (
-            <article key={item.id} className={index === 0 ? "ranked-item top" : "ranked-item"}>
+          {results.map((item, index) => {
+            const equipment = getOpportunityEquipmentRecommendation(item.id, item.category);
+            return <article key={item.id} className={index === 0 ? "ranked-item top" : "ranked-item"}>
               <span className="result-rank">#{index + 1}</span>
               <div className="result-image"><Image src={assetPath(item.image)} alt={locale === "zh" ? item.titleZh : item.title} fill sizes="240px" /></div>
               <div className="result-copy">
@@ -120,11 +122,11 @@ export function OpportunityFinder() {
                 <ul>{(locale === "zh" ? item.matchReasonsZh : item.matchReasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul>
                 <div className="result-cta-row">
                   <Link className="button button-ghost" href={`/calculator/laser-roi?product=${item.id}`}>{t.calculator}<ArrowRight weight="bold" /></Link>
-                  <Link className="result-equipment-link" href={`/calculator/machine-finder?method=${item.category}&product=${item.id}`}>{t.equipment}<Hammer weight="bold" /></Link>
+                  <a className="result-equipment-link" href={equipment.url} target="_blank" rel="noreferrer">{t.equipment}：{locale === "zh" ? equipment.nameZh : equipment.name}<ArrowSquareOut weight="bold" /></a>
                 </div>
               </div>
-            </article>
-          ))}
+            </article>;
+          })}
         </div>
         <div className="result-actions"><button className="button button-ghost" onClick={() => { setComplete(false); setStep(0); }}>{t.restart}</button></div>
         <EmailCapture tool="opportunity_finder" result={results[0].id} />
