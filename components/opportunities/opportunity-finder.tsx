@@ -122,7 +122,7 @@ export function OpportunityFinder() {
                 <ul>{(locale === "zh" ? item.matchReasonsZh : item.matchReasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul>
                 <div className="result-cta-row">
                   <Link className="button button-ghost" href={`/calculator/laser-roi?product=${item.id}`}>{t.calculator}<ArrowRight weight="bold" /></Link>
-                  <a className="result-equipment-link" href={equipment.url} target="_blank" rel="noreferrer">{t.equipment}：{locale === "zh" ? equipment.nameZh : equipment.name}<ArrowSquareOut weight="bold" /></a>
+                  <a className="button button-primary result-equipment-link" href={equipment.url} target="_blank" rel="noreferrer">{t.equipment}：{locale === "zh" ? equipment.nameZh : equipment.name}<ArrowSquareOut weight="bold" /></a>
                 </div>
               </div>
             </article>;

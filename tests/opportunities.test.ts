@@ -49,6 +49,7 @@ describe("opportunity ranking engine", () => {
       const marketCase = marketCaseByOpportunity[opportunity.id];
       expect(marketCase.sourceUrl).toMatch(/^https:\/\/www\.etsy\.com\/listing\//);
       expect(marketCase.checkedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(marketCase.price).toMatch(/^(?:CA)?\$\d/);
       expect(marketCase.signal).not.toBe("");
       expect(marketCase.signalZh).not.toBe("");
     }

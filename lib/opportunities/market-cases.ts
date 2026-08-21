@@ -8,7 +8,7 @@ export type MarketCase = {
   titleZh: string;
   signal: string;
   signalZh: string;
-  price?: string;
+  price: string;
   sourceUrl: string;
   searchUrl: string;
   checkedAt: string;
@@ -26,6 +26,7 @@ const rawMarketCases: MarketCaseInput[] = [
     titleZh: "个性化 20 oz 激光雕刻保温杯",
     signal: "2.1K item reviews · 6,192 favorites",
     signalZh: "2,100+ 条商品评价 · 6,192 次收藏",
+    price: "$4.67+",
     sourceUrl: "https://www.etsy.com/listing/1691101525/personalized-20-oz-tumbler-custom-name",
     searchQuery: "personalized laser engraved tumbler",
     checkedAt: "2026-08-19",
@@ -37,6 +38,7 @@ const rawMarketCases: MarketCaseInput[] = [
     titleZh: "现代 3D 打印桌面收纳",
     signal: "Star Seller · 5.0 rating · 328 shop sales",
     signalZh: "明星卖家 · 5.0 评分 · 店铺 328 笔销量",
+    price: "$44.05",
     sourceUrl: "https://www.etsy.com/listing/4394931482/modern-desk-organizer-3d-printed-pen",
     searchQuery: "3D printed desk organizer",
     checkedAt: "2026-08-19",
@@ -72,6 +74,7 @@ const rawMarketCases: MarketCaseInput[] = [
     titleZh: "带排水结构的 3D 打印室内花盆",
     signal: "5 item reviews · 24.6K shop sales",
     signalZh: "5 条商品评价 · 店铺 24,600+ 笔销量",
+    price: "CA$25.54+",
     sourceUrl: "https://www.etsy.com/listing/1695765063/indoor-blue-planter-pot-3d-printed",
     searchQuery: "3D printed geometric planter",
     checkedAt: "2026-08-19",
@@ -83,6 +86,7 @@ const rawMarketCases: MarketCaseInput[] = [
     titleZh: "多层激光切割木艺壁饰",
     signal: "1,412 favorites · 2.4K shop sales",
     signalZh: "1,412 次收藏 · 店铺 2,400+ 笔销量",
+    price: "$157.50+",
     sourceUrl: "https://www.etsy.com/listing/4307358815/multilayer-wooden-wall-art-sunburst",
     searchQuery: "layered laser cut wood wall art",
     checkedAt: "2026-08-19",
@@ -94,6 +98,7 @@ const rawMarketCases: MarketCaseInput[] = [
     titleZh: "热转印乙烯膜定制伴娘托特包",
     signal: "Star Seller · 4.9 shop rating · 38.4K reviews",
     signalZh: "明星卖家 · 店铺 4.9 评分 · 38,400+ 条评价",
+    price: "$5.20+",
     sourceUrl: "https://www.etsy.com/listing/699357267/personalized-bridesmaid-tote-bag-custom",
     searchQuery: "personalized heat transfer tote bag",
     checkedAt: "2026-08-19",
