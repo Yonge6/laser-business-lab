@@ -73,10 +73,10 @@ export function SiteHeader() {
           <Link className="nav-cta" href="/opportunities">{t.start}</Link>
         </nav>
         <div className="header-actions">
-          <div className="language-switch" aria-label={locale === "zh" ? "语言" : "Language"}>
-            <button className={locale === "en" ? "active" : ""} onClick={() => setLocale("en")} aria-pressed={locale === "en"}>EN</button>
+          <div className="language-switch" role="group" aria-label={locale === "zh" ? "语言" : "Language"}>
+            <button type="button" className={locale === "en" ? "active" : ""} onClick={() => setLocale("en")} aria-pressed={locale === "en"} aria-label="Switch to English">EN</button>
             <span>/</span>
-            <button className={locale === "zh" ? "active" : ""} onClick={() => setLocale("zh")} aria-pressed={locale === "zh"}>中文</button>
+            <button type="button" className={locale === "zh" ? "active" : ""} onClick={() => setLocale("zh")} aria-pressed={locale === "zh"} aria-label="切换为中文">中文</button>
           </div>
           <button className="menu-button" onClick={() => { setDrawerOpen(true); void trackEvent("drawer_open", { path: pathname }); }} aria-expanded={drawerOpen} aria-haspopup="dialog" aria-label={t.menu}>
             <List weight="bold" /><span>{t.menuLabel}</span>

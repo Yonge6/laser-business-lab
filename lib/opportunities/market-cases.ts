@@ -1,4 +1,5 @@
 import type { Opportunity } from "@/lib/opportunities/data";
+import { withElianSource } from "@/lib/commerce/outbound";
 
 export type MarketCase = {
   opportunityId: Opportunity["id"];
@@ -12,7 +13,7 @@ export type MarketCase = {
   checkedAt: string;
 };
 
-export const marketCases: MarketCase[] = [
+const rawMarketCases: MarketCase[] = [
   {
     opportunityId: "personalized-tumblers",
     platform: "Etsy",
@@ -86,6 +87,11 @@ export const marketCases: MarketCase[] = [
     checkedAt: "2026-08-19",
   },
 ];
+
+export const marketCases = rawMarketCases.map((marketCase) => ({
+  ...marketCase,
+  sourceUrl: withElianSource(marketCase.sourceUrl),
+}));
 
 export const marketCaseByOpportunity = Object.fromEntries(
   marketCases.map((marketCase) => [marketCase.opportunityId, marketCase]),
