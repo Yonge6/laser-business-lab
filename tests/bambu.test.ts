@@ -8,7 +8,7 @@ describe("Bambu Lab conversion path", () => {
 
     expect(result.origin).toBe("https://bambulab.com");
     expect(result.pathname).toBe("/en-us/compare");
-    expect(result.searchParams.get("utm_source")).toBe("maker_business_lab");
+    expect(result.searchParams.get("utm_source")).toBe("elian");
     expect(result.searchParams.get("utm_content")).toBe("home_3d-desk-organizers");
     expect(result.searchParams.get("mbl_placement")).toBe("home_opportunity");
   });
