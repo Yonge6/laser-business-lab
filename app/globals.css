@@ -416,9 +416,17 @@ img { display: block; max-width: 100%; }
 .email-capture h3 { font-family: var(--font-display), sans-serif; font-size: 38px; font-style: italic; text-transform: uppercase; margin: 0; }
 .email-capture > p:not(.eyebrow) { color: #bdb8b0; }
 .email-capture form { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-top: 24px; }
-.email-capture input { min-height: 52px; border: 1px solid #5b5854; background: #191919; color: white; padding: 0 18px; border-radius: 0; }
+.email-capture input[type="email"] { min-height: 52px; border: 1px solid #5b5854; background: #191919; color: white; padding: 0 18px; border-radius: 0; }
+.email-capture input[type="email"]:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.marketing-consent { grid-column: 1 / -1; width: fit-content; display: flex; align-items: flex-start; gap: 12px; color: #d5d1cb; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.marketing-consent input { appearance: none; flex: 0 0 20px; width: 20px; height: 20px; margin: 0; border: 1px solid #77726b; background: #191919; display: grid; place-items: center; cursor: pointer; }
+.marketing-consent input::before { content: ""; width: 10px; height: 6px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(-45deg) scale(0); transition: transform 120ms ease; }
+.marketing-consent input:checked { border-color: var(--red); background: var(--red); }
+.marketing-consent input:checked::before { transform: rotate(-45deg) scale(1); }
+.marketing-consent input:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 .form-honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 .form-success { border-left: 4px solid var(--red); padding: 18px; background: #191919; }
+.form-success-warning { border-left-color: #f0a51a; }
 .form-error { color: #ff9b87; display: block; margin-top: 8px; }
 
 .estimate-disclaimer { margin-top: 28px; padding: 18px 20px; border: 1px solid var(--line); display: flex; gap: 14px; align-items: start; color: var(--muted); font-size: 12px; line-height: 1.65; }
@@ -467,6 +475,11 @@ img { display: block; max-width: 100%; }
 .report-main strong { font-family: var(--font-display), sans-serif; font-style: italic; font-size: clamp(58px, 8vw, 100px); line-height: .9; }
 .report-stat strong { font-family: var(--font-display), sans-serif; font-size: 34px; }
 .report-stat span { color: var(--muted); font-size: 11px; }
+.report-machine { position: relative; color: white; background: var(--ink); text-decoration: none; transition: background 140ms ease; }
+.report-machine:hover { background: #202022; }
+.report-machine span { color: var(--red); }
+.report-machine strong { max-width: 88%; font-size: 25px; line-height: 1; text-transform: uppercase; }
+.report-machine svg { position: absolute; right: 22px; bottom: 22px; width: 24px; height: 24px; color: var(--red); }
 .business-report > .profit-warning { margin-top: 20px; border: 1px solid var(--red); padding: 16px; }
 .profile-block { margin-top: 28px; padding: 28px; background: var(--ink); color: white; }
 .profile-block > span { font-family: var(--font-display), sans-serif; text-transform: uppercase; color: #bdb8b0; }

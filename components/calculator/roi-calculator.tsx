@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, TShirt, Warning } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, TShirt, Warning } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -15,12 +15,14 @@ import { EmailCapture } from "@/components/results/email-capture";
 import { opportunityById } from "@/lib/opportunities/data";
 import { sitePath } from "@/lib/site";
 import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
-import { oneLaserDestinations } from "@/lib/commerce/onelaser";
+import { oneLaserDestinations, oneLaserOpportunityDestinations, oneLaserOpportunityNames } from "@/lib/commerce/onelaser";
+import { getRoiEquipmentRecommendation } from "@/lib/commerce/opportunity-equipment";
+import { clampToBudget } from "@/lib/calculators/budget";
 
 export type MakerMethod = "laser" | "3d-printing" | "heat-press" | "maker";
 
 type ProductOption = { value: string; label: string; labelZh: string };
-type BudgetOption = readonly [string, string, string, number];
+type BudgetOption = { value: string; label: string; labelZh: string; suggested: number; min: number; max?: number };
 type MachineOption = readonly [string, string, string];
 
 const productsByMethod: Record<MakerMethod, ProductOption[]> = {
@@ -46,33 +48,33 @@ const productsByMethod: Record<MakerMethod, ProductOption[]> = {
 };
 
 const laserBudgets = [
-  ["under-3", "Under $3,000", "低于 $3,000", 2_500],
-  ["3-5", "$3,000–$5,000", "$3,000–$5,000", 4_000],
-  ["5-8", "$5,000–$8,000", "$5,000–$8,000", 5_599],
-  ["8-15", "$8,000–$15,000", "$8,000–$15,000", 10_999],
-  ["15+", "$15,000+", "$15,000 以上", 15_000],
+  { value: "under-3", label: "Under $3,000", labelZh: "低于 $3,000", suggested: 2_500, min: 0, max: 2_999 },
+  { value: "3-5", label: "$3,000–$5,000", labelZh: "$3,000–$5,000", suggested: 4_000, min: 3_000, max: 4_999 },
+  { value: "5-8", label: "$5,000–$8,000", labelZh: "$5,000–$8,000", suggested: 5_599, min: 5_000, max: 7_999 },
+  { value: "8-15", label: "$8,000–$15,000", labelZh: "$8,000–$15,000", suggested: 10_999, min: 8_000, max: 14_999 },
+  { value: "15+", label: "$15,000+", labelZh: "$15,000 以上", suggested: 15_000, min: 15_000 },
 ] as const satisfies readonly BudgetOption[];
 
 const printingBudgets = [
-  ["under-500", "Under $500", "低于 $500", 399],
-  ["500-1", "$500–$1,000", "$500–$1,000", 799],
-  ["1-3", "$1,000–$3,000", "$1,000–$3,000", 1_499],
-  ["3-8", "$3,000–$8,000", "$3,000–$8,000", 4_999],
-  ["8+", "$8,000+", "$8,000 以上", 8_000],
+  { value: "under-500", label: "Under $500", labelZh: "低于 $500", suggested: 399, min: 0, max: 499 },
+  { value: "500-1", label: "$500–$1,000", labelZh: "$500–$1,000", suggested: 799, min: 500, max: 999 },
+  { value: "1-3", label: "$1,000–$3,000", labelZh: "$1,000–$3,000", suggested: 1_499, min: 1_000, max: 2_999 },
+  { value: "3-8", label: "$3,000–$8,000", labelZh: "$3,000–$8,000", suggested: 4_999, min: 3_000, max: 7_999 },
+  { value: "8+", label: "$8,000+", labelZh: "$8,000 以上", suggested: 8_000, min: 8_000 },
 ] as const satisfies readonly BudgetOption[];
 
 const heatPressBudgets = [
-  ["under-500", "Under $500", "低于 $500", 349],
-  ["500-1", "$500–$1,000", "$500–$1,000", 699],
-  ["1-3", "$1,000–$3,000", "$1,000–$3,000", 1_499],
-  ["3+", "$3,000+", "$3,000 以上", 3_000],
+  { value: "under-500", label: "Under $500", labelZh: "低于 $500", suggested: 349, min: 0, max: 499 },
+  { value: "500-1", label: "$500–$1,000", labelZh: "$500–$1,000", suggested: 699, min: 500, max: 999 },
+  { value: "1-3", label: "$1,000–$3,000", labelZh: "$1,000–$3,000", suggested: 1_499, min: 1_000, max: 2_999 },
+  { value: "3+", label: "$3,000+", labelZh: "$3,000 以上", suggested: 3_000, min: 3_000 },
 ] as const satisfies readonly BudgetOption[];
 
 const makerBudgets = [
-  ["under-500", "Under $500", "低于 $500", 399],
-  ["500-3", "$500–$3,000", "$500–$3,000", 1_499],
-  ["3-8", "$3,000–$8,000", "$3,000–$8,000", 5_599],
-  ["8+", "$8,000+", "$8,000 以上", 8_000],
+  { value: "under-500", label: "Under $500", labelZh: "低于 $500", suggested: 399, min: 0, max: 499 },
+  { value: "500-3", label: "$500–$3,000", labelZh: "$500–$3,000", suggested: 1_499, min: 500, max: 2_999 },
+  { value: "3-8", label: "$3,000–$8,000", labelZh: "$3,000–$8,000", suggested: 5_599, min: 3_000, max: 7_999 },
+  { value: "8+", label: "$8,000+", labelZh: "$8,000 以上", suggested: 8_000, min: 8_000 },
 ] as const satisfies readonly BudgetOption[];
 
 const budgetsByMethod: Record<MakerMethod, readonly BudgetOption[]> = { laser: laserBudgets, "3d-printing": printingBudgets, "heat-press": heatPressBudgets, maker: makerBudgets };
@@ -164,6 +166,7 @@ const copy = {
     copied: "Link copied",
     reset: "Edit my numbers",
     equipment: "Match equipment for this path",
+    recommended: "Recommended equipment",
     mission: "MISSION COMPLETE +100 XP",
     step: "STEP",
     minute: "min",
@@ -206,6 +209,7 @@ const copy = {
     copied: "链接已复制",
     reset: "修改数字",
     equipment: "匹配这条路径的设备",
+    recommended: "推荐设备",
     mission: "任务完成 +100 XP",
     step: "步骤",
     minute: "分钟",
@@ -252,6 +256,12 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
     : baseProductOptions;
   const [product, setProduct] = useState(selectedOpportunity?.title ?? productOptions[0].value);
   const [step, setStep] = useState(0);
+  const budgetOptions = budgetsByMethod[method];
+  const defaultBudget = method === "laser" ? "5-8" : method === "3d-printing" || method === "heat-press" ? "500-1" : "500-3";
+  const opportunityBudget = selectedOpportunity
+    ? budgetOptions.find((option) => selectedOpportunity.startingBudget >= option.min && (option.max === undefined || selectedOpportunity.startingBudget <= option.max))
+    : undefined;
+  const initialBudget = opportunityBudget ?? budgetOptions.find((option) => option.value === defaultBudget) ?? budgetOptions[0];
   const [input, setInput] = useState<RoiInput>(() => selectedOpportunity ? {
     ...initialInput,
     sellingPrice: selectedOpportunity.sellingPrice,
@@ -259,10 +269,9 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
     packagingCost: 0,
     productionMinutes: selectedOpportunity.productionMinutes,
     machinePrice: selectedOpportunity.startingBudget,
-  } : initialInput);
-  const budgetOptions = budgetsByMethod[method];
+  } : { ...initialInput, machinePrice: initialBudget.suggested });
   const machineOptions = machinesByMethod[method];
-  const [budget, setBudget] = useState(method === "laser" ? "5-8" : method === "3d-printing" || method === "heat-press" ? "500-1" : "500-3");
+  const [budget, setBudget] = useState(initialBudget.value);
   const [currentMachine, setCurrentMachine] = useState("none");
   const [complete, setComplete] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -292,19 +301,25 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const localizedProduct = locale === "zh" ? productOptions.find((item) => item.value === product)?.labelZh ?? product : productOptions.find((item) => item.value === product)?.label ?? product;
   const toolName = method === "laser" ? "laser_roi" : method === "3d-printing" ? "3d_printing_roi" : method === "heat-press" ? "heat_press_roi" : "maker_roi";
   const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : method === "heat-press" ? TShirt : Target;
-  const isTumblerProduct = method === "laser" && product.toLowerCase().includes("tumbler");
-  const roiOneLaser = isTumblerProduct ? {
-    id: "roi_vertigo",
-    productName: "OneLaser VertiGo",
-    destination: oneLaserDestinations.vertigo,
-    fit: "A dedicated vertical RF workflow for drinkware, with integrated rotary handling built around fast, repeatable tumbler engraving.",
-    fitZh: "面向杯类的专用立式 RF 工作流，集成旋转夹持，适合快速、可重复的保温杯雕刻。",
-  } : {
-    id: "roi_xrf",
-    productName: "OneLaser XRF",
-    destination: oneLaserDestinations.xrf,
-    fit: "The OneLaser entry recommendation for an enclosed desktop RF workflow with fine detail and broad maker-product coverage.",
-    fitZh: "OneLaser 入门推荐：封闭式桌面 RF 工作流兼顾精细雕刻与广泛的 Maker 产品覆盖。",
+  const activeBudget = budgetOptions.find((option) => option.value === budget) ?? initialBudget;
+  const clampMachinePrice = (value: number) => clampToBudget(value, activeBudget);
+  const equipmentRecommendation = getRoiEquipmentRecommendation(method, product, selectedOpportunity?.id);
+  const normalizedProduct = product.toLowerCase();
+  const roiOneLaserOpportunityId = selectedOpportunity?.category === "laser"
+    ? selectedOpportunity.id
+    : normalizedProduct.includes("tumbler")
+      ? "personalized-tumblers"
+      : normalizedProduct.includes("acrylic") || normalizedProduct.includes("sign")
+        ? "acrylic-wedding-signs"
+        : normalizedProduct.includes("wood")
+          ? "layered-wood-wall-art"
+          : "laser-leather-patches";
+  const roiOneLaser = {
+    id: `roi_${roiOneLaserOpportunityId}`,
+    productName: oneLaserOpportunityNames[roiOneLaserOpportunityId] ?? "OneLaser XRF",
+    destination: oneLaserOpportunityDestinations[roiOneLaserOpportunityId] ?? oneLaserDestinations.xrf,
+    fit: "A direct machine checkpoint matched to this product's material, working area, production speed, and repeatability needs.",
+    fitZh: "根据该产品的材料、工作区域、生产速度与重复加工需求直接匹配的设备检查点。",
   };
   const roiRecommendationId = roiOneLaser.id;
   const set = (key: keyof RoiInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
@@ -363,6 +378,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
           <div className="report-stat"><strong>{formatNumber(result.productionHours, 1)} {t.hour}</strong><span>{t.production}</span></div>
           <div className="report-stat"><strong>{result.paybackMonths ? `${formatNumber(result.paybackMonths, 1)} ${t.month}` : "—"}</strong><span>{t.payback}</span></div>
           <div className="report-stat"><strong>{formatNumber(result.capacityUtilization, 0)}%</strong><span>{t.utilization}</span></div>
+          <a className="report-stat report-machine" href={equipmentRecommendation.url} target="_blank" rel="noreferrer"><span>{t.recommended}</span><strong>{locale === "zh" ? equipmentRecommendation.nameZh : equipmentRecommendation.name}</strong><ArrowSquareOut weight="bold" /></a>
         </div>
         {!result.isProfitable ? <div className="profit-warning"><Warning weight="bold" />{t.negative}</div> : null}
         <div className="profile-block"><span>{t.profile}</span><div>{result.profiles.map((profile) => <b key={profile}>{locale === "zh" ? profileZh[profile] ?? profile : profile}</b>)}</div></div>
@@ -389,7 +405,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
           {step === 0 ? <div className="choice-grid product-choices">{productOptions.map((item) => <button key={item.value} className={product === item.value ? "choice-card selected" : "choice-card"} onClick={() => setProduct(item.value)}><span>{product === item.value ? <Check weight="bold" /> : null}</span><strong>{locale === "zh" ? item.labelZh : item.label}</strong></button>)}</div> : null}
           {step === 1 ? <div className="field-grid"><NumberField label={t.labels.selling} value={input.sellingPrice} onChange={set("sellingPrice")} prefix="$" step={1} /><NumberField label={t.labels.material} value={input.materialCost} onChange={set("materialCost")} prefix="$" step={.5} /><NumberField label={t.labels.packaging} value={input.packagingCost} onChange={set("packagingCost")} prefix="$" step={.5} /></div> : null}
           {step === 2 ? <div className="field-grid"><NumberField label={methodT.minutes} value={input.productionMinutes} onChange={set("productionMinutes")} suffix={t.minute} min={.1} /><NumberField label={t.labels.orders} value={input.monthlyOrders} onChange={set("monthlyOrders")} min={0} /><NumberField label={t.labels.days} value={input.workingDays} onChange={set("workingDays")} max={31} /><NumberField label={t.labels.hours} value={input.hoursPerDay} onChange={set("hoursPerDay")} max={24} step={.5} /></div> : null}
-          {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{methodT.budget}</span><select value={budget} onChange={(event) => { const next = budgetOptions.find((item) => item[0] === event.target.value)!; setBudget(event.target.value); set("machinePrice")(next[3]); }}>{budgetOptions.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label><NumberField label={methodT.machine} value={input.machinePrice} onChange={set("machinePrice")} prefix="$" step={100} /><label className="select-field"><span className="field-label">{methodT.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{machineOptions.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label></div> : null}
+          {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{methodT.budget}</span><select value={budget} onChange={(event) => { const next = budgetOptions.find((item) => item.value === event.target.value)!; setBudget(next.value); set("machinePrice")(next.suggested); }}>{budgetOptions.map(({ value, label, labelZh }) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label><NumberField label={methodT.machine} value={input.machinePrice} onChange={(value) => set("machinePrice")(clampMachinePrice(value))} prefix="$" step={100} min={activeBudget.min} max={activeBudget.max} /><label className="select-field"><span className="field-label">{methodT.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{machineOptions.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label></div> : null}
           <div className="quest-nav"><button className="button button-ghost" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}><ArrowLeft weight="bold" />{t.back}</button><button className="button button-primary" onClick={advance}>{step === 3 ? t.report : t.next}<ArrowRight weight="bold" /></button></div>
         </div>
       </div>

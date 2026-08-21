@@ -12,7 +12,7 @@ import { assetPath } from "@/lib/site";
 import { formatCurrency } from "@/lib/format";
 import { marketCaseByOpportunity } from "@/lib/opportunities/market-cases";
 import { findCenteredItemId } from "@/lib/opportunities/carousel-selection";
-import { buildOneLaserUrl, oneLaserDestinations } from "@/lib/commerce/onelaser";
+import { buildOneLaserUrl, oneLaserOpportunityDestinations } from "@/lib/commerce/onelaser";
 import { trackEvent } from "@/lib/analytics/client";
 import { buildBambuUrl } from "@/lib/commerce/bambu";
 import { buildXToolUrl } from "@/lib/commerce/xtool";
@@ -121,9 +121,7 @@ export function HomeExperience() {
   const manualSelectionRef = useRef<string | null>(null);
   const t = copy[locale];
   const marketCase = marketCaseByOpportunity[selected.id];
-  const oneLaserDestination = selected.category === "laser"
-    ? selected.id === "personalized-tumblers" ? oneLaserDestinations.vertigo : oneLaserDestinations.xrf
-    : null;
+  const oneLaserDestination = selected.category === "laser" ? oneLaserOpportunityDestinations[selected.id] : null;
   const matchedEquipmentUrl = oneLaserDestination ? buildOneLaserUrl(oneLaserDestination, {
     campaign: "equipment_match",
     content: `home_${selected.id}`,

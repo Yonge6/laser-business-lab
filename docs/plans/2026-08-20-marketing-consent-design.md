@@ -1,0 +1,7 @@
+# Optional marketing consent
+
+The report request and marketing subscription remain two separate choices. The email field is required only to deliver the requested report. A secondary checkbox appears below the primary form controls, is unchecked by default, and states that the user can unsubscribe at any time. The copy is available in English and Chinese through the existing locale provider.
+
+The browser submits a `marketingConsent` boolean with the report payload. The server accepts only a boolean value and safely treats an absent field from an older cached client as opt-out. It always attempts transactional report delivery first. Only after successful delivery, and only when the value is `true`, it creates the email as an active Resend Contact. Report delivery keeps the existing sending-only key, while Contacts uses a separate `RESEND_CONTACTS_API_KEY` with the permissions needed for audience management. An existing Contact is re-subscribed because the user has just given fresh explicit consent. A Contacts API failure does not invalidate an already delivered report; the response distinguishes that partial outcome so the interface does not falsely claim the subscription succeeded.
+
+Acceptance checks cover opted-in submission, default opt-out, missing-field rejection, bilingual UI copy, keyboard focus, mobile layout, and unchanged report delivery. The privacy page explains the separation between transactional delivery and optional marketing.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildOneLaserUrl, oneLaserDestinations } from "@/lib/commerce/onelaser";
+import { buildOneLaserUrl, oneLaserDestinations, oneLaserOpportunityDestinations } from "@/lib/commerce/onelaser";
 import { recommendEquipment } from "@/lib/equipment/engine";
 
 describe("OneLaser conversion path", () => {
@@ -54,6 +54,28 @@ describe("OneLaser conversion path", () => {
 
     expect(result.pathname).toBe("/products/onelaser-xrf-desktop-laser-machine");
     expect(result.searchParams.get("mbl_placement")).toBe("home_opportunity");
+  });
+
+  it("maps layered wood wall art to Hydra 9 Gen 2", () => {
+    const result = new URL(buildOneLaserUrl(oneLaserOpportunityDestinations["layered-wood-wall-art"], {
+      campaign: "equipment_match",
+      content: "home_layered-wood-wall-art",
+      placement: "home_opportunity",
+    }));
+
+    expect(result.pathname).toBe("/products/hydra-9-gen-2-70w-rf-co2-dual-laser-machine");
+    expect(result.searchParams.get("utm_content")).toBe("home_layered-wood-wall-art");
+  });
+
+  it("maps acrylic wedding signs to Cobra 10", () => {
+    const result = new URL(buildOneLaserUrl(oneLaserOpportunityDestinations["acrylic-wedding-signs"], {
+      campaign: "equipment_match",
+      content: "home_acrylic-wedding-signs",
+      placement: "home_opportunity",
+    }));
+
+    expect(result.pathname).toBe("/products/cobra-10-100w-co2-laser-engraver-cutter");
+    expect(result.searchParams.get("utm_content")).toBe("home_acrylic-wedding-signs");
   });
 
   it("keeps non-laser recommendations free of OneLaser sales links", () => {

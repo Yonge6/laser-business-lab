@@ -9,6 +9,7 @@ function readEnvironment(): ReportEmailEnv | null {
 
   return {
     RESEND_API_KEY,
+    RESEND_CONTACTS_API_KEY: process.env.RESEND_CONTACTS_API_KEY?.trim() || undefined,
     ALLOWED_ORIGINS,
     FROM_EMAIL,
     OWNER_EMAIL: process.env.OWNER_EMAIL?.trim() || undefined,
