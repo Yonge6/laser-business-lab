@@ -33,7 +33,7 @@ type OneLaserTracking = {
 export function buildOneLaserUrl(destination: string, tracking: OneLaserTracking) {
   const url = new URL(destination, ONE_LASER_ORIGIN);
   if (url.origin !== ONE_LASER_ORIGIN) throw new Error("OneLaser outbound links must stay on 1laser.com");
-  url.searchParams.set("utm_source", "maker_business_lab");
+  url.searchParams.set("utm_source", "elian");
   url.searchParams.set("utm_medium", "referral");
   url.searchParams.set("utm_campaign", tracking.campaign);
   url.searchParams.set("utm_content", tracking.content);

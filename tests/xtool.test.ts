@@ -8,7 +8,7 @@ describe("xTool conversion path", () => {
 
     expect(result.origin).toBe("https://www.xtool.com");
     expect(result.pathname).toContain("xtool-wonderpress-modular-auto-heat-press");
-    expect(result.searchParams.get("utm_source")).toBe("maker_business_lab");
+    expect(result.searchParams.get("utm_source")).toBe("elian");
     expect(result.searchParams.get("utm_content")).toBe("home_heat-press-tote-bags");
     expect(result.searchParams.get("mbl_placement")).toBe("home_opportunity");
   });

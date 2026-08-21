@@ -11,7 +11,7 @@ describe("OneLaser conversion path", () => {
     }));
 
     expect(result.origin).toBe("https://www.1laser.com");
-    expect(result.searchParams.get("utm_source")).toBe("maker_business_lab");
+    expect(result.searchParams.get("utm_source")).toBe("elian");
     expect(result.searchParams.get("utm_medium")).toBe("referral");
     expect(result.searchParams.get("utm_campaign")).toBe("equipment_match");
     expect(result.searchParams.get("utm_content")).toBe("fiber-laser");
