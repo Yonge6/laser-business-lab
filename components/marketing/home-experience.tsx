@@ -37,7 +37,6 @@ const copy = {
     resultLink: "Selection results · Updates with the card above",
     marketCase: "Selected marketplace example",
     publicSignal: "Public market signal",
-    checked: "Checked",
     viewSource: "View evidence listing",
     searchSimilar: "Search similar on Etsy",
     marketNote: "Selected reference example—not a bestseller ranking. Marketplace signals change over time and do not guarantee demand or earnings.",
@@ -82,7 +81,6 @@ const copy = {
     resultLink: "选择结果 · 随上方卡片实时更新",
     marketCase: "精选电商参考案例",
     publicSignal: "公开市场信号",
-    checked: "核验日期",
     viewSource: "查看参考案例",
     searchSimilar: "在 Etsy 搜索同类产品",
     marketNote: "这是精选参考案例，并非销量排名。平台数据会随时间变化，仅用于市场参考，不代表需求或收益承诺。",
@@ -320,13 +318,12 @@ export function HomeExperience() {
               <h3>{locale === "zh" ? marketCase.titleZh : marketCase.title}</h3>
               <p>{locale === "zh" ? marketCase.signalZh : marketCase.signal}</p>
             </div>
-            {marketCase.price ? <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div> : null}
+            <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div>
             <div className="market-proof-source">
               <div className="market-proof-links">
                 <a className="market-proof-primary" href={marketCase.sourceUrl} target="_blank" rel="noreferrer">{t.viewSource}<ArrowSquareOut weight="bold" /></a>
                 <a className="market-proof-secondary" href={marketCase.searchUrl} target="_blank" rel="noreferrer">{t.searchSimilar}<MagnifyingGlass weight="bold" /></a>
               </div>
-              <span>{t.checked}: {marketCase.checkedAt}</span>
             </div>
             <p className="market-proof-note">{t.marketNote}</p>
           </article>

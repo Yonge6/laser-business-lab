@@ -584,9 +584,9 @@ img { display: block; max-width: 100%; }
 .onelaser-recommendation.compact .onelaser-recommendation-copy h3 { font-size: 32px; }
 
 .result-cta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
-.result-equipment-link { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-family: var(--font-display), sans-serif; font-size: 14px; font-weight: 900; text-transform: uppercase; }
-.result-equipment-link:hover { color: var(--red); }
-.result-equipment-link svg { width: 19px; height: 19px; color: var(--red); }
+.result-equipment-link { min-height: 50px; padding-inline: 22px; color: white; font-size: 14px; font-style: italic; }
+.result-equipment-link:hover { color: white; }
+.result-equipment-link svg { width: 19px; height: 19px; color: currentColor; }
 
 .tool-index { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-block: 60px 110px; }
 .tool-index a { min-height: 330px; padding: 34px; border: 1px solid var(--line-dark); background: var(--paper-strong); display: flex; flex-direction: column; transition: transform .2s ease, border-color .2s ease; }
