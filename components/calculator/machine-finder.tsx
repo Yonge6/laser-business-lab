@@ -11,6 +11,7 @@ import { trackEvent } from "@/lib/analytics/client";
 import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
 import { buildBambuUrl } from "@/lib/commerce/bambu";
 import { buildXToolUrl } from "@/lib/commerce/xtool";
+import { withElianSource } from "@/lib/commerce/outbound";
 
 const initial: EquipmentAnswers = { method: "laser", products: [], priorities: [], volume: "10-30", budget: "starter", experience: "growing" };
 
@@ -87,7 +88,9 @@ export function MachineFinder() {
     ? buildBambuUrl(`machine_finder_${profile.id}`, "machine_finder_result")
     : profile.method === "heat-press"
       ? buildXToolUrl(`machine_finder_${profile.id}`, "machine_finder_result")
-      : profile.referenceUrl;
+      : profile.referenceUrl
+        ? withElianSource(profile.referenceUrl)
+        : undefined;
 
   useEffect(() => {
     if (!complete || !oneLaserMatch) return;

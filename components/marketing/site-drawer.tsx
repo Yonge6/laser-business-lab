@@ -17,6 +17,7 @@ import {
 } from "@phosphor-icons/react";
 import { trackEvent } from "@/lib/analytics/client";
 import { useLanguage } from "@/components/providers/language-provider";
+import { withElianSource } from "@/lib/commerce/outbound";
 
 type SiteDrawerProps = {
   open: boolean;
@@ -170,7 +171,7 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
             </div>
             <div className="drawer-work-list">
               {works.map((work, index) => (
-                <a href={work.href} target="_blank" rel="noreferrer" key={work.id} onClick={() => trackLink(work.id, "work")}>
+                <a href={withElianSource(work.href)} target="_blank" rel="noreferrer" key={work.id} onClick={() => trackLink(work.id, "work")}>
                   <span className="drawer-work-index">{String(index + 1).padStart(2, "0")}</span>
                   <span>
                     <strong>{zh ? work.nameZh ?? work.name : work.name}</strong>
@@ -190,7 +191,7 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
             </div>
             <div className="drawer-contact-links">
               {contactLinks.map((item) => (
-                <a href={item.href} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"} key={item.label} onClick={() => trackLink(item.label, "contact")}>
+                <a href={withElianSource(item.href)} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"} key={item.label} onClick={() => trackLink(item.label, "contact")}>
                   {zh ? item.labelZh ?? item.label : item.label}<ArrowSquareOut weight="bold" />
                 </a>
               ))}
