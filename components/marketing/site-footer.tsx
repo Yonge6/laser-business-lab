@@ -12,6 +12,7 @@ const copy = {
     privacy: "Privacy",
     disclaimer: "Disclaimer",
     about: "About",
+    guides: "Product guides",
   },
   zh: {
     line: "为 Maker 提供商业选择情报。",
@@ -20,6 +21,7 @@ const copy = {
     privacy: "隐私",
     disclaimer: "免责声明",
     about: "关于",
+    guides: "产品指南",
   },
 };
 
@@ -38,6 +40,7 @@ export function SiteFooter() {
           <p>{t.estimates}</p>
         </div>
         <nav aria-label={locale === "zh" ? "法律信息" : "Legal"}>
+          <Link href="/ideas">{t.guides}</Link>
           <Link href="/about">{t.about}</Link>
           <Link href="/privacy">{t.privacy}</Link>
           <Link href="/disclaimer">{t.disclaimer}</Link>

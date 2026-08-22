@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
 import { captureAttribution } from "@/lib/attribution/client";
 import { trackEvent } from "@/lib/analytics/client";
 import { LanguageProvider } from "@/components/providers/language-provider";
 
 export function AppProviders({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
   useEffect(() => {
     captureAttribution();
     if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
@@ -16,8 +19,11 @@ export function AppProviders({ children }: { children: ReactNode }) {
         person_profiles: "identified_only",
       });
     }
-    void trackEvent("page_view", { path: window.location.pathname });
   }, []);
+
+  useEffect(() => {
+    void trackEvent("page_view", { path: pathname });
+  }, [pathname]);
 
   return <LanguageProvider>{children}</LanguageProvider>;
 }

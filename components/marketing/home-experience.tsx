@@ -16,6 +16,7 @@ import { buildOneLaserUrl, oneLaserOpportunityDestinations } from "@/lib/commerc
 import { trackEvent } from "@/lib/analytics/client";
 import { buildBambuUrl } from "@/lib/commerce/bambu";
 import { buildXToolUrl } from "@/lib/commerce/xtool";
+import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 
 const copy = {
   en: {
@@ -33,7 +34,7 @@ const copy = {
     viewOneLaser: "View matched OneLaser",
     viewBambu: "Compare Bambu Lab printers",
     viewXTool: "View xTool WonderPress",
-    compareAll: "Compare all opportunities",
+    viewGuide: "View full business guide",
     resultLink: "Selection results · Updates with the card above",
     marketCase: "Selected marketplace example",
     publicSignal: "Public market signal",
@@ -77,7 +78,7 @@ const copy = {
     viewOneLaser: "在 OneLaser 查看匹配设备",
     viewBambu: "查看拓竹打印机",
     viewXTool: "查看 xTool WonderPress",
-    compareAll: "查看全部机会",
+    viewGuide: "查看完整商业指南",
     resultLink: "选择结果 · 随上方卡片实时更新",
     marketCase: "精选电商参考案例",
     publicSignal: "公开市场信号",
@@ -303,8 +304,8 @@ export function HomeExperience() {
             <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
             <div className="selection-actions">
               <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
-              <a className="selection-more" href={matchedEquipmentUrl} target="_blank" rel="noreferrer" onClick={trackHomeEquipmentClick}>{matchedEquipmentLabel}<ArrowSquareOut weight="bold" /></a>
-              <Link className="selection-more" href="/opportunities">{t.compareAll}<ArrowRight weight="bold" /></Link>
+              <TrackedExternalLink className="selection-more" href={matchedEquipmentUrl} target="_blank" rel="noreferrer" onClick={trackHomeEquipmentClick} analytics={{ placement: "home_opportunity", opportunity: selected.id, destination: "equipment", brand: matchedEquipmentBrand }}>{matchedEquipmentLabel}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
+              <Link className="selection-more" href={`/ideas/${selected.id}`}>{t.viewGuide}<ArrowRight weight="bold" /></Link>
             </div>
           </div>
           <article className="market-proof">
@@ -321,8 +322,8 @@ export function HomeExperience() {
             <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div>
             <div className="market-proof-source">
               <div className="market-proof-links">
-                <a className="market-proof-primary" href={marketCase.sourceUrl} target="_blank" rel="noreferrer">{t.viewSource}<ArrowSquareOut weight="bold" /></a>
-                <a className="market-proof-secondary" href={marketCase.searchUrl} target="_blank" rel="noreferrer">{t.searchSimilar}<MagnifyingGlass weight="bold" /></a>
+                <TrackedExternalLink className="market-proof-primary" href={marketCase.sourceUrl} target="_blank" rel="noreferrer" analytics={{ placement: "home_market_proof", opportunity: selected.id, destination: "evidence_listing" }}>{t.viewSource}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
+                <TrackedExternalLink className="market-proof-secondary" href={marketCase.searchUrl} target="_blank" rel="noreferrer" analytics={{ placement: "home_market_proof", opportunity: selected.id, destination: "marketplace_search" }}>{t.searchSimilar}<MagnifyingGlass weight="bold" /></TrackedExternalLink>
               </div>
             </div>
             <p className="market-proof-note">{t.marketNote}</p>

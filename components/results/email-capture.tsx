@@ -17,6 +17,7 @@ export function EmailCapture({ tool, result, reportPath }: { tool: string; resul
     event.preventDefault();
     setState("sending");
     try {
+      let delivery: "sent" | "sent_without_subscription" | "saved_local" = "saved_local";
       const reportUrl = new URL(reportPath ?? window.location.href, window.location.origin).toString();
       const payload = { email, tool, result, reportUrl, locale, requestId: crypto.randomUUID(), company, marketingConsent, attribution: readAttribution() };
       const endpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT;
@@ -28,12 +29,13 @@ export function EmailCapture({ tool, result, reportPath }: { tool: string; resul
         });
         if (!response.ok) throw new Error("Unable to save email");
         const outcome = await response.json() as { marketingSubscribed?: boolean };
-        setState(marketingConsent && !outcome.marketingSubscribed ? "sent_without_subscription" : "sent");
+        delivery = marketingConsent && !outcome.marketingSubscribed ? "sent_without_subscription" : "sent";
+        setState(delivery);
       } else {
         window.localStorage.setItem(`lbl_saved_report_${tool}`, JSON.stringify({ ...payload, savedAt: new Date().toISOString() }));
         setState("saved");
       }
-      await trackEvent("email_capture", { tool, recommendation: result });
+      await trackEvent("email_capture", { tool, recommendation: result, locale, marketing_consent: marketingConsent, delivery });
     } catch {
       setState("error");
     }

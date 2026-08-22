@@ -12,6 +12,7 @@ export type AnalyticsEventName =
   | "drawer_open"
   | "drawer_link_click"
   | "email_capture"
+  | "outbound_click"
   | "share_result";
 
 export type AnalyticsProperties = Record<string, unknown>;
