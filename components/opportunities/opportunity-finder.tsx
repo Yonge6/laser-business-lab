@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, Sparkle, Target, TShirt } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { rankOpportunities, type OpportunityAnswers } from "@/lib/opportunities/engine";
 import { formatCurrency } from "@/lib/format";
@@ -12,6 +12,7 @@ import { EmailCapture } from "@/components/results/email-capture";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { assetPath } from "@/lib/site";
 import { getOpportunityEquipmentRecommendation } from "@/lib/commerce/opportunity-equipment";
+import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 
 const initial: OpportunityAnswers = {
   interests: [],
@@ -80,12 +81,17 @@ export function OpportunityFinder() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState(initial);
   const [complete, setComplete] = useState(false);
+  const startedRef = useRef(false);
   const results = useMemo(() => rankOpportunities(answers), [answers]);
 
   const options = [t.interests, t.methods, t.budgets, t.time, t.goals][step];
   const currentValue = [answers.interests, answers.method, answers.budget, answers.hoursPerWeek, answers.goal][step];
 
   function choose(value: string) {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      void trackEvent("opportunity_finder_start", { tool: "opportunity_finder", path: window.location.pathname });
+    }
     if (step === 0) {
       setAnswers((current) => ({ ...current, interests: current.interests.includes(value) ? current.interests.filter((item) => item !== value) : [...current.interests, value].slice(-3) }));
     } else if (step === 1) setAnswers((current) => ({ ...current, method: value as OpportunityAnswers["method"] }));
@@ -122,7 +128,7 @@ export function OpportunityFinder() {
                 <ul>{(locale === "zh" ? item.matchReasonsZh : item.matchReasons).map((reason) => <li key={reason}><Check weight="bold" />{reason}</li>)}</ul>
                 <div className="result-cta-row">
                   <Link className="button button-ghost" href={`/calculator/laser-roi?product=${item.id}`}>{t.calculator}<ArrowRight weight="bold" /></Link>
-                  <a className="button button-primary result-equipment-link" href={equipment.url} target="_blank" rel="noreferrer">{t.equipment}：{locale === "zh" ? equipment.nameZh : equipment.name}<ArrowSquareOut weight="bold" /></a>
+                  <TrackedExternalLink className="button button-primary result-equipment-link" href={equipment.url} target="_blank" rel="noreferrer" analytics={{ placement: "opportunity_finder_result", opportunity: item.id, destination: "equipment", recommendation: equipment.name }}>{t.equipment}：{locale === "zh" ? equipment.nameZh : equipment.name}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
                 </div>
               </div>
             </article>;

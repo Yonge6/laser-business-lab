@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, TShirt, Warning } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/components/providers/language-provider";
 import { NumberField } from "@/components/calculator/number-field";
@@ -18,6 +18,7 @@ import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommend
 import { oneLaserDestinations, oneLaserOpportunityDestinations, oneLaserOpportunityNames } from "@/lib/commerce/onelaser";
 import { getRoiEquipmentRecommendation } from "@/lib/commerce/opportunity-equipment";
 import { clampToBudget } from "@/lib/calculators/budget";
+import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 
 export type MakerMethod = "laser" | "3d-printing" | "heat-press" | "maker";
 
@@ -256,6 +257,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
     : baseProductOptions;
   const [product, setProduct] = useState(selectedOpportunity?.title ?? productOptions[0].value);
   const [step, setStep] = useState(0);
+  const startedRef = useRef(false);
   const budgetOptions = budgetsByMethod[method];
   const defaultBudget = method === "laser" ? "5-8" : method === "3d-printing" || method === "heat-press" ? "500-1" : "500-3";
   const opportunityBudget = selectedOpportunity
@@ -335,6 +337,10 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   }, [complete, method, roiRecommendationId]);
 
   async function advance() {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      await trackEvent("calculator_start", { tool: toolName, product_category: product, category: method, path: window.location.pathname });
+    }
     if (step < 3) {
       await trackEvent("calculator_step_completed", { tool: toolName, step: step + 1, product_category: product, method });
       setStep((value) => value + 1);
@@ -378,7 +384,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
           <div className="report-stat"><strong>{formatNumber(result.productionHours, 1)} {t.hour}</strong><span>{t.production}</span></div>
           <div className="report-stat"><strong>{result.paybackMonths ? `${formatNumber(result.paybackMonths, 1)} ${t.month}` : "—"}</strong><span>{t.payback}</span></div>
           <div className="report-stat"><strong>{formatNumber(result.capacityUtilization, 0)}%</strong><span>{t.utilization}</span></div>
-          <a className="report-stat report-machine" href={equipmentRecommendation.url} target="_blank" rel="noreferrer"><span>{t.recommended}</span><strong>{locale === "zh" ? equipmentRecommendation.nameZh : equipmentRecommendation.name}</strong><ArrowSquareOut weight="bold" /></a>
+          <TrackedExternalLink className="report-stat report-machine" href={equipmentRecommendation.url} target="_blank" rel="noreferrer" analytics={{ placement: "roi_report", destination: "equipment", recommendation: equipmentRecommendation.name, opportunity: selectedOpportunity?.id ?? product }}><span>{t.recommended}</span><strong>{locale === "zh" ? equipmentRecommendation.nameZh : equipmentRecommendation.name}</strong><ArrowSquareOut weight="bold" /></TrackedExternalLink>
         </div>
         {!result.isProfitable ? <div className="profit-warning"><Warning weight="bold" />{t.negative}</div> : null}
         <div className="profile-block"><span>{t.profile}</span><div>{result.profiles.map((profile) => <b key={profile}>{locale === "zh" ? profileZh[profile] ?? profile : profile}</b>)}</div></div>

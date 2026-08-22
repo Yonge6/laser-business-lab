@@ -18,6 +18,7 @@ import {
 import { trackEvent } from "@/lib/analytics/client";
 import { useLanguage } from "@/components/providers/language-provider";
 import { withElianSource } from "@/lib/commerce/outbound";
+import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 
 type SiteDrawerProps = {
   open: boolean;
@@ -171,14 +172,14 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
             </div>
             <div className="drawer-work-list">
               {works.map((work, index) => (
-                <a href={withElianSource(work.href)} target="_blank" rel="noreferrer" key={work.id} onClick={() => trackLink(work.id, "work")}>
+                <TrackedExternalLink href={withElianSource(work.href)} target="_blank" rel="noreferrer" key={work.id} onClick={() => trackLink(work.id, "work")} analytics={{ placement: "site_drawer", destination: "related_work", work: work.id }}>
                   <span className="drawer-work-index">{String(index + 1).padStart(2, "0")}</span>
                   <span>
                     <strong>{zh ? work.nameZh ?? work.name : work.name}</strong>
                     <small>{zh ? work.taglineZh : work.tagline}</small>
                   </span>
                   <ArrowSquareOut weight="bold" />
-                </a>
+                </TrackedExternalLink>
               ))}
             </div>
           </section>
@@ -190,10 +191,12 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
               <EnvelopeSimple weight="bold" />
             </div>
             <div className="drawer-contact-links">
-              {contactLinks.map((item) => (
-                <a href={withElianSource(item.href)} target={item.href.startsWith("mailto:") ? undefined : "_blank"} rel={item.href.startsWith("mailto:") ? undefined : "noreferrer"} key={item.label} onClick={() => trackLink(item.label, "contact")}>
+              {contactLinks.map((item) => item.href.startsWith("mailto:") ? (
+                <a href={item.href} key={item.label} onClick={() => trackLink(item.label, "contact")}>{zh ? item.labelZh ?? item.label : item.label}<ArrowSquareOut weight="bold" /></a>
+              ) : (
+                <TrackedExternalLink href={withElianSource(item.href)} target="_blank" rel="noreferrer" key={item.label} onClick={() => trackLink(item.label, "contact")} analytics={{ placement: "site_drawer", destination: "contact", channel: item.label }}>
                   {zh ? item.labelZh ?? item.label : item.label}<ArrowSquareOut weight="bold" />
-                </a>
+                </TrackedExternalLink>
               ))}
             </div>
             <div className="drawer-legal-links">
