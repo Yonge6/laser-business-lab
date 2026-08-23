@@ -1,0 +1,107 @@
+name: Daily Maker Operations
+
+on:
+  schedule:
+    # 08:30 every day in Asia/Shanghai (UTC+8, no daylight saving time).
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+    inputs:
+      operations_date:
+        description: "Optional YYYY-MM-DD date for a deterministic replay"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: daily-maker-operations
+  cancel-in-progress: false
+
+jobs:
+  operate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Confirm the latest production branch
+        run: git pull --ff-only origin main
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Advance the daily operating signal
+        run: pnpm ops:daily
+        env:
+          OPERATIONS_DATE: ${{ inputs.operations_date }}
+      - name: Verify the release before publishing
+        run: |
+          pnpm test
+          pnpm run typecheck
+          pnpm run lint
+          pnpm run build:pages
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.NEXT_PUBLIC_LEAD_ENDPOINT }}
+      - name: Publish directly to main
+        id: publish
+        run: |
+          if git diff --quiet -- content/operations/state.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "maker-operations-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/operations/state.json
+          git commit -m "Operate Maker Radar for $(node -p \"require('./content/operations/state.json').lastRunDate\")"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Deliver the current operations package
+        if: ${{ env.OPERATIONS_DISTRIBUTION_WEBHOOK != '' }}
+        env:
+          OPERATIONS_DISTRIBUTION_WEBHOOK: ${{ secrets.OPERATIONS_DISTRIBUTION_WEBHOOK }}
+        run: |
+          expected_date="$(node -p \"require('./content/operations/state.json').lastRunDate\")"
+          live_payload="$(mktemp)"
+          live_url="https://maker.wonderelian.com/operations/latest.json?run=${GITHUB_RUN_ID}"
+          ready=false
+          for attempt in $(seq 1 36); do
+            if curl --silent --show-error --fail "$live_url" -o "$live_payload" && \
+              EXPECTED_DATE="$expected_date" LIVE_PAYLOAD="$live_payload" node -e "const fs=require('node:fs');const payload=JSON.parse(fs.readFileSync(process.env.LIVE_PAYLOAD,'utf8'));process.exit(payload.generatedFor===process.env.EXPECTED_DATE?0:1)"; then
+              ready=true
+              break
+            fi
+            sleep 10
+          done
+          if [ "$ready" != "true" ]; then
+            echo "Production did not expose the expected operations package for $expected_date." >&2
+            exit 1
+          fi
+          curl --fail-with-body --retry 3 --retry-all-errors \
+            -H "content-type: application/json" \
+            --data-binary @"$live_payload" \
+            "$OPERATIONS_DISTRIBUTION_WEBHOOK"
+      - name: Record the successful run
+        run: |
+          node -e "const s=require('./content/operations/state.json'); console.log(JSON.stringify({status:'ok',published:'${{ steps.publish.outputs.changed }}',date:s.lastRunDate,opportunity:s.activeOpportunityId,lens:s.activeLens}))"
+
+      - name: Open an operations alert
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().slice(0, 10)
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[operations] Daily automation failed — ${date}`,
+              body: `The unattended Maker operations workflow failed.\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nNo content was pushed unless all validation steps passed.`,
+            })

@@ -12,7 +12,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "ops:daily": "node scripts/operations/update-state.mjs",
+    "ops:preview": "OPERATIONS_DATE=2026-08-24 node scripts/operations/update-state.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

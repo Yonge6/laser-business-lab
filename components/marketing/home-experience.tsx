@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, Pulse, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
@@ -17,6 +17,7 @@ import { trackEvent } from "@/lib/analytics/client";
 import { buildBambuUrl } from "@/lib/commerce/bambu";
 import { buildXToolUrl } from "@/lib/commerce/xtool";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
+import { getActiveRadarBriefing } from "@/lib/operations/radar";
 
 const copy = {
   en: {
@@ -62,6 +63,8 @@ const copy = {
     estimates: "Opportunity scores and profit figures are directional estimates. Validate demand with small tests before investing.",
     catalog: "7 market-tested starting ideas",
     catalogSub: "Swipe horizontally. The centered card is selected automatically and updates the evidence below.",
+    dailySignal: "Today’s maker signal",
+    dailySignalCta: "Open opportunity radar",
   },
   zh: {
     eyebrow: "Maker 商业机会情报",
@@ -106,6 +109,8 @@ const copy = {
     estimates: "机会评分与利润数字均为方向性估算。投资前请先用小批量测试验证需求。",
     catalog: "7 个经过市场信号验证的起步方向",
     catalogSub: "左右滑动浏览，居中的卡片会自动选中，并实时更新下方市场证据。",
+    dailySignal: "今日 Maker 信号",
+    dailySignalCta: "打开机会雷达",
   },
 };
 
@@ -121,6 +126,7 @@ export function HomeExperience() {
   const scrollFrameRef = useRef<number | null>(null);
   const manualSelectionRef = useRef<string | null>(null);
   const t = copy[locale];
+  const currentBriefing = getActiveRadarBriefing();
   const marketCase = marketCaseByOpportunity[selected.id];
   const oneLaserDestination = selected.category === "laser" ? oneLaserOpportunityDestinations[selected.id] : null;
   const matchedEquipmentUrl = oneLaserDestination ? buildOneLaserUrl(oneLaserDestination, {
@@ -264,6 +270,16 @@ export function HomeExperience() {
           <p className="hero-sub">{t.sub}</p>
         </div>
         <OpportunityRadar opportunity={selected} />
+      </section>
+
+      <section className="home-daily-signal shell" aria-labelledby="home-daily-signal-title">
+        <div className="home-daily-signal-status"><Pulse weight="fill" /><span>{t.dailySignal}</span><time dateTime={currentBriefing.state.lastRunDate}>{currentBriefing.state.lastRunDate}</time></div>
+        <div>
+          <small>{locale === "zh" ? currentBriefing.daily.labelZh : currentBriefing.daily.label}</small>
+          <h2 id="home-daily-signal-title">{locale === "zh" ? currentBriefing.daily.headlineZh : currentBriefing.daily.headline}</h2>
+          <p>{locale === "zh" ? currentBriefing.daily.answerZh : currentBriefing.daily.answer}</p>
+        </div>
+        <Link href="/radar">{t.dailySignalCta}<ArrowRight weight="bold" /></Link>
       </section>
 
       <section className="opportunity-showcase shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
