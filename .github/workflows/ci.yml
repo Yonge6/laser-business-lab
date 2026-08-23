@@ -46,6 +46,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build:pages
         env:
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.NEXT_PUBLIC_LEAD_ENDPOINT }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
