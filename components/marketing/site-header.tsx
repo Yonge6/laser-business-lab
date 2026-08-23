@@ -17,6 +17,7 @@ const copy = {
     opportunities: "Opportunities",
     calculators: "Calculators",
     equipment: "Equipment",
+    radar: "Radar",
     learn: "Learn",
     about: "About",
     start: "Start quest",
@@ -29,6 +30,7 @@ const copy = {
     opportunities: "机会发现",
     calculators: "利润计算",
     equipment: "设备匹配",
+    radar: "雷达",
     learn: "学习",
     about: "关于",
     start: "开始任务",
@@ -47,6 +49,7 @@ export function SiteHeader() {
     [t.opportunities, "/opportunities"],
     [t.calculators, "/calculator"],
     [t.equipment, "/calculator/machine-finder"],
+    [t.radar, "/radar"],
     [t.learn, "/learn"],
     [t.about, "/about"],
   ];

@@ -12,6 +12,8 @@ A bilingual, business-first maker platform for answering three questions:
 
 The MVP is laser-first and already models 3D-printing opportunities. It includes an opportunity finder, laser ROI calculator, tumbler profit calculator, deterministic machine finder, shareable reports, first/last-touch attribution, attributed equipment links, email capture, and optional GA4/PostHog integrations.
 
+The zero-budget operating loop publishes a bilingual daily Maker signal at `/radar`, rotates the featured opportunity every Monday, and exposes a structured content package at `/operations/latest.json`. See [`docs/operations/README.md`](docs/operations/README.md).
+
 ## Run locally
 
 ```bash

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "timezone": "Asia/Shanghai",
+  "lastRunDate": "2026-08-23",
+  "weekStarted": "2026-08-17",
+  "activeOpportunityId": "personalized-tumblers",
+  "activeLens": "review",
+  "sequence": 0,
+  "history": [
+    {
+      "weekStarted": "2026-08-17",
+      "opportunityId": "personalized-tumblers"
+    }
+  ]
+}

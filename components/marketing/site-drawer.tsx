@@ -13,6 +13,7 @@ import {
   GlobeHemisphereWest,
   House,
   Info,
+  Pulse,
   X,
 } from "@phosphor-icons/react";
 import { trackEvent } from "@/lib/analytics/client";
@@ -95,6 +96,7 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
     { href: "/opportunities", label: "Find an opportunity", labelZh: "发现赚钱机会", icon: Crosshair },
     { href: "/calculator", label: "Calculate profit", labelZh: "测算利润", icon: Calculator },
     { href: "/calculator/machine-finder", label: "Match equipment", labelZh: "匹配设备", icon: ChartLineUp },
+    { href: "/radar", label: "Opportunity radar", labelZh: "机会雷达", icon: Pulse },
     { href: "/learn", label: "Maker playbook", labelZh: "Maker 赚钱指南", icon: Info },
   ];
 
