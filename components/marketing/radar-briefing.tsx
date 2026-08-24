@@ -18,8 +18,8 @@ export function RadarBriefing() {
     <main className="operations-radar-page">
       <section className="operations-radar-hero shell">
         <div className="operations-radar-copy">
-          <p className="eyebrow">{zh ? "自动运营 / 今日 MAKER 信号" : "AUTOMATED OPERATIONS / TODAY’S MAKER SIGNAL"}</p>
-          <div className="operations-live-status"><Pulse weight="fill" /><span>{zh ? "每日自动更新" : "UPDATED DAILY"}</span><time dateTime={state.lastRunDate}>{state.lastRunDate}</time></div>
+          <p className="eyebrow">{zh ? "今日 MAKER 信号" : "TODAY’S MAKER SIGNAL"}</p>
+          <div className="operations-live-status"><Pulse weight="fill" /><span>{zh ? "每日更新" : "UPDATED DAILY"}</span><time dateTime={state.lastRunDate}>{state.lastRunDate}</time></div>
           <h1>{zh ? daily.headlineZh : daily.headline}</h1>
           <p>{zh ? daily.answerZh : daily.answer}</p>
           <div className="operations-radar-actions">
