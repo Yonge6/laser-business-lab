@@ -49,10 +49,10 @@ const copy = {
       ["Build", "Make it efficiently and consistently."],
       ["Sell", "List, market, and scale with confidence."],
     ],
-    level: "Level 01",
-    maker: "Beginner maker",
-    xp: "250 / 1,000 XP",
-    progress: "Complete steps to earn XP and level up.",
+    level: "Current stage",
+    maker: "Discover",
+    xp: "Step 1 of 4",
+    progress: "Start by comparing product opportunities.",
     toolkit: "Your maker business toolkit",
     toolkitSub: "Start with the decision you need to make today.",
     tools: [
@@ -95,10 +95,10 @@ const copy = {
       ["生产", "稳定、高效地制造。"],
       ["销售", "上架、营销并扩大规模。"],
     ],
-    level: "等级 01",
-    maker: "新手 Maker",
-    xp: "250 / 1,000 XP",
-    progress: "完成任务获取 XP 并升级。",
+    level: "当前阶段",
+    maker: "发现",
+    xp: "步骤 1 / 4",
+    progress: "先从比较产品机会开始。",
     toolkit: "你的 Maker 商业工具箱",
     toolkitSub: "从今天最需要做出的决定开始。",
     tools: [
@@ -269,17 +269,18 @@ export function HomeExperience() {
           <div className="speed-stripe" aria-hidden="true" />
           <p className="hero-sub">{t.sub}</p>
         </div>
-        <OpportunityRadar opportunity={selected} />
-      </section>
 
-      <section className="home-daily-signal shell" aria-labelledby="home-daily-signal-title">
-        <div className="home-daily-signal-status"><Pulse weight="fill" /><span>{t.dailySignal}</span><time dateTime={currentBriefing.state.lastRunDate}>{currentBriefing.state.lastRunDate}</time></div>
-        <div>
-          <small>{locale === "zh" ? currentBriefing.daily.labelZh : currentBriefing.daily.label}</small>
-          <h2 id="home-daily-signal-title">{locale === "zh" ? currentBriefing.daily.headlineZh : currentBriefing.daily.headline}</h2>
-          <p>{locale === "zh" ? currentBriefing.daily.answerZh : currentBriefing.daily.answer}</p>
-        </div>
-        <Link href="/radar">{t.dailySignalCta}<ArrowRight weight="bold" /></Link>
+        <section className="home-daily-signal" aria-labelledby="home-daily-signal-title">
+          <div className="home-daily-signal-status"><Pulse weight="fill" /><span>{t.dailySignal}</span><time dateTime={currentBriefing.state.lastRunDate}>{currentBriefing.state.lastRunDate}</time></div>
+          <div>
+            <small>{locale === "zh" ? currentBriefing.daily.labelZh : currentBriefing.daily.label}</small>
+            <h2 id="home-daily-signal-title">{locale === "zh" ? currentBriefing.daily.headlineZh : currentBriefing.daily.headline}</h2>
+            <p>{locale === "zh" ? currentBriefing.daily.answerZh : currentBriefing.daily.answer}</p>
+          </div>
+          <Link href="/radar">{t.dailySignalCta}<ArrowRight weight="bold" /></Link>
+        </section>
+
+        <OpportunityRadar opportunity={selected} />
       </section>
 
       <section className="opportunity-showcase shell" aria-label={locale === "zh" ? "精选 Maker 产品机会" : "Featured maker opportunities"}>
@@ -370,7 +371,7 @@ export function HomeExperience() {
           <div className="level-panel">
             <CheckCircle weight="fill" />
             <div><strong>{t.level}</strong><span>{t.maker}</span></div>
-            <div className="xp-bar"><span /></div>
+            <div className="path-progress-bar" aria-hidden="true"><span /></div>
             <b>{t.xp}</b>
             <small>{t.progress}</small>
           </div>

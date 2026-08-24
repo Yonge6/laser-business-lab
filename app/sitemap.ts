@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import operationsState from "@/content/operations/state.json";
+import { getRadarArchiveDates } from "@/lib/operations/radar-archive";
 import { opportunities } from "@/lib/opportunities/data";
 import { seoPagePath, type SeoPageKind } from "@/lib/seo/opportunity-content";
 
@@ -23,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: kind === "idea" ? .85 : .8,
     images: [`${base}${opportunity.image}`],
   })));
+  const radarArchive = getRadarArchiveDates().map((date) => ({
+    url: `${base}/radar/${date}`,
+    lastModified: new Date(`${date}T00:00:00.000Z`),
+    changeFrequency: "never" as const,
+    priority: .65,
+  }));
 
-  return [...core, ...growthPages];
+  return [...core, ...growthPages, ...radarArchive];
 }
