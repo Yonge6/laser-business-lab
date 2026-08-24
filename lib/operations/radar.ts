@@ -3,8 +3,19 @@ import { opportunityById, type Opportunity } from "@/lib/opportunities/data";
 import { opportunitySeoProfiles, seoPagePath, type OpportunitySeoProfile } from "@/lib/seo/opportunity-content";
 
 export type RadarLens = "demand" | "price" | "validation" | "production" | "equipment" | "risk" | "review";
+export type OperationsState = {
+  version: number;
+  timezone: string;
+  lastRunDate: string;
+  weekStarted: string;
+  activeOpportunityId: string;
+  activeLens: RadarLens;
+  sequence: number;
+  history: Array<{ weekStarted: string; opportunityId: string }>;
+};
 
 const siteUrl = "https://maker.wonderelian.com";
+const activeOperationsState = operationsState as OperationsState;
 
 function trackedUrl(path: string, source: string, medium: string, content: string) {
   const url = new URL(path, siteUrl);
@@ -15,35 +26,39 @@ function trackedUrl(path: string, source: string, medium: string, content: strin
   return url.toString();
 }
 
-export function getActiveRadarBriefing() {
-  const opportunity = opportunityById[operationsState.activeOpportunityId];
-  const profile = opportunitySeoProfiles[operationsState.activeOpportunityId];
-  if (!opportunity || !profile) throw new Error(`Unknown automated opportunity: ${operationsState.activeOpportunityId}`);
+export function getRadarBriefing(state: OperationsState, radarPath = "/radar") {
+  const opportunity = opportunityById[state.activeOpportunityId];
+  const profile = opportunitySeoProfiles[state.activeOpportunityId];
+  if (!opportunity || !profile) throw new Error(`Unknown automated opportunity: ${state.activeOpportunityId}`);
 
   const marginRate = Math.round((opportunity.grossProfit / opportunity.sellingPrice) * 100);
-  const daily = dailyCopy(operationsState.activeLens as RadarLens, opportunity, profile, marginRate);
-  const contentKey = `${operationsState.lastRunDate}_${opportunity.id}_${operationsState.activeLens}`;
+  const daily = dailyCopy(state.activeLens, opportunity, profile, marginRate);
+  const contentKey = `${state.lastRunDate}_${opportunity.id}_${state.activeLens}`;
 
   return {
-    state: operationsState,
+    state,
     opportunity,
     profile,
     marginRate,
     daily,
     links: {
-      radar: "/radar",
+      radar: radarPath,
       idea: seoPagePath("idea", opportunity.id),
       profit: seoPagePath("profit", opportunity.id),
       equipment: seoPagePath("equipment", opportunity.id),
       calculator: `/calculator/laser-roi?product=${opportunity.id}`,
     },
     distribution: {
-      youtube: trackedUrl("/radar/", "youtube", "organic_video", contentKey),
-      pinterest: trackedUrl("/radar/", "pinterest", "organic_social", contentKey),
-      reddit: trackedUrl("/radar/", "reddit", "community", contentKey),
-      email: trackedUrl("/radar/", "email", "newsletter", contentKey),
+      youtube: trackedUrl(radarPath, "youtube", "organic_video", contentKey),
+      pinterest: trackedUrl(radarPath, "pinterest", "organic_social", contentKey),
+      reddit: trackedUrl(radarPath, "reddit", "community", contentKey),
+      email: trackedUrl(radarPath, "email", "newsletter", contentKey),
     },
   };
+}
+
+export function getActiveRadarBriefing() {
+  return getRadarBriefing(activeOperationsState);
 }
 
 export function getOperationsPayload() {

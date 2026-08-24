@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import sitemap from "@/app/sitemap";
 import { opportunities } from "@/lib/opportunities/data";
+import { getArchivedRadarBriefing, getRadarArchiveDates, getRadarArchiveSummaries } from "@/lib/operations/radar-archive";
 import { getActiveRadarBriefing, getOperationsPayload } from "@/lib/operations/radar";
 
 describe("automated Maker operations", () => {
@@ -27,5 +28,25 @@ describe("automated Maker operations", () => {
 
   it("includes the Radar in the public sitemap", () => {
     expect(sitemap().map((entry) => entry.url)).toContain("https://maker.wonderelian.com/radar");
+  });
+
+  it("keeps unique dated Radar snapshots with stable public routes", () => {
+    const dates = getRadarArchiveDates();
+    expect(dates.length).toBeGreaterThan(0);
+    expect(new Set(dates).size).toBe(dates.length);
+    expect(dates).toEqual([...dates].sort((a, b) => b.localeCompare(a)));
+
+    for (const date of dates) {
+      const briefing = getArchivedRadarBriefing(date);
+      expect(briefing?.state.lastRunDate).toBe(date);
+      expect(briefing?.links.radar).toBe(`/radar/${date}`);
+      expect(sitemap().map((entry) => entry.url)).toContain(`https://maker.wonderelian.com/radar/${date}`);
+    }
+  });
+
+  it("builds a reverse-chronological archive index without duplicate dates", () => {
+    const summaries = getRadarArchiveSummaries();
+    expect(summaries.map((entry) => entry.date)).toEqual(getRadarArchiveDates());
+    expect(summaries.every((entry) => entry.title.length > 20 && entry.answer.length > 30)).toBe(true);
   });
 });

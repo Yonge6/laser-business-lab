@@ -15,7 +15,9 @@ const opportunityIds = [
 const lenses = ["review", "demand", "price", "validation", "production", "equipment", "risk"];
 const timezone = "Asia/Shanghai";
 const startWeek = "2026-08-17";
-const filePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../content/operations/state.json");
+const contentDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../content/operations");
+const filePath = path.join(contentDirectory, "state.json");
+const archivePath = path.join(contentDirectory, "archive.json");
 
 function shanghaiDate() {
   if (process.env.OPERATIONS_DATE) return process.env.OPERATIONS_DATE;
@@ -72,5 +74,14 @@ const next = {
   history: history.slice(-12),
 };
 
+const archive = JSON.parse(await readFile(archivePath, "utf8"));
+const entriesByDate = new Map(
+  (Array.isArray(archive.entries) ? archive.entries : []).map((entry) => [entry.lastRunDate, entry]),
+);
+entriesByDate.set(previous.lastRunDate, previous);
+entriesByDate.set(next.lastRunDate, next);
+const entries = [...entriesByDate.values()].sort((a, b) => a.lastRunDate.localeCompare(b.lastRunDate));
+
 await writeFile(filePath, `${JSON.stringify(next, null, 2)}\n`, "utf8");
+await writeFile(archivePath, `${JSON.stringify({ version: 1, entries }, null, 2)}\n`, "utf8");
 console.log(`Maker operations updated: ${runDate} / ${activeOpportunityId} / ${activeLens}`);

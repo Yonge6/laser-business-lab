@@ -2,24 +2,27 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Calculator, CalendarDots, CheckCircle, Factory, Pulse, ShieldCheck, Target } from "@phosphor-icons/react";
+import { ArrowRight, ArrowUpRight, Calculator, CalendarDots, CheckCircle, ClockCounterClockwise, Factory, Pulse, ShieldCheck, Target } from "@phosphor-icons/react";
 
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatCurrency } from "@/lib/format";
-import { getActiveRadarBriefing } from "@/lib/operations/radar";
+import type { RadarArchiveSummary } from "@/lib/operations/radar-archive";
+import { getActiveRadarBriefing, getRadarBriefing, type OperationsState } from "@/lib/operations/radar";
 import { assetPath } from "@/lib/site";
 
-export function RadarBriefing() {
+export function RadarBriefing({ state, archiveItems = [] }: { state?: OperationsState; archiveItems?: RadarArchiveSummary[] }) {
   const { locale } = useLanguage();
   const zh = locale === "zh";
-  const { state, opportunity, profile, daily, links, marginRate } = getActiveRadarBriefing();
+  const briefing = state ? getRadarBriefing(state, `/radar/${state.lastRunDate}`) : getActiveRadarBriefing();
+  const { opportunity, profile, daily, links, marginRate } = briefing;
+  const archived = Boolean(state);
 
   return (
     <main className="operations-radar-page">
       <section className="operations-radar-hero shell">
         <div className="operations-radar-copy">
-          <p className="eyebrow">{zh ? "今日 MAKER 信号" : "TODAY’S MAKER SIGNAL"}</p>
-          <div className="operations-live-status"><Pulse weight="fill" /><span>{zh ? "每日更新" : "UPDATED DAILY"}</span><time dateTime={state.lastRunDate}>{state.lastRunDate}</time></div>
+          <p className="eyebrow">{archived ? (zh ? "往期 MAKER 信号" : "MAKER SIGNAL ARCHIVE") : (zh ? "今日 MAKER 信号" : "TODAY’S MAKER SIGNAL")}</p>
+          <div className="operations-live-status"><Pulse weight="fill" /><span>{archived ? (zh ? "历史快照" : "ARCHIVE SNAPSHOT") : (zh ? "每日更新" : "UPDATED DAILY")}</span><time dateTime={briefing.state.lastRunDate}>{briefing.state.lastRunDate}</time></div>
           <h1>{zh ? daily.headlineZh : daily.headline}</h1>
           <p>{zh ? daily.answerZh : daily.answer}</p>
           <div className="operations-radar-actions">
@@ -29,7 +32,7 @@ export function RadarBriefing() {
         </div>
         <div className="operations-radar-image">
           <Image src={assetPath(opportunity.image)} alt={zh ? opportunity.titleZh : opportunity.title} fill sizes="(max-width: 760px) 100vw, 42vw" priority />
-          <span>{daily.label}</span>
+          <span>{zh ? daily.labelZh : daily.label}</span>
           <div><small>{zh ? "本周机会" : "THIS WEEK"}</small><strong>#{String(opportunity.rank).padStart(2, "0")}</strong></div>
         </div>
       </section>
@@ -53,7 +56,7 @@ export function RadarBriefing() {
           <p>{zh ? "本周机会" : "WEEKLY OPPORTUNITY"}</p>
           <h2>{zh ? opportunity.titleZh : opportunity.title}</h2>
           <span>{zh ? profile.seasonalWindowZh : profile.seasonalWindow}</span>
-          <small>{zh ? `本周起始：${state.weekStarted}` : `Week started: ${state.weekStarted}`}</small>
+          <small>{zh ? `本周起始：${briefing.state.weekStarted}` : `Week started: ${briefing.state.weekStarted}`}</small>
         </aside>
       </section>
 
@@ -68,6 +71,25 @@ export function RadarBriefing() {
         <Link href={links.profit}>{zh ? "查看利润模型" : "View profit model"}<ArrowRight weight="bold" /></Link>
         <Link href={links.equipment}>{zh ? "查看设备路径" : "View equipment path"}<ArrowRight weight="bold" /></Link>
       </section>
+
+      {archiveItems.length ? (
+        <section className="operations-archive shell" aria-labelledby="radar-archive-title">
+          <header>
+            <div><p className="eyebrow">{zh ? "往期雷达" : "RADAR ARCHIVE"}</p><h2 id="radar-archive-title">{zh ? "按日期回看每一个商机判断。" : "Revisit every opportunity decision by date."}</h2></div>
+            <p>{zh ? "每次更新都会保留独立页面、当日假设与下一步行动，方便比较信号如何变化。" : "Every update keeps its own page, assumptions, and next action so you can compare how the signal changes."}</p>
+          </header>
+          <div className="operations-archive-list">
+            {archiveItems.map((item) => (
+              <Link href={item.href} key={item.date} className="operations-archive-card">
+                <div><ClockCounterClockwise weight="bold" /><time dateTime={item.date}>{item.date}</time><span>{zh ? item.labelZh : item.label}</span></div>
+                <h3>{zh ? item.titleZh : item.title}</h3>
+                <p>{zh ? item.answerZh : item.answer}</p>
+                <footer><span>{zh ? `机会评分 ${item.score}/100` : `Opportunity score ${item.score}/100`}</span><strong>{zh ? "查看当天雷达" : "Open daily radar"}<ArrowUpRight weight="bold" /></strong></footer>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { RadarBriefing } from "@/components/marketing/radar-briefing";
+import { getRadarArchiveSummaries } from "@/lib/operations/radar-archive";
 import { getActiveRadarBriefing } from "@/lib/operations/radar";
 
 const briefing = getActiveRadarBriefing();
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 
 export default function RadarPage() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maker.wonderelian.com";
+  const archiveItems = getRadarArchiveSummaries(briefing.state.lastRunDate);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -34,5 +36,5 @@ export default function RadarPage() {
     about: [briefing.opportunity.title, briefing.opportunity.process, "maker business"],
   };
 
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} /><RadarBriefing /></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} /><RadarBriefing archiveItems={archiveItems} /></>;
 }
