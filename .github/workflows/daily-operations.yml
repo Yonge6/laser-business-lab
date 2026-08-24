@@ -14,6 +14,8 @@ on:
 permissions:
   contents: write
   issues: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: daily-maker-operations
@@ -23,6 +25,9 @@ jobs:
   operate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,6 +70,15 @@ jobs:
           git commit -m "Operate Maker Radar for ${operations_date}"
           git push origin HEAD:main
           echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Prepare the daily production deployment
+        uses: actions/configure-pages@v5
+      - name: Upload the verified daily site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+      - name: Deploy the daily Radar to production
+        id: deployment
+        uses: actions/deploy-pages@v4
       - name: Deliver the current operations package
         if: ${{ env.OPERATIONS_DISTRIBUTION_WEBHOOK != '' }}
         env:
