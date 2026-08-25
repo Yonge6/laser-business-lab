@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-08-24",
+  "lastRunDate": "2026-08-25",
   "weekStarted": "2026-08-24",
   "activeOpportunityId": "laser-leather-patches",
-  "activeLens": "demand",
+  "activeLens": "price",
   "sequence": 1,
   "history": [
     {

@@ -34,6 +34,25 @@
           "opportunityId": "laser-leather-patches"
         }
       ]
+    },
+    {
+      "version": 1,
+      "timezone": "Asia/Shanghai",
+      "lastRunDate": "2026-08-25",
+      "weekStarted": "2026-08-24",
+      "activeOpportunityId": "laser-leather-patches",
+      "activeLens": "price",
+      "sequence": 1,
+      "history": [
+        {
+          "weekStarted": "2026-08-17",
+          "opportunityId": "personalized-tumblers"
+        },
+        {
+          "weekStarted": "2026-08-24",
+          "opportunityId": "laser-leather-patches"
+        }
+      ]
     }
   ]
 }
