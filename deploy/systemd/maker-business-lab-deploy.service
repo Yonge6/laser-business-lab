@@ -1,0 +1,13 @@
+[Unit]
+Description=Deploy the current Maker Business Lab Radar release
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=NEXT_PUBLIC_GA_ID=G-HDHST6WKKB
+Environment=NEXT_PUBLIC_LEAD_ENDPOINT=https://maker-business-lab-report-email.vercel.app/reports
+ExecStart=/usr/local/sbin/maker-business-lab-deploy
+
+[Install]
+WantedBy=multi-user.target
