@@ -25,7 +25,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "Maker Business Lab — Turn Maker Skills Into Business Numbers", template: "%s | Maker Business Lab" },
   description: "Find maker products worth selling, calculate realistic profit and payback, and match your business to the right production setup.",
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     title: "Maker Business Lab",
     description: "Choose your next winning maker product with explainable opportunity scores and business math.",
