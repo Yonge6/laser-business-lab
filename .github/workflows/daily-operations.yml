@@ -12,10 +12,9 @@ on:
         type: string
 
 permissions:
+  actions: write
   contents: write
   issues: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: daily-maker-operations
@@ -25,9 +24,6 @@ jobs:
   operate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,17 +66,11 @@ jobs:
           git commit -m "Operate Maker Radar for ${operations_date}"
           git push origin HEAD:main
           echo "changed=true" >> "$GITHUB_OUTPUT"
-      - name: Prepare the daily production deployment
-        uses: actions/configure-pages@v5
-      - name: Upload the verified daily site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: out
-      - name: Deploy the daily Radar to production
-        id: deployment
-        uses: actions/deploy-pages@v4
-      - name: Deliver the current operations package
-        if: ${{ env.OPERATIONS_DISTRIBUTION_WEBHOOK != '' }}
+      - name: Deploy the committed daily Radar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --ref main
+      - name: Verify production and deliver the current operations package
         env:
           OPERATIONS_DISTRIBUTION_WEBHOOK: ${{ secrets.OPERATIONS_DISTRIBUTION_WEBHOOK }}
         run: |
@@ -100,10 +90,12 @@ jobs:
             echo "Production did not expose the expected operations package for $expected_date." >&2
             exit 1
           fi
-          curl --fail-with-body --retry 3 --retry-all-errors \
-            -H "content-type: application/json" \
-            --data-binary @"$live_payload" \
-            "$OPERATIONS_DISTRIBUTION_WEBHOOK"
+          if [ -n "$OPERATIONS_DISTRIBUTION_WEBHOOK" ]; then
+            curl --fail-with-body --retry 3 --retry-all-errors \
+              -H "content-type: application/json" \
+              --data-binary @"$live_payload" \
+              "$OPERATIONS_DISTRIBUTION_WEBHOOK"
+          fi
       - name: Record the successful run
         run: |
           node -e "const s=require('./content/operations/state.json'); console.log(JSON.stringify({status:'ok',published:'${{ steps.publish.outputs.changed }}',date:s.lastRunDate,opportunity:s.activeOpportunityId,lens:s.activeLens}))"
