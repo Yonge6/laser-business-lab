@@ -96,6 +96,9 @@ jobs:
               --data-binary @"$live_payload" \
               "$OPERATIONS_DISTRIBUTION_WEBHOOK"
           fi
+      - name: Notify participating search engines
+        run: pnpm ops:indexnow
+
       - name: Record the successful run
         run: |
           node -e "const s=require('./content/operations/state.json'); console.log(JSON.stringify({status:'ok',published:'${{ steps.publish.outputs.changed }}',date:s.lastRunDate,opportunity:s.activeOpportunityId,lens:s.activeLens}))"
