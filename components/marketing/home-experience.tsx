@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, Headphones, MagnifyingGlass, PlayCircle, Pulse, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, Pulse, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
@@ -18,7 +18,6 @@ import { buildBambuUrl } from "@/lib/commerce/bambu";
 import { buildXToolUrl } from "@/lib/commerce/xtool";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { getActiveRadarBriefing } from "@/lib/operations/radar";
-import { buildYixiuFocusAppStoreUrl, buildYixiuFocusUrl } from "@/lib/commerce/yixiu";
 
 const copy = {
   en: {
@@ -66,13 +65,6 @@ const copy = {
     catalogSub: "Swipe horizontally. The centered card is selected automatically and updates the evidence below.",
     dailySignal: "Today’s maker signal",
     dailySignalCta: "Open opportunity radar",
-    focusEyebrow: "Focus companion · Yixiu",
-    focusTitle: "Protect the next 30 minutes.",
-    focusBody: "Open Mountain Stream in Yixiu for a steady, music-free soundscape while you calculate, write or plan.",
-    focusNote: "No account · No ads · Runs in the background on iPhone",
-    focusListen: "Play Mountain Stream",
-    focusDownload: "Get the iPhone app",
-    focusScene: "Mountain Stream · Yixiu",
   },
   zh: {
     eyebrow: "Maker 商业机会情报",
@@ -119,13 +111,6 @@ const copy = {
     catalogSub: "左右滑动浏览，居中的卡片会自动选中，并实时更新下方市场证据。",
     dailySignal: "今日 Maker 信号",
     dailySignalCta: "打开机会雷达",
-    focusEyebrow: "专注伴侣 · 一休",
-    focusTitle: "留给下一段工作 30 分钟安静。",
-    focusBody: "打开一休的山间溪流，用没有音乐和人声的自然声，陪你计算、写作或制定计划。",
-    focusNote: "无需账号 · 没有广告 · iPhone 支持后台播放",
-    focusListen: "播放山间溪流",
-    focusDownload: "下载 iPhone App",
-    focusScene: "山间溪流 · 一休",
   },
 };
 
@@ -153,8 +138,6 @@ export function HomeExperience() {
     : buildXToolUrl(`home_${selected.id}`);
   const matchedEquipmentBrand = selected.category === "laser" ? "OneLaser" : selected.category === "3d-printing" ? "Bambu Lab" : "xTool";
   const matchedEquipmentLabel = selected.category === "3d-printing" ? t.viewBambu : selected.category === "heat-press" ? t.viewXTool : t.viewOneLaser;
-  const yixiuFocusUrl = buildYixiuFocusUrl();
-  const yixiuAppStoreUrl = buildYixiuFocusAppStoreUrl();
 
   const updateCarouselEdges = useCallback(() => {
     const carousel = carouselRef.current;
@@ -391,25 +374,6 @@ export function HomeExperience() {
             <div className="path-progress-bar" aria-hidden="true"><span /></div>
             <b>{t.xp}</b>
             <small>{t.progress}</small>
-          </div>
-        </div>
-      </section>
-
-      <section className="focus-companion-section" aria-labelledby="focus-companion-title">
-        <div className="shell focus-companion-grid">
-          <div className="focus-companion-image">
-            <Image src={assetPath("/images/yixiu/mountain-stream-focus.jpg")} alt={locale === "zh" ? "阳光下流过山谷的清澈溪流" : "A clear mountain stream flowing through a bright green valley"} fill sizes="(max-width: 760px) 100vw, 36vw" />
-            <span><Headphones weight="fill" aria-hidden="true" />{t.focusScene}</span>
-          </div>
-          <div className="focus-companion-copy">
-            <p className="focus-companion-eyebrow">{t.focusEyebrow}</p>
-            <h2 id="focus-companion-title">{t.focusTitle}</h2>
-            <p>{t.focusBody}</p>
-            <div className="focus-companion-note"><span aria-hidden="true" />{t.focusNote}</div>
-            <div className="focus-companion-actions">
-              <TrackedExternalLink className="focus-companion-primary" href={yixiuFocusUrl} target="_blank" rel="noreferrer" analytics={{ placement: "focus_companion_card", destination: "yixiu_focus_web", scene: "stream" }}>{t.focusListen}<PlayCircle weight="fill" /></TrackedExternalLink>
-              <TrackedExternalLink className="focus-companion-secondary" href={yixiuAppStoreUrl} target="_blank" rel="noreferrer" analytics={{ placement: "focus_companion_card", destination: "yixiu_focus_app_store", product_page: "focus" }}>{t.focusDownload}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
-            </div>
           </div>
         </div>
       </section>
