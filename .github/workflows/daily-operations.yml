@@ -74,7 +74,7 @@ jobs:
         env:
           OPERATIONS_DISTRIBUTION_WEBHOOK: ${{ secrets.OPERATIONS_DISTRIBUTION_WEBHOOK }}
         run: |
-          expected_date="$(node -p \"require('./content/operations/state.json').lastRunDate\")"
+          expected_date="$(node -p 'require("./content/operations/state.json").lastRunDate')"
           live_payload="$(mktemp)"
           live_url="https://maker.wonderelian.com/operations/latest.json?run=${GITHUB_RUN_ID}"
           ready=false
