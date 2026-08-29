@@ -27,7 +27,7 @@ export const oneLaserOpportunityNames: Record<string, string> = {
 type OneLaserTracking = {
   campaign: "equipment_match" | "roi_result";
   content: string;
-  placement: "home_opportunity" | "opportunity_finder_result" | "machine_finder_result" | "roi_report";
+  placement: "home_opportunity" | "opportunity_finder_result" | "machine_finder_result" | "roi_report" | "project_library";
 };
 
 export function buildOneLaserUrl(destination: string, tracking: OneLaserTracking) {
