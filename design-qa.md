@@ -51,3 +51,58 @@ The latest pointer implementation was captured at a 1280 × 720 CSS viewport at 
 ## Final result
 
 passed
+
+---
+
+# Product Library Design QA
+
+## Source truth
+
+- Live reference: `https://yonge6.github.io/onelaser-homepage/?v=24c6e1a`
+- Reference gallery: `qa/product-design-audit-gallery/18-reference-gallery-same-viewport.png`
+- Reference project detail: `qa/product-design-audit-gallery/20-reference-detail-same-viewport.png`
+- Source asset set: 42 original finished-project images copied without recomposition.
+
+## Implementation
+
+- Home module: `components/marketing/project-library.tsx`
+- Full catalog: `/projects/`
+- Static project plans: `/projects/[slug]/`
+- Same-view gallery capture: `qa/product-design-audit-gallery/19-implementation-gallery-same-viewport.png`
+- Same-view detail capture: `qa/product-design-audit-gallery/21-implementation-detail-same-viewport.png`
+- Mobile grid: `qa/product-design-audit-gallery/06-implementation-mobile-project-library.png`
+- Mobile dialog: `qa/product-design-audit-gallery/16-project-modal-mobile.png`
+- Mobile project page: `qa/product-design-audit-gallery/17-project-detail-mobile.png`
+
+## Viewports and comparison inputs
+
+- Desktop comparison viewport: 1280 x 720 CSS px at 1x density.
+- Mobile verification viewport: 390 x 844 CSS px at 1x density.
+- Full gallery comparison: `qa/product-design-audit-gallery/22-comparison-gallery-same-viewport.png`.
+- Focused detail comparison: `qa/product-design-audit-gallery/23-comparison-detail-same-viewport.png`.
+- Both comparison images place the live source on the left and the implementation on the right with no rescaling between sides.
+
+## State and interaction coverage
+
+- Default `All` filter, `Wood` filtering, 42-project count, and local images verified.
+- Project cards open the correct dialog and update the selected project's economics and equipment.
+- Escape closes the dialog; focus is trapped while open and returned to the trigger on cleanup.
+- Dialog previous/next controls, backdrop close, calculator CTA, project guide CTA, and tracked equipment CTA are implemented.
+- Mobile grid, mobile dialog scrolling, and mobile static project page were inspected.
+- Browser console: no warnings or errors on the homepage, catalog, dialog, or detail route.
+
+## Visual findings
+
+- P0: none.
+- P1: none.
+- P2: none.
+- The finished-project imagery, material filters, browsing density, and project-detail hierarchy match the source experience while using Maker Business Lab's established red, black, square-corner, condensed-display system.
+- The implementation adds explicit planning boundaries and avoids presenting gross-profit estimates as guaranteed earnings.
+
+## Comparison history
+
+1. First implementation preserved all 42 source images and added a 12-card home preview plus a complete library route.
+2. Desktop and mobile review confirmed the grid, modal, and detail pages remain usable at the tested viewports.
+3. Same-viewport gallery and detail comparisons confirmed no visible regressions requiring another iteration.
+
+final result: passed

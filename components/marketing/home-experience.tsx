@@ -18,6 +18,7 @@ import { buildBambuUrl } from "@/lib/commerce/bambu";
 import { buildXToolUrl } from "@/lib/commerce/xtool";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { getActiveRadarBriefing } from "@/lib/operations/radar";
+import { ProjectLibrary } from "@/components/marketing/project-library";
 
 const copy = {
   en: {
@@ -351,6 +352,8 @@ export function HomeExperience() {
           <Link className="button button-ghost" href="/calculator/laser-roi">{t.calculate}<Calculator weight="bold" /></Link>
         </div>
       </section>
+
+      <ProjectLibrary compact />
 
       <section className="game-path-section">
         <div className="shell game-path-grid">
