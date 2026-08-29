@@ -5,6 +5,7 @@ import "./globals.css";
 import { AppProviders } from "@/components/providers/app-providers";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { SiteFooter } from "@/components/marketing/site-footer";
+import { MobileBottomNav } from "@/components/marketing/mobile-bottom-nav";
 
 const display = Barlow_Condensed({
   subsets: ["latin"],
@@ -38,6 +39,12 @@ export const metadata: Metadata = {
     locale: "en_US",
   },
   twitter: { card: "summary_large_image", title: "Maker Business Lab", description: "Turn maker skills into profitable products." },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Maker Lab",
+  },
+  formatDetection: { telephone: false },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -76,6 +83,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AppProviders>
           <SiteHeader />
           {children}
+          <MobileBottomNav />
           <SiteFooter />
         </AppProviders>
       </body>

@@ -109,6 +109,45 @@ final result: passed
 
 ---
 
+# Mobile App Home Design QA
+
+## Source and target
+
+- Selected mobile concept: `qa/mobile-app-home/reference.png`.
+- Implementation capture: `qa/mobile-app-home/implementation-390x844.png`.
+- Same-viewport combined comparison: `qa/mobile-app-home/reference-vs-implementation.png`.
+- Verification viewport: 390 x 844 CSS px at DPR 2.
+
+## Findings
+
+- P0: none.
+- P1: none.
+- P2: none.
+- The mobile home now uses the selected three-line mission hierarchy, compact money-first signal card, persistent five-item app navigation, and the established ivory, ink, and `#e7310e` visual system.
+- The implementation uses the live Radar opportunity and economics instead of duplicating fixed mock values. It keeps the reference's visual density while exposing a real opportunity score, selling price, gross profit, margin boundary, and a functioning opportunity CTA.
+- The signal card was compressed after the first comparison so the primary CTA and Discover-to-Sell path remain visible in the first phone viewport.
+- The header language toggle, opportunity save state, Saved route, bottom navigation, and full-opportunity link were exercised at the target viewport.
+- Desktop verification at the default 1280 px browser width confirmed the original homepage remains active and the mobile app shell stays hidden.
+- Browser console: no errors.
+
+## Build and installability
+
+- The PWA manifest now declares standalone portrait presentation and 192 px, 512 px, and maskable icons.
+- A dedicated Apple touch icon is available through the App Router metadata convention.
+- Safe-area padding is applied to the sticky header and fixed bottom navigation for iPhone display cutouts and home indicators.
+- The Saved page is device-local and intentionally marked `noindex`.
+
+## Functional and build evidence
+
+- `pnpm typecheck`: passed.
+- `pnpm lint`: passed.
+- `pnpm test`: 19 files and 82 tests passed.
+- `pnpm build:pages`: passed; 95 static pages generated, including `/saved`, `/manifest.webmanifest`, and `/apple-icon.png`.
+
+final result: passed
+
+---
+
 # Project Library Image Scrim Design QA
 
 ## Source truth

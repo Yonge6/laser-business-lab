@@ -19,6 +19,7 @@ import { buildXToolUrl } from "@/lib/commerce/xtool";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { getActiveRadarBriefing } from "@/lib/operations/radar";
 import { ProjectLibrary } from "@/components/marketing/project-library";
+import { MobileAppHome } from "@/components/marketing/mobile-app-home";
 
 const copy = {
   en: {
@@ -262,6 +263,7 @@ export function HomeExperience() {
 
   return (
     <main>
+      <MobileAppHome />
       <section className="hero-section shell">
         <Image className="hero-racing-stripe" src={assetPath("/images/racing-header-stripe.png")} alt="" width={709} height={38} aria-hidden="true" priority />
         <div className="hero-copy">
