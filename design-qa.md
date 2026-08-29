@@ -106,3 +106,54 @@ passed
 3. Same-viewport gallery and detail comparisons confirmed no visible regressions requiring another iteration.
 
 final result: passed
+
+---
+
+# Project Library Image Scrim Design QA
+
+## Source truth
+
+- User annotation: replace the solid black lower-half treatment on project cards and the opened project image with a gradual darkening treatment.
+- Production card baseline: `qa/product-design-audit-gallery/gradient-update/source-card-1280x720.png`.
+- Production dialog baseline: `qa/product-design-audit-gallery/gradient-update/source-dialog-1280x720.png`.
+
+## Implementation evidence
+
+- Desktop cards: `qa/product-design-audit-gallery/gradient-update/implementation-card-desktop.png` at 1373 x 1179 CSS px, DPR 1.
+- Same-viewport cards: `qa/product-design-audit-gallery/gradient-update/implementation-card-1280x720.png` at 1280 x 720 CSS px, DPR 1.
+- Desktop dialog: `qa/product-design-audit-gallery/gradient-update/implementation-dialog-desktop.png` at 1373 x 1179 CSS px, DPR 1.
+- Same-viewport dialog: `qa/product-design-audit-gallery/gradient-update/implementation-dialog-1280x720.png` at 1280 x 720 CSS px, DPR 1.
+- Mobile cards: `qa/product-design-audit-gallery/gradient-update/implementation-card-mobile.png` at 390 x 844 CSS px, DPR 1.
+- Mobile dialog: `qa/product-design-audit-gallery/gradient-update/implementation-dialog-mobile.png` at 390 x 844 CSS px, DPR 1.
+
+## Combined comparison inputs
+
+- Card before/after: `qa/product-design-audit-gallery/gradient-update/comparison-card-solid-vs-gradient.png`.
+- Dialog before/after: `qa/product-design-audit-gallery/gradient-update/comparison-dialog-solid-vs-gradient.png`.
+- Both comparisons use 1280 x 720 source and implementation captures at DPR 1, aligned without density scaling.
+
+## Findings
+
+- P0: none.
+- P1: none.
+- P2: none.
+- Cards now preserve the product image through the middle of the frame and darken continuously toward the title baseline; the former hard horizontal black edge is gone.
+- The opened image uses the same transparent-to-dark direction with a longer falloff, so the product remains visible while the material label retains sufficient contrast.
+- Display font, title sizing, spacing, brand red, image crops, card geometry, copy, controls, and hover behavior are unchanged.
+- Desktop and mobile titles remain legible across the light serving-board image, pale acrylic imagery, dark metal and glass imagery, and detailed leather/wood scenes.
+
+## Functional evidence
+
+- The 12-card home preview still renders and opens the selected project dialog.
+- Dialog close, previous/next navigation, focus behavior, and mobile scrolling remain functional.
+- Browser console produced no warnings or errors.
+- `pnpm typecheck`, `pnpm lint`, and all 80 tests passed.
+
+## Comparison history
+
+1. Baseline used a solid `rgba(0, 0, 0, .76)` card block beginning at 52% and a solid `.68` dialog block beginning at 72%.
+2. The card scrim was changed to a four-stop gradient beginning transparent at 30% and reaching `.9` only at the bottom edge.
+3. The dialog scrim was changed to a four-stop gradient beginning transparent at 44% and reaching `.82` only at the bottom edge.
+4. Same-viewport comparisons and mobile captures found no remaining P0/P1/P2 visual issues.
+
+final result: passed
