@@ -384,7 +384,7 @@ img { display: block; max-width: 100%; }
 .project-library-filters button.active { background: var(--ink); color: white; }
 .project-library-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .project-library-card { appearance: none; position: relative; min-width: 0; aspect-ratio: 1 / .78; overflow: hidden; padding: 0; border: 1px solid var(--ink); background: var(--ink); color: white; cursor: pointer; text-align: left; box-shadow: 0 0 0 transparent; transition: transform .18s ease, box-shadow .18s ease; }
-.project-library-card::after { content: ""; position: absolute; inset: 52% 0 0; background: rgba(0, 0, 0, .76); pointer-events: none; }
+.project-library-card::after { content: ""; position: absolute; inset: 30% 0 0; background: linear-gradient(180deg, rgba(8, 8, 8, 0) 0%, rgba(8, 8, 8, .08) 20%, rgba(8, 8, 8, .48) 58%, rgba(8, 8, 8, .9) 100%); pointer-events: none; }
 .project-library-card:hover { transform: translateY(-6px); box-shadow: 7px 7px 0 var(--red); }
 .project-library-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
 .project-library-card:hover img { transform: scale(1.035); }
@@ -401,7 +401,7 @@ img { display: block; max-width: 100%; }
 .project-dialog-close:hover { background: var(--red); }
 .project-dialog-close svg { width: 23px; height: 23px; }
 .project-dialog-media { position: relative; min-height: 660px; overflow: hidden; background: var(--ink); }
-.project-dialog-media::after { content: ""; position: absolute; inset: 72% 0 0; background: rgba(0, 0, 0, .68); pointer-events: none; }
+.project-dialog-media::after { content: ""; position: absolute; inset: 44% 0 0; background: linear-gradient(180deg, rgba(8, 8, 8, 0) 0%, rgba(8, 8, 8, .08) 28%, rgba(8, 8, 8, .42) 68%, rgba(8, 8, 8, .82) 100%); pointer-events: none; }
 .project-dialog-media img { width: 100%; height: 100%; object-fit: cover; }
 .project-dialog-media > span { position: absolute; z-index: 2; left: 24px; bottom: 24px; padding: 9px 14px; background: var(--red); color: white; font-family: var(--font-display), sans-serif; font-size: 13px; font-style: italic; font-weight: 900; text-transform: uppercase; }
 .project-dialog-content { min-width: 0; padding: 56px 54px 42px; }
