@@ -35,4 +35,16 @@ describe("mobile app shell", () => {
     expect(home).toContain('className="toolkit-section shell"');
     expect(css).not.toContain(".mobile-app-home ~");
   });
+
+  it("keeps the H5 tab bar aligned with the native App tabs", () => {
+    const navigation = readFileSync("components/marketing/mobile-bottom-nav.tsx", "utf8");
+    const css = readFileSync("app/globals.css", "utf8");
+
+    expect(navigation).toContain('["Learn", "/learn", BookOpenText]');
+    expect(navigation).toContain('["学习", "/learn", BookOpenText]');
+    expect(navigation).toContain('["Calculate", "/calculator", Calculator]');
+    expect(navigation).not.toContain('"Saved"');
+    expect(css).toContain("left: 12px; right: 12px; bottom: calc(8px + env(safe-area-inset-bottom))");
+    expect(css).toContain("border-radius: 25px");
+  });
 });

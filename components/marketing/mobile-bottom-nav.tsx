@@ -2,23 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookmarkSimple, Broadcast, Calculator, House, MagnifyingGlass } from "@phosphor-icons/react";
+import { BookOpenText, Broadcast, Calculator, House, MagnifyingGlass } from "@phosphor-icons/react";
 import { useLanguage } from "@/components/providers/language-provider";
 
 const items = {
   en: [
     ["Home", "/", House],
     ["Opportunities", "/opportunities", MagnifyingGlass],
-    ["Calculate", "/calculator/laser-roi", Calculator],
+    ["Calculate", "/calculator", Calculator],
     ["Radar", "/radar", Broadcast],
-    ["Saved", "/saved", BookmarkSimple],
+    ["Learn", "/learn", BookOpenText],
   ] as const,
   zh: [
     ["首页", "/", House],
     ["机会", "/opportunities", MagnifyingGlass],
-    ["计算", "/calculator/laser-roi", Calculator],
+    ["测算", "/calculator", Calculator],
     ["雷达", "/radar", Broadcast],
-    ["收藏", "/saved", BookmarkSimple],
+    ["学习", "/learn", BookOpenText],
   ] as const,
 };
 
