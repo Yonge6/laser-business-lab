@@ -15,8 +15,15 @@ describe("bilingual typography", () => {
     const css = readFileSync("app/globals.css", "utf8");
 
     expect(css).toContain('html[lang="zh-CN"]');
-    expect(css).toContain("--font-display: var(--font-display-en), var(--font-display-zh)");
+    expect(css).toContain("--font-display: var(--font-body-zh)");
     expect(css).toContain('"PingFang SC"');
+  });
+
+  it("keeps Chinese interface type upright while preserving its existing bold weights", () => {
+    const css = readFileSync("app/globals.css", "utf8");
+
+    expect(css).toContain('html[lang="zh-CN"] body *');
+    expect(css).toContain("font-style: normal !important");
   });
 
   it("synchronizes the document language for restored App and H5 sessions", () => {
