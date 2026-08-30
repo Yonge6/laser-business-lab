@@ -35,9 +35,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.localStorage.removeItem(localeStorageKey);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = locale === "zh" ? "zh-CN" : "en";
+  }, [locale]);
+
   const setLocale = (next: Locale) => {
     window.sessionStorage.setItem(localeStorageKey, next);
-    document.documentElement.lang = next === "zh" ? "zh-CN" : "en";
     window.dispatchEvent(new Event(localeEvent));
   };
 

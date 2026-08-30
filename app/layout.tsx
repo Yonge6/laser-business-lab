@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Barlow_Condensed, Noto_Sans_SC } from "next/font/google";
+import { Barlow_Condensed, Noto_Sans_SC, ZCOOL_QingKe_HuangYou } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/components/providers/app-providers";
 import { SiteHeader } from "@/components/marketing/site-header";
@@ -9,15 +9,22 @@ import { MobileBottomNav } from "@/components/marketing/mobile-bottom-nav";
 
 const display = Barlow_Condensed({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-display-en",
   weight: ["500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
 });
 
 const body = Noto_Sans_SC({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-body-en",
   weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const chineseDisplay = ZCOOL_QingKe_HuangYou({
+  subsets: ["latin"],
+  variable: "--font-display-zh",
+  weight: "400",
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maker.wonderelian.com";
@@ -71,7 +78,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     ],
   };
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${chineseDisplay.variable}`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
         {gaId ? (
