@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { usePathname } from "next/navigation";
 import {
   ArrowRight,
@@ -89,6 +89,9 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
   const { locale, setLocale } = useLanguage();
   const pathname = usePathname();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const dragRef = useRef({ startX: 0, startY: 0, distance: 0, horizontal: false });
   const zh = locale === "zh";
 
   const primaryNav = [
@@ -103,15 +106,35 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
   useEffect(() => {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
+    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
-    const closeOnEscape = (event: KeyboardEvent) => {
+    const handleDialogKeys = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
+      if (event.key !== "Tab" || !drawerRef.current) return;
+
+      const focusable = Array.from(
+        drawerRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => !element.hasAttribute("hidden"));
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
-    document.addEventListener("keydown", closeOnEscape);
+    document.addEventListener("keydown", handleDialogKeys);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("keydown", handleDialogKeys);
+      previousFocusRef.current?.focus();
     };
   }, [onClose, open]);
 
@@ -121,10 +144,55 @@ export function SiteDrawer({ open, onClose }: SiteDrawerProps) {
     void trackEvent("drawer_link_click", { destination, type, path: pathname });
   }
 
+  function resetDrawerDrag() {
+    dragRef.current = { startX: 0, startY: 0, distance: 0, horizontal: false };
+    drawerRef.current?.style.removeProperty("--drawer-drag-x");
+    drawerRef.current?.classList.remove("is-dragging");
+  }
+
+  function handlePointerDown(event: ReactPointerEvent<HTMLElement>) {
+    if (!event.isPrimary) return;
+    dragRef.current = { startX: event.clientX, startY: event.clientY, distance: 0, horizontal: false };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
+    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    const deltaX = Math.max(0, event.clientX - dragRef.current.startX);
+    const deltaY = Math.abs(event.clientY - dragRef.current.startY);
+    if (!dragRef.current.horizontal && deltaX < 8) return;
+    if (!dragRef.current.horizontal && deltaY > deltaX) return;
+
+    dragRef.current.horizontal = true;
+    dragRef.current.distance = deltaX;
+    drawerRef.current?.classList.add("is-dragging");
+    drawerRef.current?.style.setProperty("--drawer-drag-x", `${deltaX}px`);
+  }
+
+  function handlePointerEnd(event: ReactPointerEvent<HTMLElement>) {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    const shouldClose = dragRef.current.horizontal && dragRef.current.distance >= 72;
+    resetDrawerDrag();
+    if (shouldClose) onClose();
+  }
+
   return (
     <div className="site-drawer-layer">
       <button className="site-drawer-backdrop" type="button" aria-label={zh ? "关闭菜单" : "Close menu"} onClick={onClose} />
-      <aside className="site-drawer" role="dialog" aria-modal="true" aria-labelledby="site-drawer-title">
+      <aside
+        ref={drawerRef}
+        className="site-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="site-drawer-title"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
+      >
+        <span className="site-drawer-drag-rail" aria-hidden="true" />
         <header className="site-drawer-header">
           <div>
             <span>MAKER BUSINESS LAB / CONTROL DECK</span>
