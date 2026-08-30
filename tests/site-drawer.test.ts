@@ -8,7 +8,7 @@ describe("site drawer interaction contract", () => {
   it("keeps a visible mobile backdrop and caps the desktop panel width", () => {
     const css = fs.readFileSync(path.join(root, "app/globals.css"), "utf8");
     expect(css).toContain("grid-template-columns: 1fr clamp(390px, 36vw, 520px)");
-    expect(css).toContain("width: min(calc(100% - 44px), 420px)");
+    expect(css).toContain("width: min(88vw, 410px)");
   });
 
   it("supports focus trapping, focus restoration, and swipe dismissal", () => {
