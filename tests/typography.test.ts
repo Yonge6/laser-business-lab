@@ -24,6 +24,9 @@ describe("bilingual typography", () => {
 
     expect(css).toContain('html[lang="zh-CN"] body *');
     expect(css).toContain("font-style: normal !important");
+    expect(css).toContain('html[lang="zh-CN"] body :where(h1, h2, h3)');
+    expect(css).toContain("font-weight: 800");
+    expect(css).toContain("line-height: 1.08 !important");
   });
 
   it("synchronizes the document language for restored App and H5 sessions", () => {
