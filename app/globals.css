@@ -349,7 +349,7 @@ img { display: block; max-width: 100%; }
   .saved-empty { min-height: 430px; }
   .site-drawer-layer { display: block; }
   .site-drawer-backdrop { position: absolute; inset: 0; }
-  .site-drawer { position: absolute; inset: 0 0 0 auto; width: min(calc(100% - 44px), 420px); }
+  .site-drawer { position: absolute; inset: 0 0 0 auto; width: min(88vw, 410px); }
   .site-drawer-drag-rail { position: absolute; z-index: 3; left: 7px; top: 50%; width: 4px; height: 54px; display: block; border-radius: 99px; background: var(--red); box-shadow: 0 0 0 1px rgba(255, 255, 255, .65); transform: translateY(-50%); pointer-events: none; }
   .site-drawer-header { min-height: 92px; padding: 18px 18px 16px 20px; }
   .site-drawer-header h2 { font-size: 29px; }
