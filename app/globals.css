@@ -17,8 +17,12 @@
 }
 
 html[lang="zh-CN"] {
-  --font-display: var(--font-display-en), var(--font-display-zh);
+  --font-display: var(--font-body-zh);
   --font-body: var(--font-body-zh);
+}
+
+html[lang="zh-CN"] body * {
+  font-style: normal !important;
 }
 
 * { box-sizing: border-box; }
