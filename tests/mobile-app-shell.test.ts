@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import manifest from "@/app/manifest";
 
@@ -16,11 +16,23 @@ describe("mobile app shell", () => {
     ]));
   });
 
-  it("ships the install icons and mobile signal image", () => {
+  it("ships the install icons", () => {
     expect(existsSync("app/apple-icon.png")).toBe(true);
     expect(existsSync("public/icons/icon-192.png")).toBe(true);
     expect(existsSync("public/icons/icon-512.png")).toBe(true);
     expect(existsSync("public/icons/icon-maskable-512.png")).toBe(true);
-    expect(existsSync("public/images/mobile/leather-luggage-tag.png")).toBe(true);
+  });
+
+  it("uses the same homepage content structure on desktop and mobile", () => {
+    const home = readFileSync("components/marketing/home-experience.tsx", "utf8");
+    const css = readFileSync("app/globals.css", "utf8");
+
+    expect(home).not.toContain("MobileAppHome");
+    expect(home).toContain('className="hero-section shell"');
+    expect(home).toContain('className="opportunity-showcase shell"');
+    expect(home).toContain("<ProjectLibrary compact />");
+    expect(home).toContain('className="game-path-section"');
+    expect(home).toContain('className="toolkit-section shell"');
+    expect(css).not.toContain(".mobile-app-home ~");
   });
 });
