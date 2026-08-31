@@ -15,8 +15,19 @@ describe("bilingual typography", () => {
     const css = readFileSync("app/globals.css", "utf8");
 
     expect(css).toContain('html[lang="zh-CN"]');
-    expect(css).toContain("--font-display: var(--font-body-zh)");
+    expect(css).toContain("--font-display: var(--font-display-en), var(--font-body-zh)");
+    expect(css).toContain("--font-body: var(--font-body-en), var(--font-body-zh)");
     expect(css).toContain('"PingFang SC"');
+  });
+
+  it("keeps Latin branding and numeric data identical in both languages", () => {
+    const css = readFileSync("app/globals.css", "utf8");
+
+    expect(css).toContain("--font-numeric: var(--font-display-en)");
+    expect(css).toContain(".brand-lockup strong { font-family: var(--font-display-en)");
+    expect(css).toContain('html[lang="zh-CN"] body :where(');
+    expect(css).toContain("font-family: var(--font-numeric), sans-serif !important");
+    expect(css).toContain("font-variant-numeric: lining-nums tabular-nums");
   });
 
   it("keeps Chinese interface type upright while preserving its existing bold weights", () => {
