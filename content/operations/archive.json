@@ -194,6 +194,29 @@
           "opportunityId": "heat-press-tote-bags"
         }
       ]
+    },
+    {
+      "version": 1,
+      "timezone": "Asia/Shanghai",
+      "lastRunDate": "2026-09-02",
+      "weekStarted": "2026-08-31",
+      "activeOpportunityId": "heat-press-tote-bags",
+      "activeLens": "validation",
+      "sequence": 2,
+      "history": [
+        {
+          "weekStarted": "2026-08-17",
+          "opportunityId": "personalized-tumblers"
+        },
+        {
+          "weekStarted": "2026-08-24",
+          "opportunityId": "laser-leather-patches"
+        },
+        {
+          "weekStarted": "2026-08-31",
+          "opportunityId": "heat-press-tote-bags"
+        }
+      ]
     }
   ]
 }
