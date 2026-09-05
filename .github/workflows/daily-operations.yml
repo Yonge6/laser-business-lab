@@ -2,8 +2,10 @@ name: Daily Maker Operations
 
 on:
   schedule:
-    # 08:30 every day in Asia/Shanghai (UTC+8, no daylight saving time).
-    - cron: "30 0 * * *"
+    # Nominally 03:30 in Asia/Shanghai. GitHub scheduled runs have recently
+    # started about four hours late, so this buffer keeps publishing ahead of
+    # the production server's 08:45/09:15 deployment retries.
+    - cron: "30 19 * * *"
   workflow_dispatch:
     inputs:
       operations_date:
