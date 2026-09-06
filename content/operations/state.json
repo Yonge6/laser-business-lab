@@ -1,11 +1,11 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-09-06",
-  "weekStarted": "2026-08-31",
-  "activeOpportunityId": "heat-press-tote-bags",
-  "activeLens": "review",
-  "sequence": 2,
+  "lastRunDate": "2026-09-07",
+  "weekStarted": "2026-09-07",
+  "activeOpportunityId": "layered-wood-wall-art",
+  "activeLens": "demand",
+  "sequence": 3,
   "history": [
     {
       "weekStarted": "2026-08-17",
@@ -18,6 +18,10 @@
     {
       "weekStarted": "2026-08-31",
       "opportunityId": "heat-press-tote-bags"
+    },
+    {
+      "weekStarted": "2026-09-07",
+      "opportunityId": "layered-wood-wall-art"
     }
   ]
 }
