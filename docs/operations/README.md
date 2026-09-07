@@ -4,9 +4,10 @@ The public site runs a zero-budget, unattended operating loop from GitHub Action
 
 ## Cadence
 
-- **Daily at 08:30 Asia/Shanghai:** update the current decision lens, validate the full site, publish directly to `main`, and trigger the existing GitHub Pages deployment.
+- **Daily with an early-morning Asia/Shanghai buffer:** update the current decision lens, validate the full site, publish directly to `main`, and trigger the existing GitHub Pages deployment ahead of the production server's morning deployment retries.
 - **Every Monday:** rotate to the next of the seven product opportunities and begin a new weekly Radar cycle.
-- **Every run:** emit a structured distribution package at `/operations/latest.json` for connected publishing channels.
+- **Every run:** validate the freshly generated static `/operations/latest.json` package and make it available to connected publishing channels without waiting for the public deployment window.
+- **Daily monitor:** verify that the public Radar and operations package have reached production after the deployment window.
 - **On failure:** create a GitHub Issue. The workflow never pushes content that failed tests, type checks, lint, or the production static build.
 
 The seven daily lenses are demand, price, validation, production, equipment, risk, and weekly review. Public content uses the existing explainable planning model. It does not claim live sales, bestseller status, or guaranteed earnings.
