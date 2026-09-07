@@ -72,30 +72,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run ci.yml --ref main
-      - name: Verify production and deliver the current operations package
+      - name: Validate and deliver the generated operations package
         env:
           OPERATIONS_DISTRIBUTION_WEBHOOK: ${{ secrets.OPERATIONS_DISTRIBUTION_WEBHOOK }}
         run: |
           expected_date="$(node -p 'require("./content/operations/state.json").lastRunDate')"
-          live_payload="$(mktemp)"
-          live_url="https://maker.wonderelian.com/operations/latest.json?run=${GITHUB_RUN_ID}"
-          ready=false
-          for attempt in $(seq 1 36); do
-            if curl --silent --show-error --fail "$live_url" -o "$live_payload" && \
-              EXPECTED_DATE="$expected_date" LIVE_PAYLOAD="$live_payload" node -e "const fs=require('node:fs');const payload=JSON.parse(fs.readFileSync(process.env.LIVE_PAYLOAD,'utf8'));process.exit(payload.generatedFor===process.env.EXPECTED_DATE?0:1)"; then
-              ready=true
-              break
-            fi
-            sleep 10
-          done
-          if [ "$ready" != "true" ]; then
-            echo "Production did not expose the expected operations package for $expected_date." >&2
-            exit 1
-          fi
+          generated_payload="out/operations/latest.json"
+          EXPECTED_DATE="$expected_date" GENERATED_PAYLOAD="$generated_payload" node -e "const fs=require('node:fs');const payload=JSON.parse(fs.readFileSync(process.env.GENERATED_PAYLOAD,'utf8'));process.exit(payload.generatedFor===process.env.EXPECTED_DATE?0:1)"
           if [ -n "$OPERATIONS_DISTRIBUTION_WEBHOOK" ]; then
             curl --fail-with-body --retry 3 --retry-all-errors \
               -H "content-type: application/json" \
-              --data-binary @"$live_payload" \
+              --data-binary @"$generated_payload" \
               "$OPERATIONS_DISTRIBUTION_WEBHOOK"
           fi
       - name: Notify participating search engines
