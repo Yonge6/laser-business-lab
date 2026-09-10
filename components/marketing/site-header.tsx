@@ -65,7 +65,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="shell header-inner">
         <Link className="brand" href="/" aria-label={locale === "zh" ? "Maker Business Lab 首页" : "Maker Business Lab home"}>
-          <span className="brand-mark-source" aria-hidden="true"><Image src={assetPath("/images/brand-lockup.png")} alt="" width={392} height={62} priority /></span>
+          <span className="brand-mark-source" aria-hidden="true"><Image src={assetPath("/icons/icon-192.png")} alt="" width={192} height={192} preload /></span>
           <span className="brand-lockup"><strong>MAKER BUSINESS LAB</strong><small>{t.tagline}</small></span>
         </Link>
         <nav className="main-nav" aria-label={locale === "zh" ? "主导航" : "Primary navigation"}>
