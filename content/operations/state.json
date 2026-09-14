@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-09-14",
+  "lastRunDate": "2026-09-15",
   "weekStarted": "2026-09-14",
   "activeOpportunityId": "3d-desk-organizers",
-  "activeLens": "demand",
+  "activeLens": "price",
   "sequence": 4,
   "history": [
     {
