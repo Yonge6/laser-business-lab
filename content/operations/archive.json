@@ -684,6 +684,37 @@
           "opportunityId": "3d-desk-organizers"
         }
       ]
+    },
+    {
+      "version": 1,
+      "timezone": "Asia/Shanghai",
+      "lastRunDate": "2026-09-20",
+      "weekStarted": "2026-09-14",
+      "activeOpportunityId": "3d-desk-organizers",
+      "activeLens": "review",
+      "sequence": 4,
+      "history": [
+        {
+          "weekStarted": "2026-08-17",
+          "opportunityId": "personalized-tumblers"
+        },
+        {
+          "weekStarted": "2026-08-24",
+          "opportunityId": "laser-leather-patches"
+        },
+        {
+          "weekStarted": "2026-08-31",
+          "opportunityId": "heat-press-tote-bags"
+        },
+        {
+          "weekStarted": "2026-09-07",
+          "opportunityId": "layered-wood-wall-art"
+        },
+        {
+          "weekStarted": "2026-09-14",
+          "opportunityId": "3d-desk-organizers"
+        }
+      ]
     }
   ]
 }
