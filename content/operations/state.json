@@ -1,11 +1,11 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-09-20",
-  "weekStarted": "2026-09-14",
-  "activeOpportunityId": "3d-desk-organizers",
-  "activeLens": "review",
-  "sequence": 4,
+  "lastRunDate": "2026-09-21",
+  "weekStarted": "2026-09-21",
+  "activeOpportunityId": "3d-geometric-planters",
+  "activeLens": "demand",
+  "sequence": 5,
   "history": [
     {
       "weekStarted": "2026-08-17",
@@ -26,6 +26,10 @@
     {
       "weekStarted": "2026-09-14",
       "opportunityId": "3d-desk-organizers"
+    },
+    {
+      "weekStarted": "2026-09-21",
+      "opportunityId": "3d-geometric-planters"
     }
   ]
 }
