@@ -1,5 +1,6 @@
 export type AnalyticsEventName =
   | "page_view"
+  | "home_cta_click"
   | "calculator_start"
   | "calculator_step_completed"
   | "calculator_complete"
