@@ -1,3 +1,4 @@
+import { makerGuides, guidePath, guideDate } from "@/lib/learn/guides";
 import type { MetadataRoute } from "next";
 import operationsState from "@/content/operations/state.json";
 import { getRadarArchiveDates } from "@/lib/operations/radar-archive";
@@ -13,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const corePaths = ["", "/opportunities", "/ideas", "/projects", "/radar", "/calculator", "/calculator/laser-roi", "/calculator/tumbler-profit", "/calculator/machine-finder", "/learn", "/about", "/privacy", "/disclaimer"];
   const core = corePaths.map((path, index) => ({
     url: `${base}${path}`,
-    lastModified: path === "/radar" ? new Date(`${operationsState.lastRunDate}T00:00:00.000Z`) : updated,
+    lastModified: path === "/radar" ? new Date(`${operationsState.lastRunDate}T00:00:00.000Z`) : new Date("2026-09-23T00:00:00.000Z"),
     changeFrequency: (index < 8 ? "weekly" : "monthly") as MetadataRoute.Sitemap[number]["changeFrequency"],
     priority: path === "" ? 1 : path === "/opportunities" || path === "/ideas" || path.includes("calculator") ? .9 : .5,
   }));
@@ -39,5 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     images: [`${base}${project.imagePath}`],
   }));
 
-  return [...core, ...growthPages, ...projectPages, ...radarArchive];
+  const guides = makerGuides.map(guide => ({ url: `${base}${guidePath(guide.slug)}`, lastModified: new Date(`${guideDate}T00:00:00.000Z`), changeFrequency: "monthly" as const, priority: .8, images: [`${base}${guide.image}`] }));
+  return [...core, ...growthPages, ...projectPages, ...radarArchive, ...guides];
 }

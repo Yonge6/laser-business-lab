@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, MouseEvent } from "react";
 
+import { withElianSource } from "@/lib/commerce/outbound";
 import { trackEvent } from "@/lib/analytics/client";
 
 type TrackedExternalLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
@@ -10,10 +11,12 @@ type TrackedExternalLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
 };
 
 export function TrackedExternalLink({ href, analytics, onClick, ...props }: TrackedExternalLinkProps) {
+  const attributedHref = withElianSource(href);
+
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     let destinationDomain = "unknown";
     try {
-      destinationDomain = new URL(href).hostname;
+      destinationDomain = new URL(attributedHref).hostname;
     } catch {
       destinationDomain = "invalid";
     }
@@ -21,10 +24,10 @@ export function TrackedExternalLink({ href, analytics, onClick, ...props }: Trac
     void trackEvent("outbound_click", {
       ...analytics,
       destination_domain: destinationDomain,
-      destination_url: href,
+      destination_url: attributedHref,
     });
     onClick?.(event);
   }
 
-  return <a {...props} href={href} onClick={handleClick} />;
+  return <a {...props} href={attributedHref} onClick={handleClick} />;
 }

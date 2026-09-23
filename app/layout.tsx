@@ -34,12 +34,11 @@ export const metadata: Metadata = {
   title: { default: "Maker Business Lab — Turn Maker Skills Into Business Numbers", template: "%s | Maker Business Lab" },
   description: "Find maker products worth selling, calculate realistic profit and payback, and match your business to the right production setup.",
   alternates: {
-    canonical: "/",
     types: { "application/rss+xml": "/feed.xml" },
   },
   openGraph: {
     title: "Maker Business Lab",
-    description: "Choose your next winning maker product with explainable opportunity scores and business math.",
+    description: "Explore maker products, compare cost assumptions, and build a business plan before buying equipment.",
     url: siteUrl,
     siteName: "Maker Business Lab",
     type: "website",
@@ -64,7 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         "@id": `${siteUrl}/#organization`,
         name: "Maker Business Lab",
         url: siteUrl,
-        logo: `${siteUrl}/images/brand-lockup.png`,
+        logo: `${siteUrl}/images/maker-brand-mark.png`,
         description: "Business-first product opportunity, profit, and equipment decision tools for makers and one-person companies.",
       },
       {

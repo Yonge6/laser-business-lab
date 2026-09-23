@@ -1,3 +1,4 @@
+import { makerGuides, guidePath } from "@/lib/learn/guides";
 import { getRadarArchiveDates } from "@/lib/operations/radar-archive";
 import { getActiveRadarBriefing } from "@/lib/operations/radar";
 import { opportunities } from "@/lib/opportunities/data";
@@ -34,6 +35,7 @@ export function buildLlmsText() {
     lines.push("");
   }
 
+  lines.push("## U.S. Maker Guides", "", "English guides with original USD worked examples and primary sources. Examples are assumptions, not observed seller earnings.", ...makerGuides.map(guide => `- [${guide.title}](${siteUrl}${guidePath(guide.slug)})`), "");
   lines.push("## Radar archive");
   lines.push("");
   for (const date of getRadarArchiveDates().slice(0, 30)) {
