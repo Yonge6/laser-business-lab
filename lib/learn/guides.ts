@@ -53,10 +53,10 @@ export const makerGuides: MakerGuide[] = [
 ];
 
 export function guidePath(slug: string) { return `/learn/${slug}/`; }
-export function guideStructuredData(guide: MakerGuide, base: string) {
+export function guideStructuredData(guide: MakerGuide, base: string, language: "en-US" | "zh-CN" = "en-US") {
   const url = `${base}${guidePath(guide.slug)}`;
   return { "@context": "https://schema.org", "@graph": [
-    { "@type": "Article", "@id": `${url}#article`, headline: guide.title, description: guide.description, abstract: guide.answer, mainEntityOfPage: url, url, inLanguage: "en-US", datePublished: guideDate, dateModified: guideDate, image: `${base}${guide.image}`, author: { "@type": "Organization", "@id": `${base}/#organization`, name: "Maker Business Lab", url: `${base}/about/` }, publisher: { "@id": `${base}/#organization` }, citation: guide.sources.map(source => source.url) },
-    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${base}/` }, { "@type": "ListItem", position: 2, name: "Learn", item: `${base}/learn/` }, { "@type": "ListItem", position: 3, name: guide.title, item: url }] },
+    { "@type": "Article", "@id": `${url}#article`, headline: guide.title, description: guide.description, abstract: guide.answer, mainEntityOfPage: url, url, inLanguage: language, datePublished: guideDate, dateModified: guideDate, image: `${base}${guide.image}`, author: { "@type": "Organization", "@id": `${base}/#organization`, name: "Maker Business Lab", url: `${base}/about/` }, publisher: { "@id": `${base}/#organization` }, citation: guide.sources.map(source => source.url) },
+    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: language === "zh-CN" ? "首页" : "Home", item: `${base}/` }, { "@type": "ListItem", position: 2, name: language === "zh-CN" ? "学习" : "Learn", item: `${base}/learn/` }, { "@type": "ListItem", position: 3, name: guide.title, item: url }] },
   ] };
 }
