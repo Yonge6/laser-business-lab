@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Calculator, CalendarDots, CheckCircle, ClockCounterClockwise, Factory, Pulse, ShieldCheck, Target } from "@phosphor-icons/react";
@@ -21,8 +22,9 @@ export function RadarBriefing({ state, archiveItems = [] }: { state?: Operations
     <main className="operations-radar-page">
       <section className="operations-radar-hero shell">
         <div className="operations-radar-copy">
-          <p className="eyebrow">{archived ? (zh ? "往期 MAKER 信号" : "MAKER SIGNAL ARCHIVE") : (zh ? "今日 MAKER 信号" : "TODAY’S MAKER SIGNAL")}</p>
-          <div className="operations-live-status"><Pulse weight="fill" /><span>{archived ? (zh ? "历史快照" : "ARCHIVE SNAPSHOT") : (zh ? "每日更新" : "UPDATED DAILY")}</span><time dateTime={briefing.state.lastRunDate}>{briefing.state.lastRunDate}</time></div>
+          <p className="eyebrow">{zh ? "MAKER 商机雷达" : "MAKER OPPORTUNITY RADAR"}</p>
+          <p className="operations-cadence">{zh ? "每周聚焦一个产品，每天推进一步验证。" : "One product each week. One validation step each day."}</p>
+          <div className="operations-live-status"><Pulse weight="fill" /><span>{archived ? (zh ? "当日验证任务" : "DAILY TASK ARCHIVE") : (zh ? "今日验证任务 · 每日更新" : "TODAY’S TASK · UPDATED DAILY")}</span><time dateTime={briefing.state.lastRunDate}>{briefing.state.lastRunDate}</time></div>
           <h1>{zh ? daily.headlineZh : daily.headline}</h1>
           <p>{zh ? daily.answerZh : daily.answer}</p>
           <div className="operations-radar-actions">
@@ -33,7 +35,7 @@ export function RadarBriefing({ state, archiveItems = [] }: { state?: Operations
         <div className="operations-radar-image">
           <Image src={assetPath(opportunity.image)} alt={zh ? opportunity.titleZh : opportunity.title} fill sizes="(max-width: 760px) 100vw, 42vw" priority />
           <span>{zh ? daily.labelZh : daily.label}</span>
-          <div><small>{zh ? "本周机会" : "THIS WEEK"}</small><strong>#{String(opportunity.rank).padStart(2, "0")}</strong></div>
+          <div><small>{archived ? (zh ? "当周产品" : "THAT WEEK’S PRODUCT") : (zh ? "本周产品" : "THIS WEEK’S PRODUCT")}</small><strong>#{String(opportunity.rank).padStart(2, "0")}</strong></div>
         </div>
       </section>
 
@@ -46,17 +48,18 @@ export function RadarBriefing({ state, archiveItems = [] }: { state?: Operations
 
       <section className="operations-radar-grid shell">
         <article className="operations-daily-mission">
-          <header><Target weight="bold" /><div><p>{zh ? "今天只做这一件事" : "ONE ACTION FOR TODAY"}</p><h2>{zh ? "把信号变成真实证据。" : "Turn the signal into evidence."}</h2></div></header>
+          <header><Target weight="bold" /><div><p>{archived ? (zh ? "当日验证行动" : "VALIDATION ACTION FOR THAT DAY") : (zh ? "今日验证行动" : "TODAY’S VALIDATION ACTION")}</p><h2>{zh ? "把信号变成真实证据。" : "Turn the signal into evidence."}</h2></div></header>
           <p>{zh ? daily.actionZh : daily.action}</p>
           <div className="operations-estimate-note"><ShieldCheck weight="bold" /><span>{zh ? "页面数字是规划估算，不是需求或收益承诺。单件毛利尚未扣除平台费、人工、报废、包装、物流、税费和营销。" : "Planning estimates—not a demand or earnings guarantee. Gross profit does not yet subtract selling fees, labor, failures, packaging, shipping, tax, or marketing."}</span></div>
         </article>
 
         <aside className="operations-week-panel">
           <CalendarDots weight="bold" />
-          <p>{zh ? "本周机会" : "WEEKLY OPPORTUNITY"}</p>
+          <p>{archived ? (zh ? "当周研究的产品" : "THAT WEEK’S PRODUCT") : (zh ? "本周研究的产品" : "THIS WEEK’S PRODUCT")}</p>
           <h2>{zh ? opportunity.titleZh : opportunity.title}</h2>
           <span>{zh ? profile.seasonalWindowZh : profile.seasonalWindow}</span>
-          <small>{zh ? `本周起始：${briefing.state.weekStarted}` : `Week started: ${briefing.state.weekStarted}`}</small>
+          <small>{zh ? `研究周起始：${briefing.state.weekStarted}` : `Research week started: ${briefing.state.weekStarted}`}</small>
+          <p className="operations-week-explainer">{zh ? "每周一切换研究产品，周内依次查看需求、定价、付费验证、生产、设备、风险与复盘。" : "A new product every Monday. Work through demand, pricing, paid validation, production, equipment, risk and review during the week."}</p>
         </aside>
       </section>
 
@@ -72,24 +75,60 @@ export function RadarBriefing({ state, archiveItems = [] }: { state?: Operations
         <Link href={links.equipment}>{zh ? "查看设备路径" : "View equipment path"}<ArrowRight weight="bold" /></Link>
       </section>
 
-      {archiveItems.length ? (
-        <section className="operations-archive shell" aria-labelledby="radar-archive-title">
-          <header>
-            <div><p className="eyebrow">{zh ? "往期雷达" : "RADAR ARCHIVE"}</p><h2 id="radar-archive-title">{zh ? "按日期回看每一个商机判断。" : "Revisit every opportunity decision by date."}</h2></div>
-            <p>{zh ? "每次更新都会保留独立页面、当日假设与下一步行动，方便比较信号如何变化。" : "Every update keeps its own page, assumptions, and next action so you can compare how the signal changes."}</p>
-          </header>
-          <div className="operations-archive-list">
-            {archiveItems.map((item) => (
-              <Link href={item.href} key={item.date} className="operations-archive-card">
-                <div><ClockCounterClockwise weight="bold" /><time dateTime={item.date}>{item.date}</time><span>{zh ? item.labelZh : item.label}</span></div>
-                <h3>{zh ? item.titleZh : item.title}</h3>
-                <p>{zh ? item.answerZh : item.answer}</p>
-                <footer><span>{zh ? `机会评分 ${item.score}/100` : `Opportunity score ${item.score}/100`}</span><strong>{zh ? "查看当天雷达" : "Open daily radar"}<ArrowUpRight weight="bold" /></strong></footer>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      {archiveItems.length ? <RadarArchive key={briefing.state.lastRunDate} archiveItems={archiveItems} zh={zh} /> : null}
     </main>
+  );
+}
+
+const ARCHIVE_PAGE_SIZE = 10;
+
+function RadarArchive({ archiveItems, zh }: { archiveItems: RadarArchiveSummary[]; zh: boolean }) {
+  const [page, setPage] = useState(1);
+  const archiveRef = useRef<HTMLElement>(null);
+  const pageCount = Math.ceil(archiveItems.length / ARCHIVE_PAGE_SIZE);
+  const currentPage = Math.min(page, pageCount);
+  const start = (currentPage - 1) * ARCHIVE_PAGE_SIZE;
+  const pageItems = archiveItems.slice(start, start + ARCHIVE_PAGE_SIZE);
+
+  function changePage(nextPage: number) {
+    setPage(Math.max(1, Math.min(pageCount, nextPage)));
+    requestAnimationFrame(() => {
+      archiveRef.current?.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
+      archiveRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    });
+  }
+
+  return (
+    <section className="operations-archive shell" aria-labelledby="radar-archive-title" ref={archiveRef}>
+      <header>
+        <div><p className="eyebrow">{zh ? "往期验证记录" : "DAILY VALIDATION ARCHIVE"}</p><h2 id="radar-archive-title" tabIndex={-1}>{zh ? "回看每天的判断与行动。" : "Revisit each day’s decision and next step."}</h2></div>
+        <p>{zh ? "同一周围绕同一个产品展开，每天保留当日分析、测算假设与验证任务。每页显示 10 条记录。" : "Each week follows one product. Revisit its daily analysis, planning assumptions and validation tasks, with 10 entries per page."}</p>
+      </header>
+      <div className="operations-archive-list" id="radar-archive-list">
+        {pageItems.map((item) => (
+          <Link href={item.href} key={item.date} className="operations-archive-card">
+            <div><ClockCounterClockwise weight="bold" /><time dateTime={item.date}>{item.date}</time><span>{zh ? item.labelZh : item.label}</span></div>
+            <h3>{zh ? item.titleZh : item.title}</h3>
+            <p>{zh ? item.answerZh : item.answer}</p>
+            <footer><span>{zh ? `机会评分 ${item.score}/100` : `Opportunity score ${item.score}/100`}</span><strong>{zh ? "查看当天雷达" : "Open daily radar"}<ArrowUpRight weight="bold" /></strong></footer>
+          </Link>
+        ))}
+      </div>
+      {pageCount > 1 && (
+        <nav className="operations-archive-pagination" aria-label={zh ? "往期雷达分页" : "Radar archive pagination"}>
+          <p role="status">{zh ? `第 ${start + 1}–${start + pageItems.length} 条，共 ${archiveItems.length} 条` : `${start + 1}–${start + pageItems.length} of ${archiveItems.length} entries`}</p>
+          <div>
+            <button type="button" disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)} aria-controls="radar-archive-list">{zh ? "上一页" : "Previous"}</button>
+            <label>
+              <span className="archive-page-label">{zh ? "跳转页码" : "Go to page"}</span>
+              <select value={currentPage} onChange={(event) => changePage(Number(event.target.value))} aria-controls="radar-archive-list">
+                {Array.from({ length: pageCount }, (_, index) => <option key={index + 1} value={index + 1}>{zh ? `第 ${index + 1} / ${pageCount} 页` : `Page ${index + 1} of ${pageCount}`}</option>)}
+              </select>
+            </label>
+            <button type="button" disabled={currentPage === pageCount} onClick={() => changePage(currentPage + 1)} aria-controls="radar-archive-list">{zh ? "下一页" : "Next"}</button>
+          </div>
+        </nav>
+      )}
+    </section>
   );
 }

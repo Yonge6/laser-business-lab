@@ -1502,3 +1502,38 @@ html[lang="zh-CN"] body :where(
   .home-page .metric-row b { flex-shrink: 0; font-size: 16px; }
   .home-page .score-value { font-size: 40px; }
 }
+
+/* Compact, paged Radar archive. */
+.operations-archive { padding-top: 48px; scroll-margin-top: 96px; }
+.operations-archive > header { gap: 28px; padding-bottom: 20px; }
+.operations-archive h2 { font-size: clamp(30px, 3.4vw, 44px); }
+.operations-archive-card { min-height: 112px; padding: 16px 20px; grid-template-columns: 150px minmax(0, 1fr) 180px; column-gap: 24px; }
+.operations-archive-card > div { gap: 6px 8px; font-size: 13px; }
+.operations-archive-card h3 { margin: 0 0 6px; font-size: 25px; line-height: 1.15; }
+.operations-archive-card > p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 13px; }
+.operations-archive-card footer { padding-left: 20px; gap: 10px; font-size: 13px; }
+.operations-archive-pagination { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 0; }
+.operations-archive-pagination p { margin: 0; color: var(--muted); font-size: 13px; }
+.operations-archive-pagination > div { display: flex; gap: 8px; align-items: center; }
+.operations-archive-pagination :is(button, select) { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line-dark); background: var(--paper-strong); color: var(--ink); font-size: 14px; cursor: pointer; }
+.operations-archive-pagination button:hover:not(:disabled) { background: var(--ink); color: white; }
+.operations-archive-pagination button:disabled { opacity: .4; cursor: default; }
+.archive-page-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 1050px) and (min-width: 761px) {
+  .operations-archive-card { grid-template-columns: 125px minmax(0, 1fr) 140px; column-gap: 16px; }
+}
+@media (max-width: 760px) {
+  .operations-archive { padding-top: 32px; scroll-margin-top: 76px; }
+  .operations-archive > header { padding-inline: 16px; gap: 12px; }
+  .operations-archive h2 { font-size: 30px; }
+  .operations-archive-card { min-height: 0; padding: 14px 16px; }
+  .operations-archive-card > div { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 12px; }
+  .operations-archive-card > div svg { width: 16px; height: 16px; }
+  .operations-archive-card h3 { margin: 9px 0 6px; font-size: 21px; }
+  .operations-archive-card footer { flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 0; border-left: 0; font-size: 12px; }
+  .operations-archive-pagination { padding: 16px; }
+  .operations-archive-pagination :is(button, select) { padding-inline: 9px; font-size: 13px; }
+}
+
+.operations-radar-copy > .operations-cadence { margin: 0 0 18px; font-size: 16px; line-height: 1.6; color: var(--muted); }
+.operations-week-panel > .operations-week-explainer { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--line-dark); color: var(--muted); font-family: var(--font-body), sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 1.65; letter-spacing: 0; text-transform: none; }
