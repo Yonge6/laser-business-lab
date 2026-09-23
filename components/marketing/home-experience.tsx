@@ -23,14 +23,16 @@ import { ProjectLibrary } from "@/components/marketing/project-library";
 const copy = {
   en: {
     eyebrow: "Maker opportunity intelligence",
-    heroA: "Choose your next",
-    heroB: "winning product.",
-    sub: "Compare real maker opportunities by demand, margin, competition and production fit.",
-    find: "Find my opportunity",
-    calculate: "Calculate a product",
+    heroA: "Make something.",
+    heroB: "Make it add up.",
+    sub: "Find a product to sell. Check your costs, pricing and break-even point before you invest in equipment.",
+    heroNote: "Free tools · No sign-up required · Your costs, your assumptions",
+    find: "Find a product",
+    calculate: "Check my profit",
     selected: "Selected opportunity",
     nextMission: "Next mission: validate the business",
-    profit: "Est. gross profit / item",
+    profit: "Price less materials / item",
+    profitNote: "Planning estimate before labor, fees, shipping and overhead. Adjust costs in the calculator.",
     calculateSelected: "Calculate this product",
     matchEquipment: "Match production equipment",
     viewOneLaser: "View matched OneLaser",
@@ -39,7 +41,8 @@ const copy = {
     viewGuide: "View full business guide",
     resultLink: "Selection results · Updates with the card above",
     marketCase: "Selected marketplace example",
-    publicSignal: "Public market signal",
+    publicSignal: "Recorded market signal",
+    recordedAt: "Snapshot date",
     viewSource: "View evidence listing",
     searchSimilar: "Search similar on Etsy",
     marketNote: "Selected reference example—not a bestseller ranking. Marketplace signals change over time and do not guarantee demand or earnings.",
@@ -62,21 +65,23 @@ const copy = {
       ["Maker equipment finder", "Choose a making path, then match business needs to an equipment category.", "/calculator/machine-finder"],
     ],
     estimates: "Opportunity scores and profit figures are directional estimates. Validate demand with small tests before investing.",
-    catalog: "7 market-tested starting ideas",
-    catalogSub: "Swipe horizontally. The centered card is selected automatically and updates the evidence below.",
+    catalog: "7 product ideas to validate",
+    catalogSub: "Choose a product to see its costs, market reference and next step.",
     dailySignal: "Today’s maker signal",
     dailySignalCta: "Open opportunity radar",
   },
   zh: {
     eyebrow: "Maker 商业机会情报",
-    heroA: "选择你的下一个",
-    heroB: "畅销产品。",
-    sub: "从需求、利润、竞争和生产适配度比较真实的 Maker 产品机会。",
-    find: "寻找我的机会",
-    calculate: "计算一个产品",
+    heroA: "把创意做成产品，",
+    heroB: "先把生意算清楚。",
+    sub: "找到想卖的产品，算清成本、定价与回本周期，再决定是否投入设备。",
+    heroNote: "免费工具 · 无需注册 · 按你的实际成本测算",
+    find: "寻找产品机会",
+    calculate: "测算产品利润",
     selected: "已选机会",
     nextMission: "下一项任务：验证商业模型",
-    profit: "预计单件毛利",
+    profit: "单件售价减材料成本",
+    profitNote: "规划估算，尚未扣除人工、平台费、运费与间接成本。可在计算器中调整成本。",
     calculateSelected: "计算这个产品",
     matchEquipment: "匹配生产设备",
     viewOneLaser: "在 OneLaser 查看匹配设备",
@@ -85,7 +90,8 @@ const copy = {
     viewGuide: "查看完整商业指南",
     resultLink: "选择结果 · 随上方卡片实时更新",
     marketCase: "精选电商参考案例",
-    publicSignal: "公开市场信号",
+    publicSignal: "已记录的市场信号",
+    recordedAt: "数据采集日期",
     viewSource: "查看参考案例",
     searchSimilar: "在 Etsy 搜索同类产品",
     marketNote: "这是精选参考案例，并非销量排名。平台数据会随时间变化，仅用于市场参考，不代表需求或收益承诺。",
@@ -108,8 +114,8 @@ const copy = {
       ["Maker 设备匹配器", "先选择制造方式，再把业务需求匹配到设备类别。", "/calculator/machine-finder"],
     ],
     estimates: "机会评分与利润数字均为方向性估算。投资前请先用小批量测试验证需求。",
-    catalog: "7 个经过市场信号验证的起步方向",
-    catalogSub: "左右滑动浏览，居中的卡片会自动选中，并实时更新下方市场证据。",
+    catalog: "7 个值得进一步验证的产品方向",
+    catalogSub: "左右滑动选择产品，查看成本、市场参考和下一步。",
     dailySignal: "今日 Maker 信号",
     dailySignalCta: "打开机会雷达",
   },
@@ -261,25 +267,20 @@ export function HomeExperience() {
   };
 
   return (
-    <main>
+    <main className="home-page">
       <section className="hero-section shell">
-        <Image className="hero-racing-stripe" src={assetPath("/images/racing-header-stripe.png")} alt="" width={709} height={38} aria-hidden="true" priority />
+        <Image className="hero-racing-stripe" src={assetPath("/images/racing-header-stripe.png")} alt="" width={709} height={38} aria-hidden="true" />
         <div className="hero-copy">
           <p className="eyebrow">{t.eyebrow}</p>
           <h1>{t.heroA}<br /><em>{t.heroB}</em></h1>
           <div className="speed-stripe" aria-hidden="true" />
           <p className="hero-sub">{t.sub}</p>
-        </div>
-
-        <section className="home-daily-signal" aria-labelledby="home-daily-signal-title">
-          <div className="home-daily-signal-status"><Pulse weight="fill" /><span>{t.dailySignal}</span><time dateTime={currentBriefing.state.lastRunDate}>{currentBriefing.state.lastRunDate}</time></div>
-          <div>
-            <small>{locale === "zh" ? currentBriefing.daily.labelZh : currentBriefing.daily.label}</small>
-            <h2 id="home-daily-signal-title">{locale === "zh" ? currentBriefing.daily.headlineZh : currentBriefing.daily.headline}</h2>
-            <p>{locale === "zh" ? currentBriefing.daily.answerZh : currentBriefing.daily.answer}</p>
+          <div className="hero-actions">
+            <Link className="button button-primary" href="/opportunities" onClick={() => void trackEvent("home_cta_click", { destination: "opportunities", placement: "hero" })}>{t.find}<ArrowRight weight="bold" /></Link>
+            <Link className="button button-ghost" href="/calculator/laser-roi" onClick={() => void trackEvent("home_cta_click", { destination: "calculator", placement: "hero" })}>{t.calculate}<Calculator weight="bold" /></Link>
           </div>
-          <Link href="/radar">{t.dailySignalCta}<ArrowRight weight="bold" /></Link>
-        </section>
+          <p className="hero-note">{t.heroNote}</p>
+        </div>
 
         <OpportunityRadar opportunity={selected} />
       </section>
@@ -319,7 +320,7 @@ export function HomeExperience() {
               <h2>{locale === "zh" ? selected.titleZh : selected.title}</h2>
               <p>{locale === "zh" ? selected.evidenceZh : selected.evidence}</p>
             </div>
-            <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong></div>
+            <div className="selection-profit"><span>{t.profit}</span><strong>{formatCurrency(selected.grossProfit, 2)}</strong><small>{t.profitNote}</small></div>
             <div className="selection-actions">
               <Link className="button button-primary" href={`/calculator/laser-roi?product=${selected.id}`}>{t.calculateSelected}<Calculator weight="bold" /></Link>
               <TrackedExternalLink className="selection-more" href={matchedEquipmentUrl} target="_blank" rel="noreferrer" onClick={trackHomeEquipmentClick} analytics={{ placement: "home_opportunity", opportunity: selected.id, destination: "equipment", brand: matchedEquipmentBrand }}>{matchedEquipmentLabel}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
@@ -339,6 +340,7 @@ export function HomeExperience() {
             </div>
             <div className="market-proof-price"><span>{locale === "zh" ? "公开售价" : "LISTED PRICE"}</span><strong>{marketCase.price}</strong></div>
             <div className="market-proof-source">
+              <span>{t.recordedAt}: <time dateTime={marketCase.checkedAt}>{marketCase.checkedAt}</time></span>
               <div className="market-proof-links">
                 <TrackedExternalLink className="market-proof-primary" href={marketCase.sourceUrl} target="_blank" rel="noreferrer" analytics={{ placement: "home_market_proof", opportunity: selected.id, destination: "evidence_listing" }}>{t.viewSource}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
                 <TrackedExternalLink className="market-proof-secondary" href={marketCase.searchUrl} target="_blank" rel="noreferrer" analytics={{ placement: "home_market_proof", opportunity: selected.id, destination: "marketplace_search" }}>{t.searchSimilar}<MagnifyingGlass weight="bold" /></TrackedExternalLink>
@@ -351,6 +353,16 @@ export function HomeExperience() {
           <Link className="button button-primary" href="/opportunities">{t.find}<ArrowRight weight="bold" /></Link>
           <Link className="button button-ghost" href="/calculator/laser-roi">{t.calculate}<Calculator weight="bold" /></Link>
         </div>
+      </section>
+
+      <section className="home-daily-signal shell" aria-labelledby="home-daily-signal-title">
+        <div className="home-daily-signal-status"><Pulse weight="fill" /><span>{t.dailySignal}</span><time dateTime={currentBriefing.state.lastRunDate}>{currentBriefing.state.lastRunDate}</time></div>
+        <div>
+          <small>{locale === "zh" ? currentBriefing.daily.labelZh : currentBriefing.daily.label}</small>
+          <h2 id="home-daily-signal-title">{locale === "zh" ? currentBriefing.daily.headlineZh : currentBriefing.daily.headline}</h2>
+          <p>{locale === "zh" ? currentBriefing.daily.answerZh : currentBriefing.daily.answer}</p>
+        </div>
+        <Link href="/radar">{t.dailySignalCta}<ArrowRight weight="bold" /></Link>
       </section>
 
       <ProjectLibrary compact />
