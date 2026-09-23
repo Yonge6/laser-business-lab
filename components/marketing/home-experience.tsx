@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Hammer, MagnifyingGlass, Pulse, ShoppingCartSimple, Storefront, Target } from "@phosphor-icons/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { opportunities } from "@/lib/opportunities/data";
 import { OpportunityCard } from "@/components/marketing/opportunity-card";
@@ -123,7 +123,7 @@ const copy = {
 
 const stepIcons = [Target, MagnifyingGlass, Hammer, ShoppingCartSimple];
 
-export function HomeExperience() {
+export function HomeExperience({ children }: { children?: ReactNode }) {
   const { locale } = useLanguage();
   const [selected, setSelected] = useState(opportunities[0]);
   const [carouselEdges, setCarouselEdges] = useState({ atStart: true, atEnd: false });
@@ -411,6 +411,7 @@ export function HomeExperience() {
         </div>
         <p className="estimate-note">{t.estimates}</p>
       </section>
+      {children}
     </main>
   );
 }
