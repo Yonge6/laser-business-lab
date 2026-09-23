@@ -1604,3 +1604,7 @@ html[lang="zh-CN"] body :where(
   .guide-tool { padding: 22px; }
   .guide-tool .button { white-space: normal; }
 }
+.guide-shelf[lang="zh-CN"] h3 { line-height: 1.35; }
+.maker-guide[lang="zh-CN"] .guide-header h1 { line-height: 1.2; }
+.maker-guide[lang="zh-CN"] .guide-body h2,
+.maker-guide[lang="zh-CN"] .guide-body h3 { line-height: 1.35; }

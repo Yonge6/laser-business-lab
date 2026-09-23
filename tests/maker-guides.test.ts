@@ -35,3 +35,34 @@ describe("U.S. guide discovery and source integrity", () => {
     expect(renderToStaticMarkup(createElement(TrackedExternalLink, { href: "/learn/", analytics: {} }, "Learn"))).toContain('href="/learn/"');
   });
 });
+
+import { makerGuidesZh } from "@/lib/learn/guides-zh";
+
+describe("Chinese guide parity", () => {
+  it("translates every article section and preserves destinations, source URLs and financial table inputs", () => {
+    expect(makerGuidesZh).toHaveLength(makerGuides.length);
+    for (const english of makerGuides) {
+      const chinese = makerGuidesZh.find(item => item.slug === english.slug)!;
+      expect(chinese.title).toMatch(/[\u4e00-\u9fff]/);
+      expect(chinese.image).toBe(english.image);
+      expect(chinese.tool.href).toBe(english.tool.href);
+      expect(chinese.sources.map(item => item.url)).toEqual(english.sources.map(item => item.url));
+      expect(chinese.sources.every(item => Boolean(item.title))).toBe(true);
+      expect(chinese.sections.map(item => item.id)).toEqual(english.sections.map(item => item.id));
+      expect(chinese.faq).toHaveLength(english.faq.length);
+      english.sections.forEach((section, index) => {
+        const translated = chinese.sections[index];
+        expect(translated.title).toMatch(/[\u4e00-\u9fff]/);
+        expect(translated.paragraphs).toHaveLength(section.paragraphs.length);
+        expect(translated.sources).toEqual(section.sources);
+        expect(translated.bullets?.length).toBe(section.bullets?.length);
+        if (section.table) {
+          expect(translated.table?.rows).toHaveLength(section.table.rows.length);
+          const numbers = (rows: string[][]) => rows.flat().join(" ").match(/\d+(?:[.,]\d+)*/g);
+          expect(numbers(translated.table!.rows)).toEqual(numbers(section.table.rows));
+        }
+      });
+      expect(guideStructuredData(chinese, "https://maker.wonderelian.com", "zh-CN")["@graph"][0]).toMatchObject({ headline: chinese.title, abstract: chinese.answer, inLanguage: "zh-CN" });
+    }
+  });
+});

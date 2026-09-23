@@ -5,7 +5,7 @@ export const makerGuides: MakerGuide[] = [
   {
     slug: "laser-engraving-business-startup-costs", title: "Laser Engraving Business Startup Costs in the U.S.", category: "STARTUP BUDGET",
     description: "Build a U.S. laser engraving startup budget with a $5,500 worked example, operating break-even, and equipment payback scenarios in USD.",
-    image: "/images/opportunities/personalized-tumbler.webp",
+    image: "/images/opportunities/laser-leather-patches.webp",
     answer: "Budget for the whole workflow, not just the laser. In our illustrative U.S. workshop plan, $4,250 of setup costs, $450 of opening inventory, and $800 of working cash require $5,500 to launch. These are planning assumptions, not equipment quotes or an industry average. Your required cash depends on the product, workspace, and actual supplier quotes.",
     sections: [
       { id: "budget", title: "What belongs in your startup budget?", paragraphs: ["Separate one-time setup, saleable inventory, and cash held for ongoing bills. This makes it easier to see which purchases can wait until buyers have paid for a small batch. The SBA recommends identifying startup expenses before estimating capital needs.", "The example below assumes you already have a suitable workspace and computer. It excludes rent deposits, delivery, sales tax on purchases, insurance, permits, and any building or electrical changes. Obtain local quotes for those items before treating this as a cash requirement."], table: { headers: ["Planning item", "Assumed USD"], rows: [["Laser", "$3,000"], ["Fixtures and accessories", "$500"], ["Extraction and ventilation", "$600"], ["Initial design software allowance", "$150"], ["Setup subtotal", "$4,250"], ["Opening blanks", "$300"], ["Opening packaging", "$150"], ["Working cash reserve", "$800"], ["Total launch cash", "$5,500"]] }, sources: ["sba"] },
@@ -53,10 +53,10 @@ export const makerGuides: MakerGuide[] = [
 ];
 
 export function guidePath(slug: string) { return `/learn/${slug}/`; }
-export function guideStructuredData(guide: MakerGuide, base: string) {
+export function guideStructuredData(guide: MakerGuide, base: string, language: "en-US" | "zh-CN" = "en-US") {
   const url = `${base}${guidePath(guide.slug)}`;
   return { "@context": "https://schema.org", "@graph": [
-    { "@type": "Article", "@id": `${url}#article`, headline: guide.title, description: guide.description, abstract: guide.answer, mainEntityOfPage: url, url, inLanguage: "en-US", datePublished: guideDate, dateModified: guideDate, image: `${base}${guide.image}`, author: { "@type": "Organization", "@id": `${base}/#organization`, name: "Maker Business Lab", url: `${base}/about/` }, publisher: { "@id": `${base}/#organization` }, citation: guide.sources.map(source => source.url) },
-    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${base}/` }, { "@type": "ListItem", position: 2, name: "Learn", item: `${base}/learn/` }, { "@type": "ListItem", position: 3, name: guide.title, item: url }] },
+    { "@type": "Article", "@id": `${url}#article`, headline: guide.title, description: guide.description, abstract: guide.answer, mainEntityOfPage: url, url, inLanguage: language, datePublished: guideDate, dateModified: guideDate, image: `${base}${guide.image}`, author: { "@type": "Organization", "@id": `${base}/#organization`, name: "Maker Business Lab", url: `${base}/about/` }, publisher: { "@id": `${base}/#organization` }, citation: guide.sources.map(source => source.url) },
+    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: language === "zh-CN" ? "首页" : "Home", item: `${base}/` }, { "@type": "ListItem", position: 2, name: language === "zh-CN" ? "学习" : "Learn", item: `${base}/learn/` }, { "@type": "ListItem", position: 3, name: guide.title, item: url }] },
   ] };
 }
