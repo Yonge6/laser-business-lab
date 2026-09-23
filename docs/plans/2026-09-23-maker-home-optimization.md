@@ -16,3 +16,9 @@ Scope:
 Validation: existing tests, typecheck, lint, production static build; browser checks for both languages at 320, 390, 768 and desktop widths; carousel selection and product-specific calculator entry; public readback after deployment. Preserve the latest daily operations state from main.
 
 Isolation: work on `codex/maker-home-optimization-20260923` from current origin/main. Preserve the original checkout and its uncommitted iOS/assets work; carry forward only its previously prepared trust-copy patch.
+
+Observed results:
+- Existing suite: 23 files / 94 tests passed. Typecheck and lint passed; static build generated 120 pages.
+- Seven opportunity image derivatives: 10,270,717 bytes -> 946,322 bytes (90.8% reduction); original files retained.
+- Product selection updates the evidence and SVG scores; selecting leather patches routes to `?product=laser-leather-patches` and initializes the calculator at $9.10 per product.
+- Resize testing exposed a transient overflow from the animated selection pointer. Clamp its CSS position to the result panel and remove the left-position transition so resizing cannot temporarily widen the mobile viewport.

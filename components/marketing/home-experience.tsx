@@ -306,7 +306,7 @@ export function HomeExperience() {
           </button>
         </div>
         <div ref={selectionResultRef} className="selection-result" aria-live="polite">
-          <span className="selection-result-pointer" style={selectionPointerX === null ? undefined : { left: selectionPointerX }} aria-hidden="true">
+          <span className="selection-result-pointer" style={selectionPointerX === null ? undefined : { left: `clamp(28px, ${selectionPointerX}px, calc(100% - 28px))` }} aria-hidden="true">
             <ArrowDown weight="bold" />
           </span>
           <div className="selection-result-header">
