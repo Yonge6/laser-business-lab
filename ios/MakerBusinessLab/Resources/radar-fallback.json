@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "generatedFor": "2026-08-30",
+  "opportunity": {
+    "id": "laser-leather-patches",
+    "title": "Custom Leather Patches",
+    "titleZh": "定制皮革章",
+    "score": 79,
+    "typicalPrice": 11,
+    "materialCost": 1.9,
+    "estimatedGrossProfit": 9.1,
+    "productionMinutes": 3
+  },
+  "radar": {
+    "weekStarted": "2026-08-24",
+    "lens": "review",
+    "headline": "Custom Leather Patches: test the business before scaling it.",
+    "headlineZh": "定制皮革章：扩大投入前，先验证商业模型。",
+    "answer": "Low material cost and short engraving cycles make patches a practical way to test niches and repeat wholesale orders.",
+    "answerZh": "低材料成本和短雕刻周期，让皮革章适合测试细分市场并承接重复批发订单。",
+    "action": "Review demand, margin, production speed, and the evidence collected from real paid tests.",
+    "actionZh": "复盘需求、利润、生产速度，以及真实付费测试获得的证据。",
+    "caveat": "Planning estimates only. Fees, labor, failed units, packaging, shipping, tax, and marketing may not be included."
+  }
+}
