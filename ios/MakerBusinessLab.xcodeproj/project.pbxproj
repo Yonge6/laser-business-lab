@@ -1,0 +1,526 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01C991511101A6DEE87612B9 /* RadarSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2CBEAC101C785014DBF7D4 /* RadarSignal.swift */; };
+		27B4A28B084BF9006DACDC3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E405C39D30C98DD68369AA52 /* Assets.xcassets */; };
+		3B112AD47D8B9B736B643276 /* MakerBusinessLabApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A5431E79690B27FC9B87C1 /* MakerBusinessLabApp.swift */; };
+		438AAE12B0CC942383CDC501 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DF840D8BFC788B4E6DE205 /* HomeView.swift */; };
+		4F3C74C7B6EFFE07AE5EE801 /* SavedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC75C05691A4B571932123AE /* SavedView.swift */; };
+		5C5EFC3C8E820F3CCFF56453 /* CalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70D4A8ED7F46A055E9C70C /* CalculatorView.swift */; };
+		5EAB6042DA98973069E891B1 /* OpportunityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0887F9BBF9150B580A2177 /* OpportunityDetailView.swift */; };
+		65BB2D5FE5515A84C4744377 /* OpportunityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606C2FEA229BA4E605BFD4A3 /* OpportunityCard.swift */; };
+		80E9EF373F89597DA7081BDA /* radar-fallback.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F9F0E35599680867BD767A8 /* radar-fallback.json */; };
+		A6BA20C547C7F546D572A88F /* OpportunitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A91B94C1785921DF9128F8 /* OpportunitiesView.swift */; };
+		A86D0860935AFE9EA601F96A /* RadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9698736C5997EC0B4E90EE5 /* RadarView.swift */; };
+		BEE4EAB495623BECB0BC5D20 /* ProfitCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C910482350AAEC4F7123079 /* ProfitCalculatorTests.swift */; };
+		D3EE424457EC4A1B3C9E7490 /* ProfitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F767E12DAFB0569D0999CA2 /* ProfitModel.swift */; };
+		DAAE70AC8C0215DFA458082F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0C7393D1654FD197CC907FAE /* Localizable.strings */; };
+		E05E6A43BB8D14B760EE7A9F /* Opportunity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6117F9E693D74061CB992F /* Opportunity.swift */; };
+		E19FA4F4262C2F3C0AF885F2 /* RadarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C9703597387644B27F3DD6 /* RadarService.swift */; };
+		FD91660E9D5FEA2981CB383B /* AppShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EABB42E289E5B05C7C9AEA /* AppShellView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0EDBCFCAF662327212AFF23A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 267663D33281A26556BC6139 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07C1552121C96D88C320C2DA;
+			remoteInfo = MakerBusinessLab;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0F9F0E35599680867BD767A8 /* radar-fallback.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "radar-fallback.json"; sourceTree = "<group>"; };
+		17DF840D8BFC788B4E6DE205 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		20EABB42E289E5B05C7C9AEA /* AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShellView.swift; sourceTree = "<group>"; };
+		22BB9CD44CE91D02488F57CC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		3F767E12DAFB0569D0999CA2 /* ProfitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfitModel.swift; sourceTree = "<group>"; };
+		4F70D4A8ED7F46A055E9C70C /* CalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorView.swift; sourceTree = "<group>"; };
+		606C2FEA229BA4E605BFD4A3 /* OpportunityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpportunityCard.swift; sourceTree = "<group>"; };
+		7C910482350AAEC4F7123079 /* ProfitCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfitCalculatorTests.swift; sourceTree = "<group>"; };
+		88C9703597387644B27F3DD6 /* RadarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarService.swift; sourceTree = "<group>"; };
+		8E2CBEAC101C785014DBF7D4 /* RadarSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarSignal.swift; sourceTree = "<group>"; };
+		8E6117F9E693D74061CB992F /* Opportunity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opportunity.swift; sourceTree = "<group>"; };
+		99A91B94C1785921DF9128F8 /* OpportunitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpportunitiesView.swift; sourceTree = "<group>"; };
+		AC0887F9BBF9150B580A2177 /* OpportunityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpportunityDetailView.swift; sourceTree = "<group>"; };
+		B036473DF494CE8C7175C139 /* MakerBusinessLab.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MakerBusinessLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDA9ACDF50854D50FB650901 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D0DD9F9F393B6C851B3BA5D4 /* MakerBusinessLabTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MakerBusinessLabTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E405C39D30C98DD68369AA52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E5840C02E32F54D6326CA510 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F3A5431E79690B27FC9B87C1 /* MakerBusinessLabApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakerBusinessLabApp.swift; sourceTree = "<group>"; };
+		F9698736C5997EC0B4E90EE5 /* RadarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
+		FC75C05691A4B571932123AE /* SavedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0C827D4E352D0F5886E1ABE5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				20EABB42E289E5B05C7C9AEA /* AppShellView.swift */,
+				4F70D4A8ED7F46A055E9C70C /* CalculatorView.swift */,
+				17DF840D8BFC788B4E6DE205 /* HomeView.swift */,
+				99A91B94C1785921DF9128F8 /* OpportunitiesView.swift */,
+				AC0887F9BBF9150B580A2177 /* OpportunityDetailView.swift */,
+				F9698736C5997EC0B4E90EE5 /* RadarView.swift */,
+				FC75C05691A4B571932123AE /* SavedView.swift */,
+				3F562683E7B8AFEF36B7FA3B /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2BA78C9663D5FAA930032303 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E405C39D30C98DD68369AA52 /* Assets.xcassets */,
+				0F9F0E35599680867BD767A8 /* radar-fallback.json */,
+				0C7393D1654FD197CC907FAE /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		3006D8252C3763962B798A02 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B036473DF494CE8C7175C139 /* MakerBusinessLab.app */,
+				D0DD9F9F393B6C851B3BA5D4 /* MakerBusinessLabTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3F562683E7B8AFEF36B7FA3B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				606C2FEA229BA4E605BFD4A3 /* OpportunityCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		55B16803D9BC218DE5B227C0 = {
+			isa = PBXGroup;
+			children = (
+				FBEDBEA5EAA843454F4EDD69 /* MakerBusinessLab */,
+				85B1D1AB39A508FC87E5343E /* MakerBusinessLabTests */,
+				3006D8252C3763962B798A02 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		85B1D1AB39A508FC87E5343E /* MakerBusinessLabTests */ = {
+			isa = PBXGroup;
+			children = (
+				7C910482350AAEC4F7123079 /* ProfitCalculatorTests.swift */,
+			);
+			path = MakerBusinessLabTests;
+			sourceTree = "<group>";
+		};
+		976F49D23973F3588CB9FCEC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8E6117F9E693D74061CB992F /* Opportunity.swift */,
+				3F767E12DAFB0569D0999CA2 /* ProfitModel.swift */,
+				8E2CBEAC101C785014DBF7D4 /* RadarSignal.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9DB67DF23F19BC5870995909 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				88C9703597387644B27F3DD6 /* RadarService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FBEDBEA5EAA843454F4EDD69 /* MakerBusinessLab */ = {
+			isa = PBXGroup;
+			children = (
+				CDA9ACDF50854D50FB650901 /* Info.plist */,
+				F3A5431E79690B27FC9B87C1 /* MakerBusinessLabApp.swift */,
+				976F49D23973F3588CB9FCEC /* Models */,
+				2BA78C9663D5FAA930032303 /* Resources */,
+				9DB67DF23F19BC5870995909 /* Services */,
+				0C827D4E352D0F5886E1ABE5 /* Views */,
+			);
+			path = MakerBusinessLab;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07C1552121C96D88C320C2DA /* MakerBusinessLab */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9CCAEB4C76636B8F83CB215D /* Build configuration list for PBXNativeTarget "MakerBusinessLab" */;
+			buildPhases = (
+				7C5490E71C69391B38C0ECA7 /* Sources */,
+				3A6863066BC1A68EAA31EA43 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MakerBusinessLab;
+			packageProductDependencies = (
+			);
+			productName = MakerBusinessLab;
+			productReference = B036473DF494CE8C7175C139 /* MakerBusinessLab.app */;
+			productType = "com.apple.product-type.application";
+		};
+		952EEE3CB356BA381969A39F /* MakerBusinessLabTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 25D8398D6FA4B78CE2F4DC31 /* Build configuration list for PBXNativeTarget "MakerBusinessLabTests" */;
+			buildPhases = (
+				312AEB6C9D5E10B8652D9A41 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FB94BE7E0ABA6D377C9CF515 /* PBXTargetDependency */,
+			);
+			name = MakerBusinessLabTests;
+			packageProductDependencies = (
+			);
+			productName = MakerBusinessLabTests;
+			productReference = D0DD9F9F393B6C851B3BA5D4 /* MakerBusinessLabTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		267663D33281A26556BC6139 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					07C1552121C96D88C320C2DA = {
+						DevelopmentTeam = L855ZVM679;
+						ProvisioningStyle = Automatic;
+					};
+					952EEE3CB356BA381969A39F = {
+						DevelopmentTeam = L855ZVM679;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5176CD6A9CD3BB999203538E /* Build configuration list for PBXProject "MakerBusinessLab" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				"zh-Hans",
+			);
+			mainGroup = 55B16803D9BC218DE5B227C0;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3006D8252C3763962B798A02 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07C1552121C96D88C320C2DA /* MakerBusinessLab */,
+				952EEE3CB356BA381969A39F /* MakerBusinessLabTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3A6863066BC1A68EAA31EA43 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27B4A28B084BF9006DACDC3F /* Assets.xcassets in Resources */,
+				DAAE70AC8C0215DFA458082F /* Localizable.strings in Resources */,
+				80E9EF373F89597DA7081BDA /* radar-fallback.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		312AEB6C9D5E10B8652D9A41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEE4EAB495623BECB0BC5D20 /* ProfitCalculatorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C5490E71C69391B38C0ECA7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD91660E9D5FEA2981CB383B /* AppShellView.swift in Sources */,
+				5C5EFC3C8E820F3CCFF56453 /* CalculatorView.swift in Sources */,
+				438AAE12B0CC942383CDC501 /* HomeView.swift in Sources */,
+				3B112AD47D8B9B736B643276 /* MakerBusinessLabApp.swift in Sources */,
+				A6BA20C547C7F546D572A88F /* OpportunitiesView.swift in Sources */,
+				E05E6A43BB8D14B760EE7A9F /* Opportunity.swift in Sources */,
+				65BB2D5FE5515A84C4744377 /* OpportunityCard.swift in Sources */,
+				5EAB6042DA98973069E891B1 /* OpportunityDetailView.swift in Sources */,
+				D3EE424457EC4A1B3C9E7490 /* ProfitModel.swift in Sources */,
+				E19FA4F4262C2F3C0AF885F2 /* RadarService.swift in Sources */,
+				01C991511101A6DEE87612B9 /* RadarSignal.swift in Sources */,
+				A86D0860935AFE9EA601F96A /* RadarView.swift in Sources */,
+				4F3C74C7B6EFFE07AE5EE801 /* SavedView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FB94BE7E0ABA6D377C9CF515 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07C1552121C96D88C320C2DA /* MakerBusinessLab */;
+			targetProxy = 0EDBCFCAF662327212AFF23A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0C7393D1654FD197CC907FAE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E5840C02E32F54D6326CA510 /* en */,
+				22BB9CD44CE91D02488F57CC /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		119E92AC81D94E6DC8733E26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wonderelian.makerbusinesslab.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MakerBusinessLab.app/MakerBusinessLab";
+			};
+			name = Release;
+		};
+		368E0805C7BCEC521C5AE42C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 13;
+				INFOPLIST_FILE = MakerBusinessLab/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wonderelian.makerbusinesslab;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		3EDEC8D8A7305E340611B467 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.wonderelian.makerbusinesslab.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MakerBusinessLab.app/MakerBusinessLab";
+			};
+			name = Debug;
+		};
+		B626D54599BAC82E8509697D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 13;
+				INFOPLIST_FILE = MakerBusinessLab/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wonderelian.makerbusinesslab;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D326228C9998F0F62208A521 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = L855ZVM679;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		FBF72EC42590524E9A5DAB27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = L855ZVM679;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		25D8398D6FA4B78CE2F4DC31 /* Build configuration list for PBXNativeTarget "MakerBusinessLabTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EDEC8D8A7305E340611B467 /* Debug */,
+				119E92AC81D94E6DC8733E26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5176CD6A9CD3BB999203538E /* Build configuration list for PBXProject "MakerBusinessLab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D326228C9998F0F62208A521 /* Debug */,
+				FBF72EC42590524E9A5DAB27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9CCAEB4C76636B8F83CB215D /* Build configuration list for PBXNativeTarget "MakerBusinessLab" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				368E0805C7BCEC521C5AE42C /* Debug */,
+				B626D54599BAC82E8509697D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 267663D33281A26556BC6139 /* Project object */;
+}
