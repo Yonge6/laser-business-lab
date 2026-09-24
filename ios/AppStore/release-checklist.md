@@ -1,4 +1,4 @@
-# Maker Business Lab iOS 1.0 Release Checklist
+# Maker Business Lab iOS 1.1 Release Checklist
 
 - [x] Native SwiftUI navigation shell with live website content and offline cache fallback
 - [x] English default and Simplified Chinese in-app language switch
