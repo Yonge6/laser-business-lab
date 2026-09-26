@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-09-26",
+  "lastRunDate": "2026-09-27",
   "weekStarted": "2026-09-21",
   "activeOpportunityId": "3d-geometric-planters",
-  "activeLens": "risk",
+  "activeLens": "review",
   "sequence": 5,
   "history": [
     {
