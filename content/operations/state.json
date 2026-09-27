@@ -1,11 +1,11 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-09-27",
-  "weekStarted": "2026-09-21",
-  "activeOpportunityId": "3d-geometric-planters",
-  "activeLens": "review",
-  "sequence": 5,
+  "lastRunDate": "2026-09-28",
+  "weekStarted": "2026-09-28",
+  "activeOpportunityId": "acrylic-wedding-signs",
+  "activeLens": "demand",
+  "sequence": 6,
   "history": [
     {
       "weekStarted": "2026-08-17",
@@ -30,6 +30,10 @@
     {
       "weekStarted": "2026-09-21",
       "opportunityId": "3d-geometric-planters"
+    },
+    {
+      "weekStarted": "2026-09-28",
+      "opportunityId": "acrylic-wedding-signs"
     }
   ]
 }
