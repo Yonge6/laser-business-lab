@@ -1,9 +1,8 @@
 export type GuideSection = { id: string; title: string; paragraphs: string[]; bullets?: string[]; table?: { headers: string[]; rows: string[][] }; sources?: string[] };
-export type MakerGuide = { slug: string; title: string; description: string; answer: string; category: string; image: string; sections: GuideSection[]; sources: { id: string; title: string; url: string }[]; faq: { question: string; answer: string }[]; tool: { href: string; label: string } };
-export const guideDate = "2026-09-23";
+export type MakerGuide = { slug: string; publishedDate: string; reviewedDate: string; title: string; description: string; answer: string; category: string; image: string; sections: GuideSection[]; sources: { id: string; title: string; url: string }[]; faq: { question: string; answer: string }[]; tool: { href: string; label: string } };
 export const makerGuides: MakerGuide[] = [
   {
-    slug: "laser-engraving-business-startup-costs", title: "Laser Engraving Business Startup Costs in the U.S.", category: "STARTUP BUDGET",
+    slug: "laser-engraving-business-startup-costs", publishedDate: "2026-09-23", reviewedDate: "2026-09-23", title: "Laser Engraving Business Startup Costs in the U.S.", category: "STARTUP BUDGET",
     description: "Build a U.S. laser engraving startup budget with a $5,500 worked example, operating break-even, and equipment payback scenarios in USD.",
     image: "/images/opportunities/laser-leather-patches.webp",
     answer: "Budget for the whole workflow, not just the laser. In our illustrative U.S. workshop plan, $4,250 of setup costs, $450 of opening inventory, and $800 of working cash require $5,500 to launch. These are planning assumptions, not equipment quotes or an industry average. Your required cash depends on the product, workspace, and actual supplier quotes.",
@@ -19,7 +18,7 @@ export const makerGuides: MakerGuide[] = [
     tool: { href: "/calculator/laser-roi", label: "Build your ROI model" },
   },
   {
-    slug: "etsy-tumbler-pricing-us", title: "How to Price Laser-Engraved Tumblers on Etsy (U.S.)", category: "ETSY PRICING",
+    slug: "etsy-tumbler-pricing-us", publishedDate: "2026-09-23", reviewedDate: "2026-09-23", title: "How to Price Laser-Engraved Tumblers on Etsy (U.S.)", category: "ETSY PRICING",
     description: "Price a laser-engraved tumbler for U.S. Etsy sales: a $32 example with listing fees, payment processing, labor, shipping, and contribution.",
     image: "/images/opportunities/personalized-tumbler.webp",
     answer: "For a U.S. Etsy seller, price an engraved tumbler after the blank, labor, packaging, shipping, and marketplace fees. Our $32 free-shipping example leaves about $9.48 per order before fixed overhead and income taxes. Price minus the $8.20 blank is $23.80, but that is not take-home profit.",
@@ -35,7 +34,7 @@ export const makerGuides: MakerGuide[] = [
     tool: { href: "/calculator/tumbler-profit", label: "Start a tumbler cost model" },
   },
   {
-    slug: "how-to-price-3d-prints", title: "How to Price 3D Prints: A U.S. Seller’s Cost Model", category: "3D PRINTING",
+    slug: "how-to-price-3d-prints", publishedDate: "2026-09-23", reviewedDate: "2026-09-23", title: "How to Price 3D Prints: A U.S. Seller’s Cost Model", category: "3D PRINTING",
     description: "Price 3D prints beyond filament: a USD worked example including machine wear, electricity, failed prints, labor, fees, and target contribution.",
     image: "/images/opportunities/3d-desk-organizer.webp",
     answer: "Price a 3D print from its cost per successful unit, then allow for sales fees and your target contribution. Our example costs about $11.99 before channel fees and needs a $20.50 rounded-up price for a 30% contribution margin with an assumed 10% plus $0.30 fee. Filament alone costs $2.64 and misses most of the order economics.",
@@ -50,13 +49,34 @@ export const makerGuides: MakerGuide[] = [
     faq: [{ question: "Can I price a print using filament cost times three?", answer: "That shortcut does not account for runtime, labor, failures, fulfillment, or selling fees. Build a cost per successful unit and test the resulting offer with buyers." }, { question: "Does this $20.50 example include shipping?", answer: "No. Add the shipping cost you pay before solving for price, and check which fee bases include any shipping charged to the buyer." }],
     tool: { href: "/calculator/laser-roi?product=3d-desk-organizers", label: "Model a 3D printing product" },
   },
+  {
+    slug: "how-to-price-acrylic-wedding-signs", publishedDate: "2026-09-29", reviewedDate: "2026-09-29", title: "How to Price Acrylic Wedding Signs on Etsy (U.S.)", category: "WEDDING SIGNS",
+    description: "Price acrylic wedding signs for U.S. Etsy orders with a $59.99 cost audit, a $95 target-price model, current Etsy fees, labor, packaging, and ad scenarios.",
+    image: "/images/opportunities/acrylic-wedding-sign.webp",
+    answer: "A $59.99 acrylic wedding sign can lose about $2.69 before shipping when the modeled material, labor, packaging, and Etsy fees are included. Under the same assumptions, a price near $95 leaves about $28.91, or a 30.4% contribution margin, before shipping, fixed overhead, Offsite Ads, and income taxes. These are planning inputs, not a market-price claim.",
+    sections: [
+      { id: "cost-stack", title: "Audit the full cost of one personalized sign", paragraphs: ["Start with the current Maker Radar planning inputs: a $59.99 selling price and $32.39 of material. They are an opportunity-model snapshot, not a supplier quote or observed Etsy average. Replace the acrylic, paint or vinyl, masking, hardware, and damaged-stock allowance with your landed costs before publishing a price.", "Assume 45 minutes of hands-on work at $24 per hour ($18) for artwork checks, layout, production setup, cleanup, buyer messages, and packing. Add $6 for protective packaging. Shipping is excluded because packed dimensions, destination, insurance, and carrier service can change the quote materially."], bullets: ["Measure hands-on work separately from unattended machine time.", "Record proofs, revisions, remakes, and rush handling against the order that caused them.", "Quote shipping from the packed sign, not the bare acrylic dimensions."] },
+      { id: "etsy-fees", title: "Apply Etsy fees to the correct bases", paragraphs: ["Etsy currently lists a $0.20 listing fee and a 6.5% transaction fee. The transaction fee applies to the order total, including shipping and gift wrapping charged to the buyer. For a U.S. bank account, Etsy Payments processing is 3% plus $0.25, and its base includes shipping and applicable sales tax.", "For the worked example, there is no separate shipping or gift-wrap charge and the buyer pays an illustrative 8% sales tax. That is not a nationwide rate. On a $59.99 item, the transaction fee is about $3.90. Payment processing on $64.79, including $4.80 of sales tax, is about $2.19."], sources: ["fees", "payments"] },
+      { id: "audit", title: "Why the $59.99 example is below cost", paragraphs: ["The complete order model below leaves approximately negative $2.69 before seller-paid shipping, fixed overhead, advertising, returns, and income taxes. The $27.60 obtained by subtracting $32.39 of material from $59.99 is a material spread, not order profit."], table: { headers: ["Order item", "Calculation", "USD"], rows: [["Seller revenue", "Item price", "$59.99"], ["Material", "Planning input", "−$32.39"], ["Hands-on labor", "45 minutes × $24/hour", "−$18.00"], ["Protective packaging", "Assumed", "−$6.00"], ["Listing fee", "One listing", "−$0.20"], ["Transaction fee", "$59.99 × 6.5%", "−$3.90"], ["Payment processing", "$64.79 × 3% + $0.25", "−$2.19"], ["Contribution", "Before shipping and fixed costs", "−$2.69"]] } },
+      { id: "target-price", title: "Solve for a 30% contribution margin", paragraphs: ["Use price = fixed variable costs ÷ (1 − percentage fees − target margin). Here, fixed variable costs are $32.39 material + $18 labor + $6 packaging + $0.20 listing + $0.25 fixed processing, or $56.84. Percentage fees are 6.5% plus 3% payment processing applied to price plus the illustrative 8% sales tax, or 9.74% of the item price.", "$56.84 ÷ (1 − 0.0974 − 0.30) = $94.32, so this model rounds the working price to $95. At $95, the transaction fee is about $6.18 and payment processing is about $3.33. The order leaves about $28.91, a 30.4% contribution margin, before shipping, fixed overhead, advertising, returns, and income taxes. Add any seller-paid shipping to cost before solving the formula again."], sources: ["sba"] },
+      { id: "offsite-ads", title: "Stress-test Offsite Ads and monthly break-even", paragraphs: ["Etsy says an attributed Offsite Ads order may incur a 15% fee for shops below the policy threshold or 12% for shops that meet it, subject to its current participation rules. On a $95 order, those fees are $14.25 or $11.40. The modeled contribution falls from $28.91 to about $14.66 or $17.51 before shipping and fixed overhead.", "With no attributed Offsite Ads fee and an illustrative $250 of monthly fixed costs, nine whole orders cover the monthly amount because $250 ÷ $28.91 = 8.65. That does not repay setup spending or prove nine orders will arrive; it only converts the cost assumptions into an operating threshold."], sources: ["fees", "sba"] },
+      { id: "offer", title: "Protect the wedding deadline in the offer", paragraphs: ["A wedding sign has a fixed event date and customized content, so the offer needs more than dimensions and color. State how many digital proofs are included, the buyer’s approval deadline, the production lead time after approval, the rush fee, and what happens when submitted names or dates are wrong. Confirm how the sign will stand, hang, or fit the venue before production.", "Test one format with one buyer segment such as planners, venues, or couples. Quote a small paid batch or one paid event order, then compare estimated and actual hands-on time, packing, remakes, and carrier charges. Record paid orders as demand evidence; views and favorites do not validate the price."] },
+    ],
+    sources: [
+      { id: "fees", title: "Etsy Help — Fees and taxes for selling on Etsy", url: "https://help.etsy.com/hc/en-us/articles/115014483627-What-are-the-Fees-and-Taxes-for-Selling-on-Etsy" },
+      { id: "payments", title: "Etsy Help — Payment processing fees by country", url: "https://help.etsy.com/hc/en-us/articles/115015628847-What-are-Payment-Processing-Fees-for-Selling-on-Etsy" },
+      { id: "sba", title: "U.S. Small Business Administration — Break-even point", url: "https://www.sba.gov/business-guide/plan-your-business/calculate-your-startup-costs/break-even-point" },
+    ],
+    faq: [{ question: "Is $95 the market price for an acrylic wedding sign?", answer: "No. It is the price produced by this article’s cost and margin assumptions. Compare it with actual buyer responses and replace every assumed cost with your records." }, { question: "Does the $95 example include shipping?", answer: "No. Measure the packed sign, obtain a destination-specific carrier quote, and add seller-paid shipping before solving the price again." }, { question: "Should I include free revisions?", answer: "Include a defined number of proofs or revisions in the priced labor allowance. Charge separately or re-quote when buyer changes exceed that scope." }],
+    tool: { href: "/calculator/laser-roi?product=acrylic-wedding-signs", label: "Model an acrylic sign offer" },
+  },
 ];
 
 export function guidePath(slug: string) { return `/learn/${slug}/`; }
 export function guideStructuredData(guide: MakerGuide, base: string, language: "en-US" | "zh-CN" = "en-US") {
   const url = `${base}${guidePath(guide.slug)}`;
   return { "@context": "https://schema.org", "@graph": [
-    { "@type": "Article", "@id": `${url}#article`, headline: guide.title, description: guide.description, abstract: guide.answer, mainEntityOfPage: url, url, inLanguage: language, datePublished: guideDate, dateModified: guideDate, image: `${base}${guide.image}`, author: { "@type": "Organization", "@id": `${base}/#organization`, name: "Maker Business Lab", url: `${base}/about/` }, publisher: { "@id": `${base}/#organization` }, citation: guide.sources.map(source => source.url) },
+    { "@type": "Article", "@id": `${url}#article`, headline: guide.title, description: guide.description, abstract: guide.answer, mainEntityOfPage: url, url, inLanguage: language, datePublished: guide.publishedDate, dateModified: guide.reviewedDate, image: `${base}${guide.image}`, author: { "@type": "Organization", "@id": `${base}/#organization`, name: "Maker Business Lab", url: `${base}/about/` }, publisher: { "@id": `${base}/#organization` }, citation: guide.sources.map(source => source.url) },
     { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: language === "zh-CN" ? "首页" : "Home", item: `${base}/` }, { "@type": "ListItem", position: 2, name: language === "zh-CN" ? "学习" : "Learn", item: `${base}/learn/` }, { "@type": "ListItem", position: 3, name: guide.title, item: url }] },
   ] };
 }

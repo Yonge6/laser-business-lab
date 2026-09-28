@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { makerGuides, guideDate, guidePath } from "@/lib/learn/guides";
+import { makerGuides, guidePath } from "@/lib/learn/guides";
 import { makerGuidesZh } from "@/lib/learn/guides-zh";
 import { MakerGuideReader } from "@/components/marketing/maker-guide-reader";
 
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const guide = makerGuides.find(item => item.slug === slug);
   if (!guide) notFound();
   return { title: { absolute: guide.title }, description: guide.description, alternates: { canonical: guidePath(slug) },
-    openGraph: { title: guide.title, description: guide.description, url: `${base}${guidePath(slug)}`, siteName: "Maker Business Lab", type: "article", locale: "en_US", publishedTime: guideDate, modifiedTime: guideDate, authors: [`${base}/about/`], images: [{ url: `${base}${guide.image}`, alt: guide.title }] },
+    openGraph: { title: guide.title, description: guide.description, url: `${base}${guidePath(slug)}`, siteName: "Maker Business Lab", type: "article", locale: "en_US", publishedTime: guide.publishedDate, modifiedTime: guide.reviewedDate, authors: [`${base}/about/`], images: [{ url: `${base}${guide.image}`, alt: guide.title }] },
     twitter: { card: "summary_large_image", title: guide.title, description: guide.description, images: [`${base}${guide.image}`] },
   };
 }

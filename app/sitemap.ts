@@ -1,4 +1,4 @@
-import { makerGuides, guidePath, guideDate } from "@/lib/learn/guides";
+import { makerGuides, guidePath } from "@/lib/learn/guides";
 import type { MetadataRoute } from "next";
 import operationsState from "@/content/operations/state.json";
 import { getRadarArchiveDates } from "@/lib/operations/radar-archive";
@@ -40,6 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     images: [`${base}${project.imagePath}`],
   }));
 
-  const guides = makerGuides.map(guide => ({ url: `${base}${guidePath(guide.slug)}`, lastModified: new Date(`${guideDate}T00:00:00.000Z`), changeFrequency: "monthly" as const, priority: .8, images: [`${base}${guide.image}`] }));
+  const guides = makerGuides.map(guide => ({ url: `${base}${guidePath(guide.slug)}`, lastModified: new Date(`${guide.reviewedDate}T00:00:00.000Z`), changeFrequency: "monthly" as const, priority: .8, images: [`${base}${guide.image}`] }));
   return [...core, ...growthPages, ...projectPages, ...radarArchive, ...guides];
 }
