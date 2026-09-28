@@ -9,9 +9,12 @@ import { buildLlmsText } from "@/app/llms.txt/route";
 
 describe("U.S. guide discovery and source integrity", () => {
   it("publishes unique articles with resolvable sources, images, and section anchors", () => {
-    expect(new Set(makerGuides.map(guide => guide.slug)).size).toBe(3);
+    expect(new Set(makerGuides.map(guide => guide.slug)).size).toBe(4);
+    expect(new Set(makerGuides.map(guide => guide.image)).size).toBe(makerGuides.length);
     for (const guide of makerGuides) {
       expect(existsSync(`public${guide.image}`)).toBe(true);
+      expect(guide.publishedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(guide.reviewedDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(new Set(guide.sections.map(section => section.id)).size).toBe(guide.sections.length);
       for (const section of guide.sections) {
         for (const id of section.sources ?? []) expect(guide.sources.some(source => source.id === id && source.url.startsWith("https://"))).toBe(true);
@@ -26,7 +29,7 @@ describe("U.S. guide discovery and source integrity", () => {
       expect(urls).toContain(url);
       expect(buildLlmsText()).toContain(url);
       const article = guideStructuredData(guide, "https://maker.wonderelian.com")["@graph"][0];
-      expect(article).toMatchObject({ headline: guide.title, abstract: guide.answer, mainEntityOfPage: url, inLanguage: "en-US", citation: guide.sources.map(source => source.url) });
+      expect(article).toMatchObject({ headline: guide.title, abstract: guide.answer, mainEntityOfPage: url, inLanguage: "en-US", datePublished: guide.publishedDate, dateModified: guide.reviewedDate, citation: guide.sources.map(source => source.url) });
     }
   });
   it("attributes raw external component destinations without losing product selection or fragment", () => {
@@ -45,6 +48,8 @@ describe("Chinese guide parity", () => {
       const chinese = makerGuidesZh.find(item => item.slug === english.slug)!;
       expect(chinese.title).toMatch(/[\u4e00-\u9fff]/);
       expect(chinese.image).toBe(english.image);
+      expect(chinese.publishedDate).toBe(english.publishedDate);
+      expect(chinese.reviewedDate).toBe(english.reviewedDate);
       expect(chinese.tool.href).toBe(english.tool.href);
       expect(chinese.sources.map(item => item.url)).toEqual(english.sources.map(item => item.url));
       expect(chinese.sources.every(item => Boolean(item.title))).toBe(true);

@@ -1540,9 +1540,10 @@ html[lang="zh-CN"] body :where(
 
 /* U.S. maker guides: readable editorial pages with visible source trails. */
 .guide-shelf { padding-block: 64px; }
-.guide-shelf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line, #cbc7bf); }
-.guide-preview { display: flex; flex-direction: column; color: inherit; text-decoration: none; min-width: 0; }
-.guide-preview + .guide-preview { border-left: 1px solid var(--line, #cbc7bf); }
+.guide-shelf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line, #cbc7bf); }
+.guide-preview { display: flex; flex-direction: column; color: inherit; text-decoration: none; min-width: 0; border-bottom: 1px solid var(--line, #cbc7bf); }
+.guide-preview:nth-child(even) { border-left: 1px solid var(--line, #cbc7bf); }
+.guide-preview:nth-last-child(-n + 2) { border-bottom: 0; }
 .guide-preview-image { overflow: hidden; aspect-ratio: 16/9; background: #e4dfd6; }
 .guide-preview-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .2s; }
 .guide-preview:hover img { transform: scale(1.03); }
@@ -1592,7 +1593,8 @@ html[lang="zh-CN"] body :where(
 @media (max-width: 760px) {
   .guide-shelf { padding-block: 40px; }
   .guide-shelf-grid { grid-template-columns: 1fr; }
-  .guide-preview + .guide-preview { border-left: 0; border-top: 1px solid #cbc7bf; }
+  .guide-preview, .guide-preview:nth-child(even), .guide-preview:nth-last-child(-n + 2) { border-left: 0; border-bottom: 1px solid #cbc7bf; }
+  .guide-preview:last-child { border-bottom: 0; }
   .guide-preview-image { aspect-ratio: 2.2; }
   .guide-preview-copy { padding: 20px; }
   .guide-layout { display: block; }
