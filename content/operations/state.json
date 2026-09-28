@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-09-28",
+  "lastRunDate": "2026-09-29",
   "weekStarted": "2026-09-28",
   "activeOpportunityId": "acrylic-wedding-signs",
-  "activeLens": "demand",
+  "activeLens": "price",
   "sequence": 6,
   "history": [
     {
