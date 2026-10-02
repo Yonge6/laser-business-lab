@@ -1,4 +1,4 @@
-# Maker Business Lab iOS 1.1 Release Checklist
+# Maker Business Lab iOS 1.2 Release Checklist
 
 - [x] Native SwiftUI navigation shell with live website content and offline cache fallback
 - [x] English default and Simplified Chinese in-app language switch
@@ -7,6 +7,8 @@
 - [x] Build 13 adds the brighter red-and-gold profit icon and compact native header
 - [x] Live first-party H5 content with last-rendered-page fallback
 - [x] Local language preference
+- [x] Consent-first anonymous usage analytics separated from H5 events
+- [x] Calculator amounts, free text, and personal content excluded from analytics
 - [x] Transparent calculation boundaries and no income promises
 - [x] GPT Image 2 app icon and Radar hero asset
 - [x] Unit tests and simulator launch

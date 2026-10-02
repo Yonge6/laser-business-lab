@@ -42,6 +42,9 @@ struct AppShellView: View {
         .onChange(of: appState.language) { _, language in
             webViewPool.applyLanguage(language)
         }
+        .onChange(of: appState.analyticsConsent) { _, enabled in
+            webViewPool.applyAnalyticsConsent(enabled)
+        }
         .onChange(of: appState.selectedTab) { _, tab in
             webViewPool.activate(tab: tab, language: appState.language)
         }
@@ -360,6 +363,23 @@ struct NativeSiteDrawer: View {
             Text(appState.text("STAY IN THE LOOP", "保持联系"))
                 .font(.title2)
                 .fontWeight(.black)
+
+            Toggle(isOn: $appState.analyticsConsent) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(appState.text("Share anonymous usage", "分享匿名使用数据"))
+                        .font(.subheadline.bold())
+                    Text(appState.text(
+                        "Helps improve the App. Calculator amounts and personal content are never included.",
+                        "用于改进 App；不会包含计算金额或个人内容。"
+                    ))
+                    .font(.caption)
+                    .foregroundStyle(Brand.muted)
+                }
+            }
+            .tint(Brand.red)
+            .padding(14)
+            .background(.white)
+            .overlay(Rectangle().stroke(Brand.ink.opacity(0.25)))
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 ForEach(contacts) { item in

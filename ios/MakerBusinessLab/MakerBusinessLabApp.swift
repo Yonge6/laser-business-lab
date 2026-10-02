@@ -15,6 +15,8 @@ struct MakerBusinessLabApp: App {
 }
 
 final class AppState: ObservableObject {
+    static let analyticsConsentKey = "maker.analyticsConsent.v1"
+
     enum Language: String, CaseIterable, Identifiable {
         case english = "en"
         case chinese = "zh-Hans"
@@ -27,6 +29,9 @@ final class AppState: ObservableObject {
     @Published var selectedTab: Int
     @Published var isDrawerOpen: Bool
     @Published private(set) var savedIDs: Set<String>
+    @Published var analyticsConsent: Bool {
+        didSet { UserDefaults.standard.set(analyticsConsent, forKey: Self.analyticsConsentKey) }
+    }
 
     init() {
         let arguments = ProcessInfo.processInfo.arguments
@@ -35,6 +40,7 @@ final class AppState: ObservableObject {
         let tabs = ["home": 0, "opportunities": 1, "calculator": 2, "radar": 3, "learn": 4, "saved": 4]
         selectedTab = tabs[screenshotTab ?? "home"] ?? 0
         isDrawerOpen = arguments.contains("-screenshot-drawer")
+        analyticsConsent = UserDefaults.standard.bool(forKey: Self.analyticsConsentKey)
 
         if let index = arguments.firstIndex(of: "-screenshot-language"), arguments.indices.contains(index + 1) {
             language = Language(rawValue: arguments[index + 1]) ?? .english

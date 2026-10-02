@@ -36,6 +36,10 @@ final class MakerWebViewPool: ObservableObject {
         sessions.values.forEach { $0.applyLanguage(language) }
     }
 
+    func applyAnalyticsConsent(_ enabled: Bool) {
+        sessions.values.forEach { $0.applyAnalyticsConsent(enabled) }
+    }
+
     func activate(tab index: Int, language: AppState.Language, forceRefresh: Bool = false) {
         let path = Self.paths.indices.contains(index) ? Self.paths[index] : "/"
         let session = session(for: path)
@@ -110,25 +114,10 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
         didStartInitialLoad = true
         isLoading = true
 
-        let rules = #"""
-        [
-          {"trigger":{"url-filter":".*googletagmanager\\.com.*"},"action":{"type":"block"}},
-          {"trigger":{"url-filter":".*google-analytics\\.com.*"},"action":{"type":"block"}}
-        ]
-        """#
-
-        WKContentRuleListStore.default().compileContentRuleList(
-            forIdentifier: "MakerBusinessLabNativePrivacy",
-            encodedContentRuleList: rules
-        ) { [weak self] ruleList, _ in
-            Task { @MainActor in
-                guard let self else { return }
-                if let ruleList {
-                    self.webView.configuration.userContentController.add(ruleList)
-                }
-                self.loadPage(cachePolicy: Self.freshCachePolicy)
-            }
-        }
+        configureAnalyticsPolicy(
+            enabled: UserDefaults.standard.bool(forKey: AppState.analyticsConsentKey),
+            reloadAfterChange: false
+        )
     }
 
     func reload() {
@@ -201,6 +190,55 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
         currentLanguage = language
         guard didStartInitialLoad else { return }
         webView.evaluateJavaScript(MakerSiteWebView.languageScript(for: language))
+    }
+
+    func applyAnalyticsConsent(_ enabled: Bool) {
+        configureAnalyticsPolicy(enabled: enabled, reloadAfterChange: didStartInitialLoad)
+    }
+
+    private func configureAnalyticsPolicy(enabled: Bool, reloadAfterChange: Bool) {
+        let controller = webView.configuration.userContentController
+        controller.removeAllContentRuleLists()
+
+        let finish: @MainActor () -> Void = { [weak self] in
+            guard let self else { return }
+            if reloadAfterChange {
+                self.refresh(userInitiated: false)
+            } else {
+                self.loadPage(cachePolicy: Self.freshCachePolicy)
+            }
+        }
+
+        guard !enabled else {
+            finish()
+            return
+        }
+
+        let rules = #"""
+        [
+          {"trigger":{"url-filter":".*googletagmanager\\.com.*"},"action":{"type":"block"}},
+          {"trigger":{"url-filter":".*google-analytics\\.com.*"},"action":{"type":"block"}}
+        ]
+        """#
+        WKContentRuleListStore.default().compileContentRuleList(
+            forIdentifier: "MakerBusinessLabNativePrivacy",
+            encodedContentRuleList: rules
+        ) { [weak self] ruleList, _ in
+            Task { @MainActor in
+                guard let self else { return }
+                if let ruleList { controller.add(ruleList) }
+                self.removeAnalyticsCookies()
+                finish()
+            }
+        }
+    }
+
+    private func removeAnalyticsCookies() {
+        webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
+            for cookie in cookies where cookie.name.hasPrefix("_ga") {
+                self.webView.configuration.websiteDataStore.httpCookieStore.delete(cookie)
+            }
+        }
     }
 
     private func loadPage(cachePolicy: URLRequest.CachePolicy) {
@@ -450,6 +488,7 @@ struct MakerSiteWebView: UIViewRepresentable {
         (() => {
           const locale = '\#(locale)';
           const key = 'lbl_locale';
+          window.__makerNativeApp = true;
           if (window.sessionStorage.getItem(key) !== locale) {
             window.sessionStorage.setItem(key, locale);
             document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en';

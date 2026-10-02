@@ -12,4 +12,6 @@ Review path:
 
 The app revalidates first-party content at launch, when the selected tab becomes active, and when returning from the background. Pull-to-refresh forces an origin reload. If a refresh fails after content has loaded, the app keeps the last visible page and presents a small retry banner instead of replacing it with an error screen.
 
+Anonymous usage analytics is off by default. A user can enable or disable it from the App menu. When enabled, first-party product events are labeled as iOS App activity and processed through the website's GA4 connection. Calculator inputs, calculated amounts, free text, email addresses, and other personal content are excluded.
+
 External equipment links are optional and open only after the user taps them. Attributed links include `utm_source=elian`. Prices, costs, scores, margins, and payback periods are labeled as planning estimates and not guaranteed earnings.

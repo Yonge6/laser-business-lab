@@ -17,3 +17,5 @@ export type AnalyticsEventName =
   | "share_result";
 
 export type AnalyticsProperties = Record<string, unknown>;
+
+export type MakerAnalyticsSurface = "h5" | "ios";
