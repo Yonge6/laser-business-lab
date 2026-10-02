@@ -51,12 +51,12 @@ const works = [
     taglineZh: "用 9 个全球热点看清昨日世界",
   },
   {
-    id: "human-design",
-    href: "https://human-design.wonderelian.com/",
-    name: "Bu'er · Know Yourself",
-    nameZh: "不二 · 认识自己",
-    tagline: "A bilingual manual for your life",
-    taglineZh: "一份中英双语的人生使用说明书",
+    id: "buer-within",
+    href: "https://buer.wonderelian.com/",
+    name: "Buer Within",
+    nameZh: "不二见己",
+    tagline: "Doudoulong, your AI growth companion",
+    taglineZh: "豆豆龙，你的专属 AI 成长伙伴",
   },
   {
     id: "style-atlas",
