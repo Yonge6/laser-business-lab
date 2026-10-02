@@ -246,7 +246,7 @@ struct NativeSiteDrawer: View {
         DrawerLink(title: "WonderElian", titleZh: "WonderElian", subtitle: "Make complex ideas clear, beautiful, and human", subtitleZh: "让复杂的想法变得清晰、好看而有人情味", url: "https://wonderelian.com/"),
         DrawerLink(title: "Yixiu Meditation", titleZh: "一休冥想", subtitle: "Return to the present through sound", subtitleZh: "让声音带你回到当下", url: "https://yixiu.wonderelian.com/"),
         DrawerLink(title: "Xiazi Says", titleZh: "虾子曰", subtitle: "See yesterday's world through nine global stories", subtitleZh: "用 9 个全球热点看清昨日世界", url: "https://xiazishuo.com/"),
-        DrawerLink(title: "Bu'er · Know Yourself", titleZh: "不二 · 认识自己", subtitle: "A bilingual manual for your life", subtitleZh: "一份中英双语的人生使用说明书", url: "https://human-design.wonderelian.com/"),
+        DrawerLink(title: "Buer Within", titleZh: "不二见己", subtitle: "Doudoulong, your AI growth companion", subtitleZh: "豆豆龙，你的专属 AI 成长伙伴", url: "https://buer.wonderelian.com/"),
         DrawerLink(title: "Style Atlas", titleZh: "艺术风格图鉴", subtitle: "Learn to see a style", subtitleZh: "沿着艺术与设计脉络看懂一种美", url: "https://style-atlas.wonderelian.com/"),
         DrawerLink(title: "Wendao · Daodejing", titleZh: "三慢问道", subtitle: "Read the classic slowly—and yourself with it", subtitleZh: "慢读《道德经》，也慢慢认识自己", url: "https://wendao.wonderelian.com/")
     ]

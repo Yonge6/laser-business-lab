@@ -18,4 +18,18 @@ describe("site drawer interaction contract", () => {
     expect(source).toContain("dragRef.current.distance >= 72");
     expect(source).toContain("onPointerCancel={handlePointerEnd}");
   });
+
+  it("links Buer Within with its current bilingual positioning on H5 and iOS", () => {
+    const webSource = fs.readFileSync(path.join(root, "components/marketing/site-drawer.tsx"), "utf8");
+    const iosSource = fs.readFileSync(path.join(root, "ios/MakerBusinessLab/Views/AppShellView.swift"), "utf8");
+
+    for (const source of [webSource, iosSource]) {
+      expect(source).toContain("https://buer.wonderelian.com/");
+      expect(source).toContain("Buer Within");
+      expect(source).toContain("不二见己");
+      expect(source).toContain("Doudoulong, your AI growth companion");
+      expect(source).toContain("豆豆龙，你的专属 AI 成长伙伴");
+      expect(source).not.toContain("https://human-design.wonderelian.com/");
+    }
+  });
 });
