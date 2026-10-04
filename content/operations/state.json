@@ -1,11 +1,11 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-10-04",
-  "weekStarted": "2026-09-28",
-  "activeOpportunityId": "acrylic-wedding-signs",
-  "activeLens": "review",
-  "sequence": 6,
+  "lastRunDate": "2026-10-05",
+  "weekStarted": "2026-10-05",
+  "activeOpportunityId": "personalized-tumblers",
+  "activeLens": "demand",
+  "sequence": 7,
   "history": [
     {
       "weekStarted": "2026-08-17",
@@ -34,6 +34,10 @@
     {
       "weekStarted": "2026-09-28",
       "opportunityId": "acrylic-wedding-signs"
+    },
+    {
+      "weekStarted": "2026-10-05",
+      "opportunityId": "personalized-tumblers"
     }
   ]
 }
