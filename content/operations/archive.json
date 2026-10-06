@@ -1280,6 +1280,49 @@
           "opportunityId": "personalized-tumblers"
         }
       ]
+    },
+    {
+      "version": 1,
+      "timezone": "Asia/Shanghai",
+      "lastRunDate": "2026-10-07",
+      "weekStarted": "2026-10-05",
+      "activeOpportunityId": "personalized-tumblers",
+      "activeLens": "validation",
+      "sequence": 7,
+      "history": [
+        {
+          "weekStarted": "2026-08-17",
+          "opportunityId": "personalized-tumblers"
+        },
+        {
+          "weekStarted": "2026-08-24",
+          "opportunityId": "laser-leather-patches"
+        },
+        {
+          "weekStarted": "2026-08-31",
+          "opportunityId": "heat-press-tote-bags"
+        },
+        {
+          "weekStarted": "2026-09-07",
+          "opportunityId": "layered-wood-wall-art"
+        },
+        {
+          "weekStarted": "2026-09-14",
+          "opportunityId": "3d-desk-organizers"
+        },
+        {
+          "weekStarted": "2026-09-21",
+          "opportunityId": "3d-geometric-planters"
+        },
+        {
+          "weekStarted": "2026-09-28",
+          "opportunityId": "acrylic-wedding-signs"
+        },
+        {
+          "weekStarted": "2026-10-05",
+          "opportunityId": "personalized-tumblers"
+        }
+      ]
     }
   ]
 }
