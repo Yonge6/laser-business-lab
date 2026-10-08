@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-10-08",
+  "lastRunDate": "2026-10-09",
   "weekStarted": "2026-10-05",
   "activeOpportunityId": "personalized-tumblers",
-  "activeLens": "production",
+  "activeLens": "equipment",
   "sequence": 7,
   "history": [
     {
