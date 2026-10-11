@@ -1,11 +1,11 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-10-11",
-  "weekStarted": "2026-10-05",
-  "activeOpportunityId": "personalized-tumblers",
-  "activeLens": "review",
-  "sequence": 7,
+  "lastRunDate": "2026-10-12",
+  "weekStarted": "2026-10-12",
+  "activeOpportunityId": "laser-leather-patches",
+  "activeLens": "demand",
+  "sequence": 8,
   "history": [
     {
       "weekStarted": "2026-08-17",
@@ -38,6 +38,10 @@
     {
       "weekStarted": "2026-10-05",
       "opportunityId": "personalized-tumblers"
+    },
+    {
+      "weekStarted": "2026-10-12",
+      "opportunityId": "laser-leather-patches"
     }
   ]
 }
