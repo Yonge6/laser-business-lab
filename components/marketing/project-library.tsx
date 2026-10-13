@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatCurrency } from "@/lib/format";
+import { projectCalculatorHref } from "@/lib/calculators/project-preset";
 import { makerProjects, projectMatchesMaterial, projectMaterialFilters, type MakerProject } from "@/lib/projects/project-library";
 
 const copy = {
@@ -135,7 +136,7 @@ export function ProjectLibrary({ compact = false }: { compact?: boolean }) {
               </button>
             ))}
           </div>
-          <strong>{filtered.length} {t.count}</strong>
+          <strong role="status">{filtered.length} {t.count}</strong>
         </div>
 
         <div className="project-library-grid">
@@ -179,7 +180,7 @@ export function ProjectLibrary({ compact = false }: { compact?: boolean }) {
               </dl>
               <p className="project-dialog-disclaimer">{t.disclaimer}</p>
               <div className="project-dialog-actions">
-                <Link className="button button-primary" href="/calculator/laser-roi">{t.calculate}<Calculator weight="bold" /></Link>
+                <Link className="button button-primary" href={projectCalculatorHref(selected)}>{t.calculate}<Calculator weight="bold" /></Link>
                 <Link className="button button-ghost" href={`/projects/${selected.slug}`}>{t.guide}<ArrowRight weight="bold" /></Link>
                 <TrackedExternalLink className="project-machine-link" href={selected.machineUrl} target="_blank" rel="noreferrer" analytics={{ placement: "project_library", project: selected.slug, destination: "equipment", recommendation: selected.machineName }}>
                   <span>{t.equipment}</span><strong>{selected.machineName}</strong><ArrowSquareOut weight="bold" />

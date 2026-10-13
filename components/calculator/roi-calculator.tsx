@@ -15,10 +15,11 @@ import { EmailCapture } from "@/components/results/email-capture";
 import { opportunityById } from "@/lib/opportunities/data";
 import { sitePath } from "@/lib/site";
 import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
-import { oneLaserDestinations, oneLaserOpportunityDestinations, oneLaserOpportunityNames } from "@/lib/commerce/onelaser";
+import { buildOneLaserUrl, oneLaserDestinations, oneLaserOpportunityDestinations, oneLaserOpportunityNames } from "@/lib/commerce/onelaser";
 import { getRoiEquipmentRecommendation } from "@/lib/commerce/opportunity-equipment";
 import { clampToBudget } from "@/lib/calculators/budget";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
+import { findCalculatorProject, projectRoiPreset } from "@/lib/calculators/project-preset";
 
 export type MakerMethod = "laser" | "3d-printing" | "heat-press" | "maker";
 
@@ -250,28 +251,33 @@ const initialInput: RoiInput = {
 export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const { locale } = useLanguage();
   const searchParams = useSearchParams();
-  const selectedOpportunity = opportunityById[searchParams.get("product") ?? ""];
+  const productId = searchParams.get("product") ?? "";
+  const initialOpportunity = Object.hasOwn(opportunityById, productId) ? opportunityById[productId] : undefined;
+  const initialProject = initialOpportunity ? undefined : findCalculatorProject(searchParams.get("project"));
+  const initialProduct = initialOpportunity ?? initialProject;
   const baseProductOptions = productsByMethod[method];
-  const productOptions = selectedOpportunity && !baseProductOptions.some((item) => item.value === selectedOpportunity.title)
-    ? [{ value: selectedOpportunity.title, label: selectedOpportunity.title, labelZh: selectedOpportunity.titleZh }, ...baseProductOptions]
+  const productOptions = initialProduct && !baseProductOptions.some((item) => item.value === initialProduct.title)
+    ? [{ value: initialProduct.title, label: initialProduct.title, labelZh: initialProduct.titleZh }, ...baseProductOptions]
     : baseProductOptions;
-  const [product, setProduct] = useState(selectedOpportunity?.title ?? productOptions[0].value);
+  const [product, setProduct] = useState(initialProduct?.title ?? productOptions[0].value);
+  const selectedOpportunity = product === initialOpportunity?.title ? initialOpportunity : undefined;
+  const selectedProject = product === initialProject?.title ? initialProject : undefined;
   const [step, setStep] = useState(0);
   const startedRef = useRef(false);
   const budgetOptions = budgetsByMethod[method];
   const defaultBudget = method === "laser" ? "5-8" : method === "3d-printing" || method === "heat-press" ? "500-1" : "500-3";
-  const opportunityBudget = selectedOpportunity
-    ? budgetOptions.find((option) => selectedOpportunity.startingBudget >= option.min && (option.max === undefined || selectedOpportunity.startingBudget <= option.max))
+  const opportunityBudget = initialOpportunity
+    ? budgetOptions.find((option) => initialOpportunity.startingBudget >= option.min && (option.max === undefined || initialOpportunity.startingBudget <= option.max))
     : undefined;
   const initialBudget = opportunityBudget ?? budgetOptions.find((option) => option.value === defaultBudget) ?? budgetOptions[0];
-  const [input, setInput] = useState<RoiInput>(() => selectedOpportunity ? {
+  const [input, setInput] = useState<RoiInput>(() => initialOpportunity ? {
     ...initialInput,
-    sellingPrice: selectedOpportunity.sellingPrice,
-    materialCost: selectedOpportunity.materialCost,
+    sellingPrice: initialOpportunity.sellingPrice,
+    materialCost: initialOpportunity.materialCost,
     packagingCost: 0,
-    productionMinutes: selectedOpportunity.productionMinutes,
-    machinePrice: selectedOpportunity.startingBudget,
-  } : { ...initialInput, machinePrice: initialBudget.suggested });
+    productionMinutes: initialOpportunity.productionMinutes,
+    machinePrice: initialOpportunity.startingBudget,
+  } : { ...initialInput, ...(initialProject ? projectRoiPreset(initialProject) : {}), machinePrice: initialBudget.suggested });
   const machineOptions = machinesByMethod[method];
   const [budget, setBudget] = useState(initialBudget.value);
   const [currentMachine, setCurrentMachine] = useState("none");
@@ -305,7 +311,10 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
   const MethodIcon = method === "laser" ? Sparkle : method === "3d-printing" ? Cube : method === "heat-press" ? TShirt : Target;
   const activeBudget = budgetOptions.find((option) => option.value === budget) ?? initialBudget;
   const clampMachinePrice = (value: number) => clampToBudget(value, activeBudget);
-  const equipmentRecommendation = getRoiEquipmentRecommendation(method, product, selectedOpportunity?.id);
+  const projectEquipmentUrl = selectedProject ? buildOneLaserUrl(selectedProject.machineUrl, { campaign: "roi_result", content: `roi_project_${selectedProject.slug}`, placement: "roi_report" }) : undefined;
+  const equipmentRecommendation = selectedProject
+    ? { name: selectedProject.machineName, nameZh: selectedProject.machineName, url: projectEquipmentUrl! }
+    : getRoiEquipmentRecommendation(method, product, selectedOpportunity?.id);
   const normalizedProduct = product.toLowerCase();
   const roiOneLaserOpportunityId = selectedOpportunity?.category === "laser"
     ? selectedOpportunity.id
@@ -317,9 +326,9 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
           ? "layered-wood-wall-art"
           : "laser-leather-patches";
   const roiOneLaser = {
-    id: `roi_${roiOneLaserOpportunityId}`,
-    productName: oneLaserOpportunityNames[roiOneLaserOpportunityId] ?? "OneLaser XRF",
-    destination: oneLaserOpportunityDestinations[roiOneLaserOpportunityId] ?? oneLaserDestinations.xrf,
+    id: selectedProject ? `roi_project_${selectedProject.slug}` : `roi_${roiOneLaserOpportunityId}`,
+    productName: selectedProject?.machineName ?? oneLaserOpportunityNames[roiOneLaserOpportunityId] ?? "OneLaser XRF",
+    destination: projectEquipmentUrl ?? oneLaserOpportunityDestinations[roiOneLaserOpportunityId] ?? oneLaserDestinations.xrf,
     fit: "A direct machine checkpoint matched to this product's material, working area, production speed, and repeatability needs.",
     fitZh: "根据该产品的材料、工作区域、生产速度与重复加工需求直接匹配的设备检查点。",
   };
@@ -404,11 +413,12 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
     <section className="calculator-shell shell">
       <div className="calculator-card">
         <div className={`method-context method-${method}`}><MethodIcon weight="bold" /><span>{t.path}</span><strong>{t.methods[method]}</strong></div>
-        <ol className="calculator-steps">{t.steps.map((label, index) => <li key={label} className={index === step ? "active" : index < step ? "done" : ""}><span>{index < step ? <Check weight="bold" /> : index + 1}</span><b>{label}</b></li>)}</ol>
+        <ol className="calculator-steps">{t.steps.map((label, index) => <li key={label} aria-current={index === step ? "step" : undefined} className={index === step ? "active" : index < step ? "done" : ""}><span>{index < step ? <Check weight="bold" /> : index + 1}</span><b>{label}</b></li>)}</ol>
         <div className="calculator-question">
           <p className="eyebrow">{t.step} {String(step + 1).padStart(2, "0")} / 04</p>
           <h2>{t.questions[step]}</h2>
-          {step === 0 ? <div className="choice-grid product-choices">{productOptions.map((item) => <button key={item.value} className={product === item.value ? "choice-card selected" : "choice-card"} onClick={() => setProduct(item.value)}><span>{product === item.value ? <Check weight="bold" /> : null}</span><strong>{locale === "zh" ? item.labelZh : item.label}</strong></button>)}</div> : null}
+          {initialProject ? <p className="calculator-preset-note">{locale === "zh" ? `已载入「${initialProject.titleZh}」的规划售价与示例订单量。材料成本由作品库毛利率反推，包装成本初始为零；工时和设备投资仍为通用默认值。请逐项用真实报价与试产数据替换。更换产品会保留当前数字，便于比较。` : `Loaded planning price and illustrative order volume for ${initialProject.title}. Material cost is inferred from the library margin; packaging starts at zero. Production time and equipment investment still use generic defaults. Replace these with real quotes and test-run data. Changing products keeps your current numbers for comparison.`}</p> : null}
+          {step === 0 ? <div className="choice-grid product-choices">{productOptions.map((item) => <button key={item.value} aria-pressed={product === item.value} className={product === item.value ? "choice-card selected" : "choice-card"} onClick={() => setProduct(item.value)}><span>{product === item.value ? <Check weight="bold" /> : null}</span><strong>{locale === "zh" ? item.labelZh : item.label}</strong></button>)}</div> : null}
           {step === 1 ? <div className="field-grid"><NumberField label={t.labels.selling} value={input.sellingPrice} onChange={set("sellingPrice")} prefix="$" step={1} /><NumberField label={t.labels.material} value={input.materialCost} onChange={set("materialCost")} prefix="$" step={.5} /><NumberField label={t.labels.packaging} value={input.packagingCost} onChange={set("packagingCost")} prefix="$" step={.5} /></div> : null}
           {step === 2 ? <div className="field-grid"><NumberField label={methodT.minutes} value={input.productionMinutes} onChange={set("productionMinutes")} suffix={t.minute} min={.1} /><NumberField label={t.labels.orders} value={input.monthlyOrders} onChange={set("monthlyOrders")} min={0} /><NumberField label={t.labels.days} value={input.workingDays} onChange={set("workingDays")} max={31} /><NumberField label={t.labels.hours} value={input.hoursPerDay} onChange={set("hoursPerDay")} max={24} step={.5} /></div> : null}
           {step === 3 ? <div className="field-grid"><label className="select-field"><span className="field-label">{methodT.budget}</span><select value={budget} onChange={(event) => { const next = budgetOptions.find((item) => item.value === event.target.value)!; setBudget(next.value); set("machinePrice")(next.suggested); }}>{budgetOptions.map(({ value, label, labelZh }) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label><NumberField label={methodT.machine} value={input.machinePrice} onChange={(value) => set("machinePrice")(clampMachinePrice(value))} prefix="$" step={100} min={activeBudget.min} max={activeBudget.max} /><label className="select-field"><span className="field-label">{methodT.current}</span><select value={currentMachine} onChange={(event) => setCurrentMachine(event.target.value)}>{machineOptions.map(([value, label, labelZh]) => <option key={value} value={value}>{locale === "zh" ? labelZh : label}</option>)}</select></label></div> : null}

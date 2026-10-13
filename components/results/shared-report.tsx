@@ -7,6 +7,7 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { decodeReport } from "@/lib/reports/codec";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { opportunityById } from "@/lib/opportunities/data";
+import { makerProjects } from "@/lib/projects/project-library";
 
 const productZh: Record<string, string> = {
   Tumblers: "保温杯",
@@ -42,7 +43,8 @@ export function SharedReport() {
   }
 
   const opportunity = Object.values(opportunityById).find((item) => item.title === report.product);
-  const product = zh ? opportunity?.titleZh ?? productZh[report.product] ?? report.product : report.product;
+  const project = makerProjects.find((item) => item.title === report.product);
+  const product = zh ? opportunity?.titleZh ?? project?.titleZh ?? productZh[report.product] ?? report.product : report.product;
   return (
     <main className="shared-report shell">
       <header><TrendUp weight="bold" /><div><p className="eyebrow">{zh ? "共享商业报告" : "SHARED BUSINESS REPORT"}</p><h1>{zh ? "我的 Maker 商业潜力" : "My maker business potential"}</h1><p>{product}</p></div></header>
