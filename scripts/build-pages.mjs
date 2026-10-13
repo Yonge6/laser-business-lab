@@ -1,11 +1,23 @@
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
-const result = spawnSync(process.execPath, [require.resolve("next/dist/bin/next"), "build"], {
+const build = spawn(process.execPath, [require.resolve("next/dist/bin/next"), "build"], {
   stdio: "inherit",
-  env: { ...process.env, NEXT_PUBLIC_SITE_URL: "https://maker.wonderelian.com" },
+  env: {
+    ...process.env,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://maker.wonderelian.com",
+  },
 });
 
-if (result.error) console.error(result.error);
-process.exit(result.status ?? 1);
+build.once("error", (error) => {
+  console.error("Unable to start the Pages build:", error.message);
+  process.exitCode = 1;
+});
+
+build.once("exit", (code, signal) => {
+  if (signal) {
+    console.error(`Pages build terminated by ${signal}`);
+  }
+  process.exitCode = code ?? 1;
+});

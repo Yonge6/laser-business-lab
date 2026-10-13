@@ -3,7 +3,6 @@
 import { ArrowLeft, ArrowRight, ArrowSquareOut, Check, Cube, ShareNetwork, Sparkle, Target, TrendUp, TShirt, Warning } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/components/providers/language-provider";
 import { NumberField } from "@/components/calculator/number-field";
 import { calculateRoi, type RoiInput } from "@/lib/calculators/roi";
@@ -12,12 +11,12 @@ import { encodeReport } from "@/lib/reports/codec";
 import { trackEvent } from "@/lib/analytics/client";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
 import { EmailCapture } from "@/components/results/email-capture";
-import { opportunityById } from "@/lib/opportunities/data";
 import { sitePath } from "@/lib/site";
 import { OneLaserRecommendation } from "@/components/commerce/onelaser-recommendation";
 import { buildOneLaserUrl, oneLaserDestinations, oneLaserOpportunityDestinations, oneLaserOpportunityNames } from "@/lib/commerce/onelaser";
 import { getRoiEquipmentRecommendation } from "@/lib/commerce/opportunity-equipment";
 import { clampToBudget } from "@/lib/calculators/budget";
+import { roiOpportunity } from "@/lib/calculators/roi-opportunity";
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { findCalculatorProject, projectRoiPreset } from "@/lib/calculators/project-preset";
 
@@ -248,12 +247,10 @@ const initialInput: RoiInput = {
   machinePrice: 5_599,
 };
 
-export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
+export function RoiCalculator({ method = "maker", opportunityId, projectSlug }: { method?: MakerMethod; opportunityId?: string; projectSlug?: string }) {
   const { locale } = useLanguage();
-  const searchParams = useSearchParams();
-  const productId = searchParams.get("product") ?? "";
-  const initialOpportunity = Object.hasOwn(opportunityById, productId) ? opportunityById[productId] : undefined;
-  const initialProject = initialOpportunity ? undefined : findCalculatorProject(searchParams.get("project"));
+  const initialOpportunity = roiOpportunity(opportunityId);
+  const initialProject = initialOpportunity ? undefined : findCalculatorProject(projectSlug ?? null);
   const initialProduct = initialOpportunity ?? initialProject;
   const baseProductOptions = productsByMethod[method];
   const productOptions = initialProduct && !baseProductOptions.some((item) => item.value === initialProduct.title)
@@ -356,7 +353,7 @@ export function RoiCalculator({ method = "maker" }: { method?: MakerMethod }) {
       return;
     }
     setComplete(true);
-    await trackEvent("calculator_complete", { tool: toolName, product_category: product, category: method, budget_range: budget, calculator_input: input, calculator_result: result });
+    await trackEvent("calculator_complete", { tool: toolName, product_category: product, category: method, path: window.location.pathname });
   }
 
   async function share() {

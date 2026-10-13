@@ -1,12 +1,12 @@
 "use client";
 
-import { ATTRIBUTION_KEY, deriveTouch, mergeAttribution, type Attribution } from "@/lib/attribution/storage";
+import { ATTRIBUTION_KEY, deriveTouch, mergeAttribution, withoutLandingQuery, type Attribution } from "@/lib/attribution/storage";
 
 export function readAttribution(): Attribution | null {
   if (typeof window === "undefined") return null;
   try {
     const value = JSON.parse(window.localStorage.getItem(ATTRIBUTION_KEY) ?? "null") as Attribution | null;
-    return value && value.expiresAt > Date.now() ? value : null;
+    return value && value.expiresAt > Date.now() ? withoutLandingQuery(value) : null;
   } catch {
     return null;
   }
