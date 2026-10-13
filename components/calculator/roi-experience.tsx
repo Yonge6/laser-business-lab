@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { PageHero } from "@/components/marketing/page-hero";
 import { RoiCalculator, type MakerMethod } from "@/components/calculator/roi-calculator";
 import { opportunityById } from "@/lib/opportunities/data";
+import { findCalculatorProject } from "@/lib/calculators/project-preset";
 
 const hero = {
   laser: {
@@ -42,14 +43,16 @@ const hero = {
 
 export function RoiExperience() {
   const searchParams = useSearchParams();
-  const opportunity = opportunityById[searchParams.get("product") ?? ""];
-  const method: MakerMethod = opportunity?.category ?? "maker";
+  const productId = searchParams.get("product") ?? "";
+  const opportunity = Object.hasOwn(opportunityById, productId) ? opportunityById[productId] : undefined;
+  const project = opportunity ? undefined : findCalculatorProject(searchParams.get("project"));
+  const method: MakerMethod = opportunity?.category ?? (project ? "laser" : "maker");
   const content = hero[method];
 
   return (
     <>
       <PageHero {...content} marker="ROI" />
-      <RoiCalculator method={method} />
+      <RoiCalculator key={opportunity?.id ?? project?.slug ?? "maker"} method={method} />
     </>
   );
 }

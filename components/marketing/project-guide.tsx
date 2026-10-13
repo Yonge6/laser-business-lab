@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, TrendUp
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatCurrency } from "@/lib/format";
+import { projectCalculatorHref } from "@/lib/calculators/project-preset";
 import type { MakerProject } from "@/lib/projects/project-library";
 
 export function ProjectGuide({ project }: { project: MakerProject }) {
@@ -22,7 +23,7 @@ export function ProjectGuide({ project }: { project: MakerProject }) {
           <h1>{zh ? project.titleZh : project.title}</h1>
           <p>{zh ? project.useCaseZh : project.useCase}</p>
           <div className="project-guide-actions">
-            <Link className="button button-primary" href="/calculator/laser-roi">{zh ? "用我的数据测算" : "Calculate with my numbers"}<Calculator weight="bold" /></Link>
+            <Link className="button button-primary" href={projectCalculatorHref(project)}>{zh ? "用我的数据测算" : "Calculate with my numbers"}<Calculator weight="bold" /></Link>
             <TrackedExternalLink className="button button-ghost" href={project.machineUrl} target="_blank" rel="noreferrer" analytics={{ placement: "project_guide", project: project.slug, destination: "equipment", recommendation: project.machineName }}>{zh ? "查看匹配设备" : "View matched equipment"}<ArrowSquareOut weight="bold" /></TrackedExternalLink>
           </div>
         </div>
@@ -57,7 +58,7 @@ export function ProjectGuide({ project }: { project: MakerProject }) {
         <TrackedExternalLink href={project.machineUrl} target="_blank" rel="noreferrer" analytics={{ placement: "project_guide", project: project.slug, destination: "equipment", recommendation: project.machineName }}><span>{zh ? "匹配设备" : "MATCHED EQUIPMENT"}</span><strong>{project.machineName}</strong><ArrowSquareOut weight="bold" /></TrackedExternalLink>
       </section>
 
-      <section className="project-guide-next shell"><p>{zh ? "准备测试这个方向？先把自己的售价、成本、工时和订单量放进模型。" : "Ready to test this direction? Put your own price, costs, time, and order volume into the model."}</p><Link className="button button-primary" href="/calculator/laser-roi">{zh ? "开始免费测算" : "Run the free profit model"}<ArrowRight weight="bold" /></Link></section>
+      <section className="project-guide-next shell"><p>{zh ? "准备测试这个方向？先把自己的售价、成本、工时和订单量放进模型。" : "Ready to test this direction? Put your own price, costs, time, and order volume into the model."}</p><Link className="button button-primary" href={projectCalculatorHref(project)}>{zh ? "开始免费测算" : "Run the free profit model"}<ArrowRight weight="bold" /></Link></section>
     </main>
   );
 }
