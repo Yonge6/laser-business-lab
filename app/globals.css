@@ -827,6 +827,7 @@ img { display: block; max-width: 100%; }
 .calculator-steps li.done { color: var(--red); }
 .calculator-question { min-height: 580px; padding: 54px clamp(24px, 5vw, 70px); display: flex; flex-direction: column; }
 .calculator-question h2 { font-family: var(--font-display), sans-serif; font-size: clamp(42px, 5vw, 64px); font-style: italic; line-height: .95; text-transform: uppercase; margin: 0 0 36px; }
+.calculator-preset-note { margin: 0 0 24px; padding: 16px 20px; border-left: 4px solid var(--red); background: var(--paper-strong); color: var(--muted); font-size: 13px; line-height: 1.65; }
 .product-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .number-field, .select-field { display: flex; flex-direction: column; gap: 8px; }
@@ -1423,9 +1424,9 @@ html[lang="zh-CN"] body :where(
   .field-label { font-size: 13px; }
   .number-control { min-height: 52px; }
   .number-control input { font-size: 25px; }
-  .live-score { margin-inline: 12px; padding: 20px; }
-  .live-score > div { padding: 13px 0; }
-  .live-score strong { font-size: 25px; }
+  .live-score { margin-inline: 12px; padding: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+  .live-score > div { min-width: 0; padding: 13px 0; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .live-score strong { max-width: 100%; font-size: 25px; overflow-wrap: anywhere; }
   .report-main, .report-stat { min-height: 112px; padding: 18px; }
   .report-main strong { font-size: 58px; }
   .report-stat strong { font-size: 28px; }
