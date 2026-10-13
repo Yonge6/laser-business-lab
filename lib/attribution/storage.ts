@@ -44,9 +44,17 @@ export function deriveTouch(url: URL, referrer = "", now = new Date()): Touch {
     campaign: valueOr(url.searchParams, "utm_campaign", "none"),
     content: valueOr(url.searchParams, "utm_content", "none"),
     term: valueOr(url.searchParams, "utm_term", "none"),
-    landingPage: `${url.pathname}${url.search}`,
+    landingPage: url.pathname,
     visitedAt: now.toISOString(),
   };
+}
+
+export function withoutLandingQuery(attribution: Attribution): Attribution {
+  const cleanTouch = (touch: Touch): Touch => ({
+    ...touch,
+    landingPage: touch.landingPage.split(/[?#]/, 1)[0] || "/",
+  });
+  return { ...attribution, first: cleanTouch(attribution.first), last: cleanTouch(attribution.last) };
 }
 
 export function mergeAttribution(existing: Attribution | null, touch: Touch, now = Date.now(), visitorId = crypto.randomUUID(), sessionId = crypto.randomUUID()): Attribution {

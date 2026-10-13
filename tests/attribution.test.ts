@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ATTRIBUTION_TTL_MS, attributionToSearchParams, deriveTouch, mergeAttribution } from "@/lib/attribution/storage";
+import { ATTRIBUTION_TTL_MS, attributionToSearchParams, deriveTouch, mergeAttribution, withoutLandingQuery } from "@/lib/attribution/storage";
 
 describe("attribution", () => {
   it("preserves first touch and updates attributable last touch", () => {
@@ -26,5 +26,23 @@ describe("attribution", () => {
     const params = attributionToSearchParams(attribution);
     expect(params.get("utm_source")).toBe("youtube");
     expect(params.get("visitor_id")).toBe("v");
+  });
+
+  it("keeps UTM dimensions without storing private report query data", () => {
+    const touch = deriveTouch(new URL("https://maker.wonderelian.com/report/?id=private-cost-model&utm_source=pinterest&utm_campaign=pricing#result"));
+    expect(touch.landingPage).toBe("/report/");
+    expect(touch.source).toBe("pinterest");
+    expect(touch.campaign).toBe("pricing");
+  });
+
+  it("sanitizes older stored query data while preserving first and last touches", () => {
+    const touch = deriveTouch(new URL("https://maker.wonderelian.com/?utm_source=pinterest"));
+    const original = mergeAttribution(null, touch, 1_000, "visitor", "session");
+    original.first.landingPage = "/report/?id=private-cost-model#result";
+    const safe = withoutLandingQuery(original);
+    expect(safe.first.landingPage).toBe("/report/");
+    expect(safe.first.source).toBe("pinterest");
+    expect(safe.visitorId).toBe("visitor");
+    expect(original.first.landingPage).toContain("private-cost-model");
   });
 });
