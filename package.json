@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:pages": "NEXT_PUBLIC_SITE_URL=https://maker.wonderelian.com next build",
+    "build:pages": "node scripts/build-pages.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

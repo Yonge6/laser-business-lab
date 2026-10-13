@@ -2,13 +2,13 @@
 
 import { Lightning, TrendUp } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useMemo } from "react";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { NumberField } from "@/components/calculator/number-field";
 import { calculateTumblerProfit, type TumblerInput } from "@/lib/calculators/tumbler";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import { EstimateDisclaimer } from "@/components/results/estimate-disclaimer";
+import { createDebouncedCalculatorTracker } from "@/lib/analytics/client";
 
 const copy = {
   en: {
@@ -65,8 +65,22 @@ export function TumblerCalculator() {
   const { locale } = useLanguage();
   const t = copy[locale];
   const [input, setInput] = useState<TumblerInput>({ blankCost: 7, sellingPrice: 32, engravingMinutes: 4, ordersPerDay: 20, workingDays: 22 });
+  const usageTracker = useRef<ReturnType<typeof createDebouncedCalculatorTracker> | null>(null);
   const result = useMemo(() => calculateTumblerProfit(input), [input]);
-  const set = (key: keyof TumblerInput) => (value: number) => setInput((current) => ({ ...current, [key]: value }));
+  useEffect(() => () => usageTracker.current?.cancel(), []);
+
+  const set = (key: keyof TumblerInput) => (value: number) => {
+    if (!Number.isFinite(value) || value === input[key]) return;
+    setInput((current) => ({ ...current, [key]: value }));
+    usageTracker.current ??= createDebouncedCalculatorTracker({
+      tool: "tumbler_profit",
+      category: "laser",
+      product_category: "tumblers",
+      path: window.location.pathname,
+    });
+    // The live result counts once after the first editing burst, never on load.
+    usageTracker.current.recordEdit();
+  };
 
   return (
     <section className="tumbler-layout shell">

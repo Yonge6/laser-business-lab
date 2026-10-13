@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { Suspense, useEffect, useRef, type ReactNode } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
-import { captureAttribution } from "@/lib/attribution/client";
-import { trackEvent } from "@/lib/analytics/client";
+import { trackPageNavigation } from "@/lib/analytics/client";
 import { LanguageProvider } from "@/components/providers/language-provider";
 
-export function AppProviders({ children }: { children: ReactNode }) {
+function NavigationAnalytics() {
   const pathname = usePathname();
+  const query = useSearchParams().toString();
+  const previousNavigation = useRef<string | null>(null);
 
   useEffect(() => {
-    captureAttribution();
     if (process.env.NEXT_PUBLIC_POSTHOG_KEY && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
         api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
@@ -22,8 +22,17 @@ export function AppProviders({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    void trackEvent("page_view", { path: pathname });
-  }, [pathname]);
+    previousNavigation.current = trackPageNavigation(pathname, query, previousNavigation.current);
+  }, [pathname, query]);
 
-  return <LanguageProvider>{children}</LanguageProvider>;
+  return null;
+}
+
+export function AppProviders({ children }: { children: ReactNode }) {
+  return (
+    <LanguageProvider>
+      <Suspense fallback={null}><NavigationAnalytics /></Suspense>
+      {children}
+    </LanguageProvider>
+  );
 }
