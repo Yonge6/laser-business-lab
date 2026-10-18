@@ -1,11 +1,11 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-10-18",
-  "weekStarted": "2026-10-12",
-  "activeOpportunityId": "laser-leather-patches",
-  "activeLens": "review",
-  "sequence": 8,
+  "lastRunDate": "2026-10-19",
+  "weekStarted": "2026-10-19",
+  "activeOpportunityId": "heat-press-tote-bags",
+  "activeLens": "demand",
+  "sequence": 9,
   "history": [
     {
       "weekStarted": "2026-08-17",
@@ -42,6 +42,10 @@
     {
       "weekStarted": "2026-10-12",
       "opportunityId": "laser-leather-patches"
+    },
+    {
+      "weekStarted": "2026-10-19",
+      "opportunityId": "heat-press-tote-bags"
     }
   ]
 }
