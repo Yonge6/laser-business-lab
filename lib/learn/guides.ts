@@ -93,6 +93,142 @@ export const makerGuides: MakerGuide[] = [
     faq: [{ question: "Should I charge a setup fee for custom leather patches?", answer: "Charge enough to cover artwork checks, test engraving, fixture setup, and buyer approval. You can show that amount as a separate setup fee or recover it through a minimum quantity, but do not hide it by treating setup time as free." }, { question: "Is $11 the market price for a custom leather patch?", answer: "No. It is the current Maker Radar planning input used for this worked example. Validate your price with paid buyers and replace every assumed cost with actual records." }, { question: "Does this model include attaching the patch to a hat?", answer: "No. It models loose patches. Add the hat blank, positioning, press or sewing time, attachment consumables, rejected hats, and finished-product packaging when you sell completed caps." }],
     tool: { href: "/calculator/laser-roi?product=laser-leather-patches", label: "Model a leather patch batch" },
   },
+  {
+  "slug": "how-to-price-personalized-tote-bags",
+  "publishedDate": "2026-10-20",
+  "reviewedDate": "2026-10-20",
+  "title": "How to Price Personalized Tote Bags (U.S.)",
+  "description": "Price a ten-bag heat-transfer order with an original USD example covering materials, waste, labor, setup, fees, and a minimum-order decision.",
+  "answer": "Quote personalized totes by batch, including setup and failed materials. In this hypothetical ten-bag local-pickup order, $24 per bag leaves about $10.44 contribution after modeled materials, labor, setup, packaging, equipment, and payment costs. A single bag at the same price loses about $1.53. These are planning calculations, not market prices or earnings.",
+  "category": "TOTE BAG PRICING",
+  "image": "/images/heat-press-tote.png",
+  "sections": [
+    {
+      "id": "offer",
+      "title": "Quote one repeatable tote order",
+      "paragraphs": [
+        "This guide is for a small U.S. maker quoting ten personalized cotton totes for one local event, with one design, one print location, and local pickup. It models heat-transfer decoration, not embroidery, screen-printing equipment, or print-on-demand fulfillment. Extra names, a second side, rush delivery, and shipping require separate cost inputs.",
+        "The October 19, 2026 Maker Radar uses a $24 selling price and $7.80 materials allowance. Those are planning inputs, not observed market prices or a supplier quote. Ask for a landed quote covering the blank, transfer, inbound freight, and applicable purchase taxes. Confirm whether ten bags share one artwork file or each needs individual preparation before promising a bulk discount."
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Test the fabric, transfer, and pressure together",
+      "paragraphs": [
+        "Siser’s current application sheet lists fabric compatibility and different settings for each transfer material. It recommends testing before production because fabrics vary. Choose the exact transfer and blank first, then follow their current instructions and care requirements. A press cycle is only one part of labor: artwork checks, cutting or ordering transfers, weeding where needed, alignment, inspection, and packing also take time.",
+        "Transfer Express explains that tote straps can prevent even pressure across the print area. Check the actual bag geometry and use the press or transfer supplier’s compatible support method. Test a spare blank before a paid batch, then perform the care test specified for that material. Do not reuse cotton settings on an unidentified coated or synthetic bag. Record the blank SKU, transfer type, print size, settings, and result so a reorder is reproducible."
+      ],
+      "sources": [
+        "siser",
+        "transfer"
+      ]
+    },
+    {
+      "id": "cost",
+      "title": "Build a ten-bag cost model in USD",
+      "paragraphs": [
+        "Assume 5% of attempts consume the full $7.80 material allowance and fail inspection. Materials per accepted tote are $7.80 ÷ 0.95 = $8.2105. This is a planning allowance across repeated production, not permission to order a fractional blank. Buy enough whole spare blanks for your test and delivery plan, and track the actual rejected quantity. If failures also consume extra labor, add it; the six-minute labor allowance here is assumed to cover all production attempts per accepted tote.",
+        "Also assume six hands-on minutes per accepted bag at $24/hour, thirty minutes of setup for the whole batch, $6 total packaging, and $0.40 per accepted bag for equipment wear and consumables. The payment example is a hypothetical 3% plus $0.30 per $240 order, not an official processor rate. No sales tax, shipping charge, marketplace fee, advertising, or refund occurs in this simplified transaction. Replace those assumptions with the actual checkout and delivery costs.",
+        "The $104.39 batch contribution is money remaining after the modeled order costs. It is not net profit or owner take-home pay. Rent, subscriptions, insurance, fixed overhead, financing, income taxes, additional remakes, and unpaid test samples still need coverage. The model includes paid labor but does not demonstrate buyer demand or any real seller’s earnings."
+      ],
+      "table": {
+        "headers": [
+          "Batch item",
+          "Calculation",
+          "USD per accepted tote"
+        ],
+        "rows": [
+          [
+            "Saleable materials",
+            "$7.80 ÷ 95% yield",
+            "$8.21"
+          ],
+          [
+            "Per-bag labor",
+            "6 minutes × $24/hour",
+            "$2.40"
+          ],
+          [
+            "Batch setup",
+            "30 minutes × $24/hour ÷ 10",
+            "$1.20"
+          ],
+          [
+            "Packing",
+            "$6.00 per batch ÷ 10",
+            "$0.60"
+          ],
+          [
+            "Equipment and consumables",
+            "Assumed per accepted bag",
+            "$0.40"
+          ],
+          [
+            "Hypothetical payment fee",
+            "($240 × 3% + $0.30) ÷ 10",
+            "$0.75"
+          ],
+          [
+            "Contribution per bag",
+            "$24.00 − modeled order costs",
+            "$10.44"
+          ],
+          [
+            "Ten-bag contribution",
+            "Unrounded unit result × 10",
+            "$104.39"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "minimum",
+      "title": "Decide between a minimum quantity and a setup fee",
+      "paragraphs": [
+        "For one bag at the same $24 price, assume the same $8.2105 materials, $2.40 labor, $0.40 equipment allowance, the full $12 setup, $1.50 single-order packaging, and $1.02 hypothetical payment fee. That leaves a loss of about $1.53 before fixed overhead. A ten-piece price cannot automatically become a one-piece price. Charge for setup, use a minimum order, or offer a higher sample price.",
+        "For ten bags, a hypothetical 30% contribution target yields a planning price floor of $19.17 per bag (rounded up to the next cent): ($8.2105 + $2.40 + $1.20 + $0.60 + $0.40 + $0.03 fixed payment allocation) ÷ (1 − 3% payment fee − 30% target). This is a mathematical floor under these assumptions, not a recommended market price. Increasing waste, individual names, shipping, or platform fees raises it. A lower transfer purchase price may be offset by more artwork or weeding time."
+      ]
+    },
+    {
+      "id": "validation",
+      "title": "Validate one paid event order before adding equipment",
+      "paragraphs": [
+        "Offer one buyer segment a defined ten-bag package with written artwork approval, print area, due date, pickup arrangement, and price. Confirm that the customer may use the artwork. Keep the approved sample and order record. Quote a second print location or each additional personalization as extra work rather than assuming the original setup covers it.",
+        "After delivery, compare estimated and actual material use, acceptable quantity, hands-on time, fees, and contribution. Track paid reorders separately from page visits, quote requests, or favorites. Use the calculator as a first equipment and capacity scenario, then add the batch setup, payment, shipping, and overhead items described here to your order ledger. Invest in more capacity only when measured production constraints and paid orders justify it."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "siser",
+      "title": "Siser North America — HTV application instructions (revision September 17, 2025)",
+      "url": "https://www.siserna.com/files/heat-transfer-vinyl-instructions.pdf"
+    },
+    {
+      "id": "transfer",
+      "title": "Transfer Express — Heat printing on canvas tote bags",
+      "url": "https://blog.transferexpress.com/heat-printing-on-canvas-tote-bags/"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Is $24 the market price for a personalized tote?",
+      "answer": "No. It is the Maker Radar planning input used for this example. Validate the offer with paid buyers and obtain actual landed material quotes."
+    },
+    {
+      "question": "Do ten seconds in the press mean ten seconds of labor?",
+      "answer": "No. Include artwork preparation, transfer preparation, alignment, inspection, packing, and any remakes. Measure hands-on time for the whole batch."
+    },
+    {
+      "question": "Can I use this contribution as net profit?",
+      "answer": "No. Fixed overhead, financing, income taxes, refunds, and costs excluded from the order model still reduce the amount available to the business."
+    }
+  ],
+  "tool": {
+    "href": "/calculator/laser-roi?product=heat-press-tote-bags",
+    "label": "Model a tote bag batch"
+  }
+},
 ];
 
 export function guidePath(slug: string) { return `/learn/${slug}/`; }
