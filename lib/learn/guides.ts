@@ -186,7 +186,7 @@ export const makerGuides: MakerGuide[] = [
       "title": "Decide between a minimum quantity and a setup fee",
       "paragraphs": [
         "For one bag at the same $24 price, assume the same $8.2105 materials, $2.40 labor, $0.40 equipment allowance, the full $12 setup, $1.50 single-order packaging, and $1.02 hypothetical payment fee. That leaves a loss of about $1.53 before fixed overhead. A ten-piece price cannot automatically become a one-piece price. Charge for setup, use a minimum order, or offer a higher sample price.",
-        "For ten bags, a hypothetical 30% contribution target yields a planning price floor of about $19.17 per bag: ($8.2105 + $2.40 + $1.20 + $0.60 + $0.40 + $0.03 fixed payment allocation) ÷ (1 − 3% payment fee − 30% target). This is a mathematical floor under these assumptions, not a recommended market price. Increasing waste, individual names, shipping, or platform fees raises it. A lower transfer purchase price may be offset by more artwork or weeding time."
+        "For ten bags, a hypothetical 30% contribution target yields a planning price floor of $19.17 per bag (rounded up to the next cent): ($8.2105 + $2.40 + $1.20 + $0.60 + $0.40 + $0.03 fixed payment allocation) ÷ (1 − 3% payment fee − 30% target). This is a mathematical floor under these assumptions, not a recommended market price. Increasing waste, individual names, shipping, or platform fees raises it. A lower transfer purchase price may be offset by more artwork or weeding time."
       ]
     },
     {
