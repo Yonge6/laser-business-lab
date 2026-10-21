@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-10-21",
+  "lastRunDate": "2026-10-22",
   "weekStarted": "2026-10-19",
   "activeOpportunityId": "heat-press-tote-bags",
-  "activeLens": "validation",
+  "activeLens": "production",
   "sequence": 9,
   "history": [
     {
