@@ -43,7 +43,7 @@ describe("maker project library", () => {
       expect(makerProjects.some((project) => project.material.toLowerCase().includes(filter.toLowerCase()))).toBe(true);
     }
     const urls = new Set(sitemap().map((entry) => entry.url));
-    expect(urls.has("https://maker.wonderelian.com/projects")).toBe(true);
-    for (const project of makerProjects) expect(urls.has(`https://maker.wonderelian.com/projects/${project.slug}`)).toBe(true);
+    expect(urls.has("https://maker.wonderelian.com/projects/")).toBe(true);
+    for (const project of makerProjects) expect(urls.has(`https://maker.wonderelian.com/projects/${project.slug}/`)).toBe(true);
   });
 });

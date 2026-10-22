@@ -18,10 +18,22 @@ export type RadarArchiveSummary = {
   score: number;
 };
 
+export type RadarArchiveNavigation = {
+  previousDate?: string;
+  nextDate?: string;
+};
+
 const archive = operationsArchive as OperationsArchive;
 
 export function getRadarArchiveDates() {
   return archive.entries.map((entry) => entry.lastRunDate).sort((a, b) => b.localeCompare(a));
+}
+
+export function getRadarArchiveNavigation(date: string): RadarArchiveNavigation {
+  const dates = getRadarArchiveDates();
+  const index = dates.indexOf(date);
+  if (index === -1) return {};
+  return { previousDate: dates[index + 1], nextDate: dates[index - 1] };
 }
 
 export function getArchivedRadarBriefing(date: string) {

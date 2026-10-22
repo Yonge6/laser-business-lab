@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { RadarBriefing } from "@/components/marketing/radar-briefing";
-import { getArchivedRadarBriefing, getRadarArchiveDates, getRadarArchiveSummaries } from "@/lib/operations/radar-archive";
+import { getArchivedRadarBriefing, getRadarArchiveDates, getRadarArchiveNavigation, getRadarArchiveSummaries } from "@/lib/operations/radar-archive";
 
 export const dynamicParams = false;
 
@@ -66,5 +66,5 @@ export default async function ArchivedRadarPage({ params }: { params: Promise<{ 
     ],
   };
 
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} /><RadarBriefing state={briefing.state} archiveItems={getRadarArchiveSummaries(date)} /></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} /><RadarBriefing state={briefing.state} archiveItems={getRadarArchiveSummaries(date)} archiveNavigation={getRadarArchiveNavigation(date)} /></>;
 }

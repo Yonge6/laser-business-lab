@@ -27,7 +27,7 @@ describe("automated Maker operations", () => {
   });
 
   it("includes the Radar in the public sitemap", () => {
-    expect(sitemap().map((entry) => entry.url)).toContain("https://maker.wonderelian.com/radar");
+    expect(sitemap().map((entry) => entry.url)).toContain("https://maker.wonderelian.com/radar/");
   });
 
   it("keeps unique dated Radar snapshots with stable public routes", () => {
@@ -40,7 +40,7 @@ describe("automated Maker operations", () => {
       const briefing = getArchivedRadarBriefing(date);
       expect(briefing?.state.lastRunDate).toBe(date);
       expect(briefing?.links.radar).toBe(`/radar/${date}`);
-      expect(sitemap().map((entry) => entry.url)).toContain(`https://maker.wonderelian.com/radar/${date}`);
+      expect(sitemap().map((entry) => entry.url)).toContain(`https://maker.wonderelian.com/radar/${date}/`);
     }
   });
 
