@@ -7,11 +7,11 @@ import { ArrowRight, ArrowUpRight, Calculator, CalendarDots, CheckCircle, ClockC
 
 import { useLanguage } from "@/components/providers/language-provider";
 import { formatCurrency } from "@/lib/format";
-import type { RadarArchiveSummary } from "@/lib/operations/radar-archive";
+import type { RadarArchiveNavigation, RadarArchiveSummary } from "@/lib/operations/radar-archive";
 import { getActiveRadarBriefing, getRadarBriefing, type OperationsState } from "@/lib/operations/radar";
 import { assetPath } from "@/lib/site";
 
-export function RadarBriefing({ state, archiveItems = [] }: { state?: OperationsState; archiveItems?: RadarArchiveSummary[] }) {
+export function RadarBriefing({ state, archiveItems = [], archiveNavigation }: { state?: OperationsState; archiveItems?: RadarArchiveSummary[]; archiveNavigation?: RadarArchiveNavigation }) {
   const { locale } = useLanguage();
   const zh = locale === "zh";
   const briefing = state ? getRadarBriefing(state, `/radar/${state.lastRunDate}`) : getActiveRadarBriefing();
@@ -75,6 +75,12 @@ export function RadarBriefing({ state, archiveItems = [] }: { state?: Operations
         <Link href={links.equipment}>{zh ? "查看设备路径" : "View equipment path"}<ArrowRight weight="bold" /></Link>
       </section>
 
+      {archiveNavigation && (archiveNavigation.previousDate || archiveNavigation.nextDate) ? (
+        <nav className="operations-archive-adjacent shell" aria-label={zh ? "相邻日期雷达" : "Adjacent daily radar"}>
+          {archiveNavigation.previousDate ? <Link className="button button-ghost" rel="prev" href={`/radar/${archiveNavigation.previousDate}/`}>{zh ? "上一期" : "Previous daily radar"}<time dateTime={archiveNavigation.previousDate}>{archiveNavigation.previousDate}</time></Link> : null}
+          {archiveNavigation.nextDate ? <Link className="button button-ghost" rel="next" href={`/radar/${archiveNavigation.nextDate}/`}>{zh ? "下一期" : "Next daily radar"}<time dateTime={archiveNavigation.nextDate}>{archiveNavigation.nextDate}</time></Link> : null}
+        </nav>
+      ) : null}
       {archiveItems.length ? <RadarArchive key={briefing.state.lastRunDate} archiveItems={archiveItems} zh={zh} /> : null}
     </main>
   );

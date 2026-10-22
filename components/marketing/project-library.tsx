@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowSquareOut, Calculator, CheckCircle, Funnel, X } from "@phosphor-icons/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 
 import { TrackedExternalLink } from "@/components/analytics/tracked-external-link";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -63,6 +63,10 @@ const copy = {
     next: "下一个项目",
   },
 };
+
+export function shouldOpenProjectPreview(event: Pick<MouseEvent<HTMLAnchorElement>, "button" | "defaultPrevented" | "ctrlKey" | "metaKey" | "shiftKey" | "altKey">) {
+  return !event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey;
+}
 
 export function ProjectLibrary({ compact = false }: { compact?: boolean }) {
   const { locale } = useLanguage();
@@ -141,7 +145,11 @@ export function ProjectLibrary({ compact = false }: { compact?: boolean }) {
 
         <div className="project-library-grid">
           {shown.map((project, index) => (
-            <button key={project.slug} type="button" className="project-library-card" onClick={(event) => openProject(project, event.currentTarget)} aria-label={`${t.open}: ${locale === "zh" ? project.titleZh : project.title}`}>
+            <Link key={project.slug} href={`/projects/${project.slug}/`} prefetch={false} className="project-library-card" onClick={(event) => {
+              if (!shouldOpenProjectPreview(event)) return;
+              event.preventDefault();
+              openProject(project, event.currentTarget);
+            }} aria-haspopup="dialog" aria-label={`${t.open}: ${locale === "zh" ? project.titleZh : project.title}`}>
               <Image src={project.imagePath} alt={locale === "zh" ? `${project.titleZh}成品示例` : `${project.title} finished-product example`} width={720} height={520} loading={index < 4 && compact ? "eager" : "lazy"} />
               <span className="project-library-card-index">#{String(makerProjects.indexOf(project) + 1).padStart(2, "0")}</span>
               <span className="project-library-card-copy">
@@ -149,7 +157,7 @@ export function ProjectLibrary({ compact = false }: { compact?: boolean }) {
                 <strong>{locale === "zh" ? project.titleZh : project.title}</strong>
                 <span>{t.open}<ArrowRight weight="bold" /></span>
               </span>
-            </button>
+            </Link>
           ))}
         </div>
 
