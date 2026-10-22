@@ -1,6 +1,174 @@
-export type GuideSection = { id: string; title: string; paragraphs: string[]; bullets?: string[]; table?: { headers: string[]; rows: string[][] }; sources?: string[] };
+export type GuideSection = { id: string; title: string; paragraphs: string[]; bullets?: string[]; table?: { headers: string[]; rows: string[][] }; sources?: string[]; links?: { href: string; label: string }[] };
 export type MakerGuide = { slug: string; publishedDate: string; reviewedDate: string; title: string; description: string; answer: string; category: string; image: string; sections: GuideSection[]; sources: { id: string; title: string; url: string }[]; faq: { question: string; answer: string }[]; tool: { href: string; label: string } };
 export const makerGuides: MakerGuide[] = [
+  {
+    "slug": "3d-printer-hourly-cost",
+    "publishedDate": "2026-10-23",
+    "reviewedDate": "2026-10-23",
+    "title": "How to Calculate Your 3D Printer’s Hourly Cost",
+    "category": "3D PRINTER COSTS",
+    "description": "Calculate 3D printer cost per hour from wear, maintenance, and electricity, with an assumed USD example and realistic production-hour inputs.",
+    "image": "/images/opportunities/3d-geometric-planter.webp",
+    "answer": "For a machine-only estimate, add hourly wear, a maintenance reserve, and electricity. Wear is (purchase price − expected resale value) ÷ expected productive lifetime hours. Add maintenance per production hour and average kW × your electricity price per kWh. Our fully assumed example totals $0.274 per hour, or $1.64 for six hours. Filament, hands-on labor, failures, and selling costs still need their own treatment before you quote a customer.",
+    "sections": [
+      {
+        "id": "machine-cost",
+        "title": "What does a printer’s hourly cost include?",
+        "paragraphs": [
+          "This guide calculates the machine-time input for a desktop FDM print: a share of the printer purchase, maintenance, and electricity. It is a planning cost allocation, not a customer hourly charge or a prediction of how long a printer will last. Material and hands-on work remain separate inputs.",
+          "Start with the runtime and material weight for the actual sliced job. Prusa’s calculator accepts those values from G-code or manual entry and separates filament, electricity, labor, and machine upkeep. Treat the slicer values as estimates, then compare them with completed-job records. A six-hour print does not automatically require six hours of hands-on labor."
+        ],
+        "sources": [
+          "prusa-inputs"
+        ]
+      },
+      {
+        "id": "wear",
+        "title": "Divide purchase cost by realistic production hours",
+        "paragraphs": [
+          "Hourly wear allocation = (purchase price − expected resale value) ÷ expected productive lifetime hours. Use the same equipment scope in the purchase and resale amounts. The hours must be positive, and resale is an assumption to revisit, not guaranteed proceeds. This model spreads equipment cost across a production plan.",
+          "Here, productive hours mean occupied production print hours, including attempts that later fail. They exclude standby and downtime. If you plan by years, multiply realistic production hours per year by the years you expect to retain the machine. Do not use every calendar hour unless your records justify that capacity, and do not divide by utilization again after choosing the production-hour denominator.",
+          "No universal printer lifespan is assumed. Keep a record of the horizon, expected runtime, and resale basis. Revise those inputs when actual use, repair history, or your replacement plan changes."
+        ]
+      },
+      {
+        "id": "maintenance",
+        "title": "Budget maintenance over the same hours",
+        "paragraphs": [
+          "Maintenance reserve per hour = maintenance budget over the planning horizon ÷ production hours over that same horizon. Build the budget from your machine’s instructions, parts quotes, and service records. Include wear parts or paid servicing only where another line does not already cover them.",
+          "Prusa’s maintenance guidance for the MK4/S and MK3.9/S describes regular inspection and care of items such as axes, pulleys, and fans. That establishes a need to plan maintenance for those models; it does not establish one maintenance price or schedule for every printer. Avoid adding the entire printer purchase again as a separate replacement reserve after including the wear allocation."
+        ],
+        "sources": [
+          "prusa-maintenance"
+        ]
+      },
+      {
+        "id": "electricity",
+        "title": "Use average power or measured job energy",
+        "paragraphs": [
+          "Electricity per production hour = average watts ÷ 1,000 × your applicable price per kWh. For a measured job, electricity cost = job kWh × price per kWh. Watts describe power; kWh measures energy used over time. Include warm-up in the measured job energy and match the averaging interval to the runtime you use.",
+          "A power supply’s capacity is not a full-job measurement. For example, Prusa lists a 240 W PSU for the MK4S, while its specifications separately list 80 W at PLA settings and 120 W at ABS settings. Those are model-and-setting-specific figures, not an average for all FDM printers. A meter reading from your own workflow is a better input for your estimate.",
+          "Use the applicable price from your utility tariff. EIA explains that electricity prices vary by locality and customer type, and some tariffs vary by time of day. If a job crosses price periods, split its energy between those periods. The electricity price in the example below is only an assumption."
+        ],
+        "sources": [
+          "eia-units",
+          "prusa-power",
+          "eia-prices"
+        ]
+      },
+      {
+        "id": "example",
+        "title": "A fully assumed six-hour example in USD",
+        "paragraphs": [
+          "Assume a $900 printer, $100 resale value, and 4,000 production hours over the planning horizon. Also assume $200 of maintenance across those same hours, an average draw of 120 W, and electricity at $0.20 per kWh. Every value is invented for this calculation; none is a market price, measured printer result, or recommended lifetime.",
+          "Hourly wear is $0.20, maintenance is $0.05, and electricity is $0.024. The unrounded total is $0.274 per hour. Multiplying that by six hours gives $1.644, displayed as $1.64. Keep the unrounded rate for job calculations; multiplying a prematurely rounded $0.27 by six would give a different result.",
+          "The $1.64 covers only this example’s machine allocation and electricity. It excludes filament, job labor, design, failed-attempt adjustment, packaging, shipping, shop overhead, financing, taxes, and selling fees. It is neither a selling price nor profit."
+        ],
+        "table": {
+          "headers": [
+            "Cost line",
+            "Assumed calculation",
+            "USD"
+          ],
+          "rows": [
+            [
+              "Wear per hour",
+              "($900 − $100) ÷ 4,000 hours",
+              "$0.200 / hour"
+            ],
+            [
+              "Maintenance per hour",
+              "$200 ÷ 4,000 hours",
+              "$0.050 / hour"
+            ],
+            [
+              "Electricity per hour",
+              "120 W ÷ 1,000 × $0.20/kWh",
+              "$0.024 / hour"
+            ],
+            [
+              "Machine total per hour",
+              "$0.200 + $0.050 + $0.024",
+              "$0.274 / hour"
+            ],
+            [
+              "Six-hour machine cost",
+              "$0.274 × 6; rounded only at the end",
+              "$1.64"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "quote",
+        "title": "Carry the machine cost into a full print quote once",
+        "paragraphs": [
+          "Multiply the unrounded hourly rate by the production-attempt runtime. If using this combined rate in our full 3D-print pricing guide, replace its existing wear-and-upkeep and electricity lines together. Adding the combined rate alongside a separate electricity charge would count the same energy twice.",
+          "Track the actual time and material consumed by failed attempts. Because the lifetime-hour denominator here includes production attempts that fail, use the full guide’s successful-unit adjustment only once at the job-cost level. If you instead allocate equipment cost only across successful output hours, do not apply another failure allowance to that same allocation without changing its basis.",
+          "Continue to the full pricing guide for labor, yield, fulfillment, selling costs, and contribution. The desk-organizer and geometric-planter models below are separate product examples. They do not automatically receive this article’s hourly rate or assumptions; reconcile their inputs with your own cost record."
+        ],
+        "links": [
+          {
+            "href": "/learn/how-to-price-3d-prints/",
+            "label": "Price a 3D print for sale with the complete cost model"
+          },
+          {
+            "href": "/profit-calculators/3d-desk-organizers/",
+            "label": "Explore the desk-organizer product cost example"
+          },
+          {
+            "href": "/profit-calculators/3d-geometric-planters/",
+            "label": "Explore the geometric-planter product cost example"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "prusa-inputs",
+        "title": "Prusa Research — 3D Printing Price Calculator",
+        "url": "https://blog.prusa3d.com/3d-printing-price-calculator_38905/"
+      },
+      {
+        "id": "prusa-maintenance",
+        "title": "Prusa Knowledge Base — Regular printer maintenance (MK4/S, MK3.9/S)",
+        "url": "https://help.prusa3d.com/article/regular-printer-maintenance-mk4-s-mk3-9-s_419000"
+      },
+      {
+        "id": "eia-units",
+        "title": "U.S. Energy Information Administration — Measuring electricity",
+        "url": "https://www.eia.gov/energyexplained/electricity/measuring-electricity.php"
+      },
+      {
+        "id": "prusa-power",
+        "title": "Prusa Research — Original Prusa MK4S technical specifications",
+        "url": "https://www.prusa3d.com/product/original-prusa-mk4s-3d-printer/"
+      },
+      {
+        "id": "eia-prices",
+        "title": "U.S. Energy Information Administration — Factors affecting electricity prices",
+        "url": "https://www.eia.gov/energyexplained/electricity/prices-and-factors-affecting-prices.php"
+      }
+    ],
+    "faq": [
+      {
+        "question": "Is printer hourly cost the rate I should charge a customer?",
+        "answer": "It is one cost input. A customer quote also needs material, hands-on labor, failures, fulfillment, selling costs, and contribution. Use the complete print-pricing guide before deciding what to charge."
+      },
+      {
+        "question": "Can I use the power-supply wattage to estimate electricity?",
+        "answer": "Use measured average draw or full-job kWh when available. A PSU specification describes capacity and does not establish the draw throughout a particular print."
+      },
+      {
+        "question": "What lifetime should I enter for my 3D printer?",
+        "answer": "This guide sets no universal lifetime. Estimate production print hours over your own retention plan, document the assumptions, and revise them with actual use and repair records."
+      }
+    ],
+    "tool": {
+      "href": "/learn/how-to-price-3d-prints/",
+      "label": "Build the complete 3D-print price"
+    }
+  },
   {
     slug: "laser-engraving-business-startup-costs", publishedDate: "2026-09-23", reviewedDate: "2026-09-23", title: "Laser Engraving Business Startup Costs in the U.S.", category: "STARTUP BUDGET",
     description: "Build a U.S. laser engraving startup budget with a $5,500 worked example, operating break-even, and equipment payback scenarios in USD.",
@@ -39,7 +207,7 @@ export const makerGuides: MakerGuide[] = [
     image: "/images/opportunities/3d-desk-organizer.webp",
     answer: "Price a 3D print from its cost per successful unit, then allow for sales fees and your target contribution. Our example costs about $11.99 before channel fees and needs a $20.50 rounded-up price for a 30% contribution margin with an assumed 10% plus $0.30 fee. Filament alone costs $2.64 and misses most of the order economics.",
     sections: [
-      { id: "production", title: "Calculate the cost of one print attempt", paragraphs: ["Start with sliced material weight and runtime, then replace those estimates with measurements from completed jobs. Prusa’s calculator separates filament, electricity, labor, machine upkeep, and other costs; the same categories are useful for a small commercial quote.", "Here we assume 120 grams of filament at $22 per kilogram and a six-hour print. We assign $0.25 per machine hour for wear and upkeep. Electricity uses an assumed average draw of 120 watts and an assumed $0.18 per kWh. Neither the electricity price nor the wear rate is a U.S. average: use your bill, measurements, and replacement budget."], table: { headers: ["Production input", "Calculation", "USD / attempt"], rows: [["Filament", "0.12 kg × $22", "$2.64"], ["Machine wear", "6 hours × $0.25", "$1.50"], ["Electricity", "0.12 kW × 6 hours × $0.18", "$0.13"], ["Attempt subtotal", "Before failures and hands-on labor", "$4.27"]] }, sources: ["prusa"] },
+      { id: "production", title: "Calculate the cost of one print attempt", paragraphs: ["Start with sliced material weight and runtime, then replace those estimates with measurements from completed jobs. Prusa’s calculator separates filament, electricity, labor, machine upkeep, and other costs; the same categories are useful for a small commercial quote.", "Here we assume 120 grams of filament at $22 per kilogram and a six-hour print. We assign $0.25 per machine hour for wear and upkeep. Electricity uses an assumed average draw of 120 watts and an assumed $0.18 per kWh. Neither the electricity price nor the wear rate is a U.S. average: use your bill, measurements, and replacement budget."], table: { headers: ["Production input", "Calculation", "USD / attempt"], rows: [["Filament", "0.12 kg × $22", "$2.64"], ["Machine wear", "6 hours × $0.25", "$1.50"], ["Electricity", "0.12 kW × 6 hours × $0.18", "$0.13"], ["Attempt subtotal", "Before failures and hands-on labor", "$4.27"]] }, sources: ["prusa"], links: [{ href: "/learn/3d-printer-hourly-cost/", label: "Calculate your printer’s hourly cost" }] },
       { id: "failure", title: "Convert attempts into successful units", paragraphs: ["If 10% of attempts fail and each failure consumes a full attempt’s production cost, the success rate is 90%. Divide the unrounded $4.2696 attempt cost by 0.90: expected production cost is $4.744 per successful unit. Multiplying by 1.10 would understate the repeated attempts needed.", "This is deliberately a simple loss model. Early failures may use less material and energy; cleanup may add more labor. Track actual failed material, occupied machine time, and recovery work. Add 15 minutes of hands-on labor at $24 per hour ($6) and $1.25 packaging per successful item. The modeled unit cost becomes $11.994, or about $11.99 before channel fees. It excludes shipping, design work, fixed overhead, and taxes."] },
       { id: "price", title: "Solve for a price that leaves a contribution", paragraphs: ["For an assumed sales channel charging 10% of revenue plus $0.30 per order, and a target contribution margin of 30%, use: price = (unit cost + fixed order fee) ÷ (1 − percentage fee − target margin). These are hypothetical channel fees, not Etsy’s fee schedule.", "With unrounded inputs, ($11.994 + $0.30) ÷ (1 − 0.10 − 0.30) = $20.49. Rounding up to the next $0.10 gives $20.50. At that price, the model leaves about $6.16 per order before fixed expenses and income taxes. The denominator must be positive; a fee percentage and target margin adding to 100% cannot produce a finite price.", "A 30% markup is different: multiplying cost by 1.30 does not produce a 30% margin, especially after fees. If you pay for shipping, add it to unit cost first. If design work is bespoke, price it separately or allocate its paid time to the actual number of units ordered."] },
       { id: "capacity", title: "Check machine hours and hands-on hours separately", paragraphs: ["A six-hour print does not necessarily require six hours of paid labor. It does occupy a machine for six hours, and that capacity limits how many orders you can promise. Measure setup, support removal, finishing, quality checks, packing, and buyer communication as hands-on work.", "Batch printing can reduce setup time, but a failed plate can affect multiple units. Validate the batch process before assuming every print-bed position is saleable capacity. Leave room for maintenance and reprints when setting delivery dates; theoretical round-the-clock output is not a production commitment."] },
