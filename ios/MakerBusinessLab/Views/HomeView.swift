@@ -1,9 +1,40 @@
 import SwiftUI
 import WebKit
 
+/// Maps every own-site page to a persistent native tab without dropping query or fragment state.
+struct MakerSiteDestination {
+    static let rootPaths = ["/", "/opportunities/", "/calculator/", "/radar/", "/learn/"]
+    let url: URL
+    let tabIndex: Int
+    var rootPath: String { Self.rootPaths[tabIndex] }
+
+    init?(path: String) {
+        guard let components = URLComponents(string: path),
+              components.scheme == nil, components.host == nil,
+              path.hasPrefix("/"), !path.hasPrefix("//"),
+              let resolved = URL(string: path, relativeTo: URL(string: "https://maker.wonderelian.com")!)?.absoluteURL,
+              var destination = URLComponents(url: resolved, resolvingAgainstBaseURL: false),
+              destination.host == "maker.wonderelian.com" else { return nil }
+        var query = destination.queryItems ?? []
+        query.removeAll { $0.name == "app" }
+        query.append(URLQueryItem(name: "app", value: "ios"))
+        destination.queryItems = query
+        guard let url = destination.url else { return nil }
+        self.url = url
+        let section = url.path.split(separator: "/").first.map(String.init) ?? ""
+        switch section {
+        case "opportunities", "ideas", "projects", "saved": tabIndex = 1
+        case "calculator", "profit-calculators", "equipment", "report": tabIndex = 2
+        case "radar": tabIndex = 3
+        case "learn": tabIndex = 4
+        default: tabIndex = 0
+        }
+    }
+}
+
 @MainActor
 final class MakerWebViewPool: ObservableObject {
-    static let paths = ["/", "/opportunities/", "/calculator/", "/radar/", "/learn/"]
+    static let paths = MakerSiteDestination.rootPaths
 
     private let sessions: [String: MakerWebViewSession]
     private var didBeginPrewarming = false
@@ -63,6 +94,9 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
     @Published private(set) var canGoBack = false
     @Published private(set) var lastSuccessfulRefresh: Date?
 
+    private var navigationObservations: [NSKeyValueObservation] = []
+    private var requestedURL: URL?
+    private var isPrivacyPolicyReady = false
     private var didStartInitialLoad = false
     private var didAttemptOfflineFallback = false
     private var currentLanguage: AppState.Language = .english
@@ -90,6 +124,14 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
         webView = WKWebView(frame: .zero, configuration: configuration)
         super.init()
 
+        navigationObservations = [
+            webView.observe(\.url, options: [.new]) { [weak self] _, _ in
+                Task { @MainActor [weak self] in self?.refreshNavigationState() }
+            },
+            webView.observe(\.canGoBack, options: [.new]) { [weak self] _, _ in
+                Task { @MainActor [weak self] in self?.refreshNavigationState() }
+            }
+        ]
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true
@@ -107,6 +149,7 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
 
     func loadIfNeeded(language: AppState.Language) {
         currentLanguage = language
+        installDocumentScripts(language: language)
         guard !didStartInitialLoad else {
             applyLanguage(language)
             return
@@ -118,6 +161,21 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
             enabled: UserDefaults.standard.bool(forKey: AppState.analyticsConsentKey),
             reloadAfterChange: false
         )
+    }
+
+    func navigate(to url: URL, language: AppState.Language) {
+        guard url.scheme == "https", url.host == "maker.wonderelian.com" else { return }
+        if Self.isRootURL(url, for: path), url.queryItemsOnlyContainApp {
+            returnToRoot(language: language)
+            return
+        }
+        requestedURL = url
+        applyLanguage(language)
+        if didStartInitialLoad {
+            loadPage(cachePolicy: Self.freshCachePolicy)
+        } else {
+            loadIfNeeded(language: language)
+        }
     }
 
     func reload() {
@@ -162,7 +220,12 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
     }
 
     func returnToRoot(language: AppState.Language) {
-        currentLanguage = language
+        applyLanguage(language)
+        requestedURL = nil
+        guard didStartInitialLoad else {
+            loadIfNeeded(language: language)
+            return
+        }
 
         if Self.isRootURL(webView.url, for: path) {
             webView.scrollView.setContentOffset(.zero, animated: true)
@@ -188,8 +251,22 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
 
     func applyLanguage(_ language: AppState.Language) {
         currentLanguage = language
+        installDocumentScripts(language: language)
         guard didStartInitialLoad else { return }
         webView.evaluateJavaScript(MakerSiteWebView.languageScript(for: language))
+    }
+
+    private func installDocumentScripts(language: AppState.Language) {
+        let controller = webView.configuration.userContentController
+        controller.removeAllUserScripts()
+        controller.addUserScript(WKUserScript(
+            source: MakerSiteWebView.languageScript(for: language),
+            injectionTime: .atDocumentStart, forMainFrameOnly: true
+        ))
+        controller.addUserScript(WKUserScript(
+            source: MakerSiteWebView.nativeShellScript(),
+            injectionTime: .atDocumentEnd, forMainFrameOnly: true
+        ))
     }
 
     func applyAnalyticsConsent(_ enabled: Bool) {
@@ -197,11 +274,13 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
     }
 
     private func configureAnalyticsPolicy(enabled: Bool, reloadAfterChange: Bool) {
+        isPrivacyPolicyReady = false
         let controller = webView.configuration.userContentController
         controller.removeAllContentRuleLists()
 
         let finish: @MainActor () -> Void = { [weak self] in
             guard let self else { return }
+            self.isPrivacyPolicyReady = true
             if reloadAfterChange {
                 self.refresh(userInitiated: false)
             } else {
@@ -242,14 +321,18 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
     }
 
     private func loadPage(cachePolicy: URLRequest.CachePolicy) {
+        // A quick menu selection must wait for the consent policy to be installed.
+        guard isPrivacyPolicyReady else { return }
         var components = URLComponents(string: "https://maker.wonderelian.com")!
         components.path = path
         components.queryItems = [URLQueryItem(name: "app", value: "ios")]
-        guard let url = components.url else { return }
+        guard let url = requestedURL ?? components.url else { return }
 
         var request = URLRequest(url: url)
         request.cachePolicy = cachePolicy
         request.timeoutInterval = 30
+        errorMessage = nil
+        isLoading = true
         webView.load(request)
     }
 
@@ -300,7 +383,7 @@ final class MakerWebViewSession: NSObject, ObservableObject, WKNavigationDelegat
     }
 
     private func refreshNavigationState() {
-        canGoBack = webView.canGoBack && !Self.isRootURL(webView.url, for: path)
+        canGoBack = webView.url != nil && !Self.isRootURL(webView.url, for: path)
     }
 
     func webView(
@@ -463,8 +546,10 @@ struct MakerSiteWebView: UIViewRepresentable {
       const nativeCSS = `
         .site-header { display: none !important; }
         .mobile-bottom-nav { display: none !important; }
-        body { padding-bottom: 112px !important; }
-        html { scroll-padding-bottom: 112px !important; }
+        /* SwiftUI reserves the real bar/safe-area space, including vertical bars on Duo. */
+        body { padding-bottom: 0 !important; }
+        html { scroll-padding-top: 16px !important; scroll-padding-bottom: 16px !important; }
+        .guide-contents nav, .live-score, .seo-evidence-panel, .content-page header { top: 16px !important; }
       `;
       const installNativeStyles = () => {
         let style = document.getElementById('maker-native-ios-shell');
@@ -514,5 +599,12 @@ struct MetricChip: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
         .background(Brand.cream)
+    }
+}
+
+private extension URL {
+    var queryItemsOnlyContainApp: Bool {
+        fragment == nil && (URLComponents(url: self, resolvingAgainstBaseURL: false)?.queryItems ?? [])
+            .allSatisfy { $0.name == "app" }
     }
 }

@@ -57,4 +57,36 @@ final class ProfitCalculatorTests: XCTestCase {
         XCTAssertTrue(DrawerLayout.shouldDismiss(translation: 73, predictedTranslation: 80))
         XCTAssertTrue(DrawerLayout.shouldDismiss(translation: 45, predictedTranslation: 140))
     }
+    func testInternalDestinationsStayInTheirNativeTabAndKeepState() throws {
+        let calculator = try XCTUnwrap(MakerSiteDestination(path: "/calculator/machine-finder/?product=planter&app=web#results"))
+        XCTAssertEqual(calculator.tabIndex, 2)
+        XCTAssertEqual(calculator.rootPath, "/calculator/")
+        let components = try XCTUnwrap(URLComponents(url: calculator.url, resolvingAgainstBaseURL: false))
+        XCTAssertEqual(components.fragment, "results")
+        XCTAssertEqual(components.queryItems?.filter { $0.name == "app" }.map(\.value), ["ios"])
+        XCTAssertEqual(components.queryItems?.first { $0.name == "product" }?.value, "planter")
+        for path in ["/projects/", "/projects/a-project/", "/saved/", "/ideas/tumbler/"] {
+            XCTAssertEqual(MakerSiteDestination(path: path)?.rootPath, "/opportunities/")
+        }
+        XCTAssertEqual(MakerSiteDestination(path: "/learn/how-to-price-3d-prints/")?.tabIndex, 4)
+        XCTAssertEqual(MakerSiteDestination(path: "/radar/2026-10-24/")?.tabIndex, 3)
+        XCTAssertEqual(MakerSiteDestination(path: "/privacy/")?.tabIndex, 0)
+    }
+
+    func testNativeRouterRejectsExternalDestinations() {
+        for path in ["https://www.1laser.com/", "//example.com/", "mailto:test@example.com", "relative"] {
+            XCTAssertNil(MakerSiteDestination(path: path))
+        }
+    }
+
+    func testLanguagePreferenceIsInstalledForFutureDocuments() {
+        let session = MakerWebViewSession(path: "/learn/")
+        session.applyLanguage(.chinese)
+        let scripts = session.webView.configuration.userContentController.userScripts
+        XCTAssertTrue(scripts.contains { $0.source.contains("const locale = 'zh'") && $0.injectionTime == .atDocumentStart })
+        XCTAssertFalse(scripts.contains { $0.source.contains("const locale = 'en'") })
+        session.applyLanguage(.english)
+        XCTAssertEqual(session.webView.configuration.userContentController.userScripts.count, 2)
+    }
+
 }
