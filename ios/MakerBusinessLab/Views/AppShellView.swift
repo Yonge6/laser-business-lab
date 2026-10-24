@@ -29,7 +29,7 @@ struct AppShellView: View {
             .toolbarColorScheme(.light, for: .tabBar)
 
             if appState.isDrawerOpen {
-                NativeDrawerOverlay()
+                NativeDrawerOverlay(onNavigate: openSitePath)
                     .transition(.opacity)
                     .zIndex(100)
             }
@@ -54,6 +54,13 @@ struct AppShellView: View {
         }
         .sensoryFeedback(.selection, trigger: appState.selectedTab)
         .sensoryFeedback(.selection, trigger: appState.language)
+    }
+
+    private func openSitePath(_ path: String) {
+        guard let destination = MakerSiteDestination(path: path) else { return }
+        appState.selectedTab = destination.tabIndex
+        webViewPool.session(for: destination.rootPath).navigate(to: destination.url, language: appState.language)
+        appState.isDrawerOpen = false
     }
 
     private func returnHome() {
@@ -127,20 +134,22 @@ struct BrandHeader: View {
         }
     }
 
-    @ViewBuilder
     private var brandTitle: some View {
-        let title = Text("MAKER BUSINESS LAB")
+        ViewThatFits(in: .horizontal) {
+            brandText("MAKER BUSINESS LAB")
+            brandText("MAKER LAB")
+        }
+        .accessibilityLabel("Maker Business Lab")
+    }
+
+    private func brandText(_ title: String) -> some View {
+        Text(title)
             .font(.system(size: 18, weight: .black))
             .fontWidth(.condensed)
             .tracking(-0.3)
-            .minimumScaleFactor(0.72)
             .lineLimit(1)
-
-        if appState.language == .english {
-            title.italic()
-        } else {
-            title
-        }
+            .fixedSize(horizontal: true, vertical: false)
+            .italic(appState.language == .english)
     }
 
     private func languageButton(_ title: String, language: AppState.Language) -> some View {
@@ -150,7 +159,7 @@ struct BrandHeader: View {
             Text(title)
                 .font(.system(.subheadline, weight: .black))
                 .foregroundStyle(appState.language == language ? .white : Brand.ink)
-                .frame(width: 36, height: 40)
+                .frame(width: 44, height: 44)
                 .background(appState.language == language ? Brand.red : Brand.cream)
         }
         .buttonStyle(.plain)
@@ -176,6 +185,7 @@ enum DrawerLayout {
 
 struct NativeDrawerOverlay: View {
     @EnvironmentObject private var appState: AppState
+    let onNavigate: (String) -> Void
     @GestureState private var dragOffset: CGFloat = 0
 
     var body: some View {
@@ -191,7 +201,7 @@ struct NativeDrawerOverlay: View {
                     .accessibilityLabel(appState.text("Close menu", "关闭菜单"))
                     .accessibilityAddTraits(.isButton)
 
-                NativeSiteDrawer()
+                NativeSiteDrawer(onNavigate: onNavigate)
                     .frame(width: width)
                     .background(Brand.cream)
                     .clipShape(.rect(topLeadingRadius: 16, bottomLeadingRadius: 16))
@@ -219,7 +229,6 @@ struct NativeDrawerOverlay: View {
                     }
             }
         }
-        .ignoresSafeArea(edges: .horizontal)
     }
 
     private func close() {
@@ -228,19 +237,27 @@ struct NativeDrawerOverlay: View {
 }
 
 extension View {
+    @ViewBuilder
     func makerAppHeader(
         canGoBack: Bool = false,
         onBack: @escaping () -> Void = {},
         onHome: @escaping () -> Void = {}
     ) -> some View {
-        safeAreaInset(edge: .top, spacing: 0) {
-            BrandHeader(canGoBack: canGoBack, onBack: onBack, onHome: onHome)
+        if #available(iOS 26.0, *) {
+            safeAreaBar(edge: .top, spacing: 0) {
+                BrandHeader(canGoBack: canGoBack, onBack: onBack, onHome: onHome)
+            }
+        } else {
+            safeAreaInset(edge: .top, spacing: 0) {
+                BrandHeader(canGoBack: canGoBack, onBack: onBack, onHome: onHome)
+            }
         }
     }
 }
 
 struct NativeSiteDrawer: View {
     @EnvironmentObject private var appState: AppState
+    let onNavigate: (String) -> Void
 
     private let works = [
         DrawerLink(title: "WonderElian", titleZh: "WonderElian", subtitle: "Make complex ideas clear, beautiful, and human", subtitleZh: "让复杂的想法变得清晰、好看而有人情味", url: "https://wonderelian.com/"),
@@ -333,9 +350,11 @@ struct NativeSiteDrawer: View {
             nativeNavRow(index: "01", title: appState.text("Home", "首页"), icon: "house.fill", tab: 0)
             nativeNavRow(index: "02", title: appState.text("Find an opportunity", "发现赚钱机会"), icon: "scope", tab: 1)
             nativeNavRow(index: "03", title: appState.text("Calculate profit", "测算利润"), icon: "plus.forwardslash.minus", tab: 2)
-            externalNavRow(index: "04", title: appState.text("Match equipment", "匹配设备"), icon: "hammer.fill", url: "https://maker.wonderelian.com/calculator/machine-finder/")
+            siteNavRow(index: "04", title: appState.text("Match equipment", "匹配设备"), icon: "hammer.fill", path: "/calculator/machine-finder/")
             nativeNavRow(index: "05", title: appState.text("Opportunity radar", "机会雷达"), icon: "waveform.path.ecg", tab: 3)
             nativeNavRow(index: "06", title: appState.text("Maker playbook", "Maker 赚钱指南"), icon: "book.fill", tab: 4)
+            siteNavRow(index: "07", title: appState.text("Project library", "项目库"), icon: "square.grid.2x2", path: "/projects/")
+            siteNavRow(index: "08", title: appState.text("Saved opportunities", "收藏的机会"), icon: "bookmark.fill", path: "/saved/")
         }
         .overlay(Rectangle().stroke(Brand.ink, lineWidth: 1))
     }
@@ -431,10 +450,11 @@ struct NativeSiteDrawer: View {
         .buttonStyle(.plain)
     }
 
-    private func externalNavRow(index: String, title: String, icon: String, url: String) -> some View {
-        Link(destination: trackedURL(url)) {
-            navRow(index: index, title: title, icon: icon, external: true)
+    private func siteNavRow(index: String, title: String, icon: String, path: String) -> some View {
+        Button { onNavigate(path) } label: {
+            navRow(index: index, title: title, icon: icon, external: false)
         }
+        .buttonStyle(.plain)
     }
 
     private func navRow(index: String, title: String, icon: String, external: Bool) -> some View {
@@ -474,14 +494,17 @@ struct NativeSiteDrawer: View {
     }
 
     private func legalLink(_ title: String, _ url: String) -> some View {
-        Link(title, destination: trackedURL(url))
+        Button(title) {
+            if let path = URL(string: url)?.path { onNavigate(path) }
+        }
+            .buttonStyle(.plain)
             .font(.caption.bold())
             .foregroundStyle(Brand.ink)
     }
 
     private func selectTab(_ tab: Int) {
-        appState.selectedTab = tab
-        appState.isDrawerOpen = false
+        guard MakerWebViewPool.paths.indices.contains(tab) else { return }
+        onNavigate(MakerWebViewPool.paths[tab])
     }
 
     private func trackedURL(_ rawValue: String) -> URL {
