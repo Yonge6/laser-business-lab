@@ -20,4 +20,4 @@ The native app loads the production H5 content in persistent WKWebView tabs. Cur
 
 ## Validation
 
-See docs/plans/2026-10-24-app-parity-duo.md for scope and Apple references. Build, simulator checks and store asset evidence will be recorded before the change is marked complete. A source PR or local build is not an App Store release.
+See docs/plans/2026-10-24-app-parity-duo.md for scope and Apple references, and docs/plans/2026-10-24-app-parity-duo-validation.md for exact results. Latest source and test bundle compile/package validation completed with Xcode 27.1. Unit execution, Duo UI checks and real store screenshots remain blocked by an unresponsive simulator service. A source PR or local build is not an App Store release.
