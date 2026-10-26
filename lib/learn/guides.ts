@@ -1,6 +1,193 @@
 export type GuideSection = { id: string; title: string; paragraphs: string[]; bullets?: string[]; table?: { headers: string[]; rows: string[][] }; sources?: string[]; links?: { href: string; label: string }[] };
 export type MakerGuide = { slug: string; publishedDate: string; reviewedDate: string; title: string; description: string; answer: string; category: string; image: string; sections: GuideSection[]; sources: { id: string; title: string; url: string }[]; faq: { question: string; answer: string }[]; tool: { href: string; label: string } };
 export const makerGuides: MakerGuide[] = [
+{
+  "slug": "shipping-laser-cut-wall-art-us",
+  "publishedDate": "2026-10-27",
+  "reviewedDate": "2026-10-27",
+  "title": "Ship Laser-Cut Wall Art: U.S. Packaging & Cost Guide",
+  "description": "Plan U.S. shipping for layered wood wall art: compare packed size and dimensional weight, then test an original USD contribution example before offering delivery.",
+  "answer": "Pack a finished sample before quoting delivery. Measure and weigh the sealed parcel, obtain a service-specific quote, and subtract both packing and postage from order revenue. A light wall hanging can still have a high billable weight. In our fully assumed $89 order, $18 postage leaves $13.70 before fixed overhead and income taxes; $30 postage leaves only $1.70.",
+  "category": "PACKAGING & SHIPPING",
+  "image": "/images/opportunities/layered-wood-wall-art.webp",
+  "sections": [
+    {
+      "id": "pack-first",
+      "title": "Make the packed wall art a product specification",
+      "paragraphs": [
+        "This guide is for U.S. makers shipping layered, laser-cut wood wall art in their own rectangular cartons. Start with one finished size, layer count, finish, hanging method, and packing method. A drawing’s outside dimensions cannot tell you the finished parcel’s thickness or weight. Build a sample with the actual backing, spacers, hardware, and protective materials before promising shipping included in the price.",
+        "USPS recommends strong packaging with cushioning that keeps fragile contents from shifting. For your prototype, check how raised layers, delicate cutouts, and hardware contact the packing material. Photograph the packing sequence and weigh the sealed box. These are proposed workshop checks, not a certified packaging test or a guarantee against damage. If the protection is inadequate, redesign the pack or the product before accepting orders."
+      ],
+      "sources": [
+        "usps-pack"
+      ]
+    },
+    {
+      "id": "dimensional-weight",
+      "title": "Separate actual weight, dimensional weight, and postage",
+      "paragraphs": [
+        "Actual weight comes from the parcel on a scale. Dimensional weight converts occupied space into a weight used for billing under the chosen carrier’s rules. Neither number is a dollar quote. The price still depends on the service, origin, destination, shipping date, account rate, and applicable charges. Enter the sealed parcel’s exterior dimensions, including any bulge, rather than the carton’s advertised interior size.",
+        "USPS Priority Mail currently applies dimensional weight to qualifying own-box parcels larger than 1,728 cubic inches. Its Domestic Mail Manual uses volume divided by 139, rounded up to a whole pound, and compares that result with actual weight. UPS lists a divisor of 139 for Daily Rates and 166 for Retail Rates, with the result rounded up to a whole pound. Check the specific service and rate type; the USPS threshold is not a universal exemption for other carriers."
+      ],
+      "sources": [
+        "usps-priority",
+        "ups-dimensions"
+      ]
+    },
+    {
+      "id": "size-example",
+      "title": "Two assumed cartons show why size needs its own quote",
+      "paragraphs": [
+        "Consider two hypothetical wall-art formats whose sealed parcels each weigh exactly 5 lb. The measurements below are exact whole-inch exterior dimensions, so this example does not resolve carriers’ fractional-inch measurement rules. These are geometry and billing-weight illustrations, not tested packaging designs or carrier price quotes.",
+        "The 22 × 22 × 4 inch parcel occupies 1,936 cubic inches. Under the cited Priority Mail DIM calculation, 1,936 ÷ 139 is about 13.93 lb, giving a 14 lb DIM weight after rounding up. The 20 × 20 × 4 inch parcel occupies 1,600 cubic inches, below that service’s volume threshold. Under UPS Daily Rates, however, 1,600 ÷ 139 rounds up to 12 lb. Obtain a fresh quote including any other applicable charges in every case.",
+        "The smaller parcel could require a smaller finished artwork or a different validated packing design. Do not strip out needed edge or surface protection merely to reduce a billing number. Compare complete product-and-package options: paid price, delivered condition, hands-on work, packing cost, and actual carrier invoice. A lower dimensional weight alone does not establish a cheaper or more reliable order."
+      ],
+      "sources": [
+        "usps-priority",
+        "ups-dimensions"
+      ],
+      "bullets": [
+        "20 × 20 × 4 in; 5 lb actual — 1,600 cu in — Below 1,728 cu in threshold — 1,600 ÷ 139 → 12 lb",
+        "22 × 22 × 4 in; 5 lb actual — 1,936 cu in — 1,936 ÷ 139 → 14 lb — 1,936 ÷ 139 → 14 lb"
+      ]
+    },
+    {
+      "id": "contribution",
+      "title": "Carry shipping into the $89 wall-art order",
+      "paragraphs": [
+        "The current layered-wood-wall-art planning model starts at $89 item revenue and $24 material cost. Those are site assumptions, not observed sales or supplier quotes. For this example, assume shipping is included in the $89 and add 35 minutes of hands-on work at $24/hour, 55 minutes of machine time at an all-in assumed $8/hour, $3 of finishing consumables, $6 of protective packaging, and $18 postage.",
+        "Assume a direct-sale payment charge of 3% plus $0.30 on the $89 payment. This is a hypothetical fee, not an official processor tariff; it models no sales tax collected or remitted. Replace it with the actual processor’s fee base and any applicable tax handling. Marketplace commissions, advertising, remakes, returns, fixed workshop overhead, financing, and income taxes are excluded. The $8 machine rate is an assumption that already includes its operating allowance; do not add the same costs again.",
+        "Calculate with unrounded inputs. The order leaves about $13.70, or 15.4% of $89, for the excluded costs and business profit. If the carrier quote is $30 instead of $18 and everything else stays constant, that falls to about $1.70. A further $3 packing increase would make it negative $1.30. This sensitivity is arithmetic, not a prediction of actual shipping charges or net income."
+      ],
+      "table": {
+        "headers": [
+          "Order line",
+          "Assumed calculation",
+          "USD"
+        ],
+        "rows": [
+          [
+            "Seller revenue",
+            "Item with shipping included",
+            "$89.00"
+          ],
+          [
+            "Wood materials",
+            "Planning input",
+            "−$24.00"
+          ],
+          [
+            "Hands-on work",
+            "35 minutes × $24/hour",
+            "−$14.00"
+          ],
+          [
+            "Machine allocation",
+            "55 minutes ÷ 60 × $8/hour",
+            "−$7.33"
+          ],
+          [
+            "Finishing consumables",
+            "Assumed, separate from wood",
+            "−$3.00"
+          ],
+          [
+            "Protective packaging",
+            "Assumed",
+            "−$6.00"
+          ],
+          [
+            "Postage",
+            "Assumed; replace with packed-parcel quote",
+            "−$18.00"
+          ],
+          [
+            "Payment charge",
+            "3% × $89 + $0.30",
+            "−$2.97"
+          ],
+          [
+            "Contribution",
+            "Before excluded costs and income taxes",
+            "$13.70"
+          ]
+        ]
+      },
+      "links": [
+        {
+          "href": "/profit-calculators/layered-wood-wall-art/",
+          "label": "Compare the initial layered wood wall art cost model"
+        }
+      ]
+    },
+    {
+      "id": "quote-record",
+      "title": "Record a quote for each size and destination",
+      "paragraphs": [
+        "Create one quote record per finished-size and packing combination. Record the packing material cost, time to pack, sealed dimensions, actual weight, origin and destination ZIP Codes, carrier service, rate type, quote date, and total quoted charge. Keep the carrier invoice alongside the order afterward so an adjustment does not disappear into a general workshop expense.",
+        "Before offering nationwide shipping included, quote a small set of destinations that reflects the buyers you intend to serve. This is a planning exercise, not evidence that orders will come from those locations. If larger formats fail the contribution test, test a higher delivered price, a smaller format, buyer-paid shipping, or a clearly defined local pickup offer. Buyer-paid shipping still needs a channel-specific fee calculation; moving postage onto a separate line does not automatically remove selling fees.",
+        "Describe the finished dimensions, hanging hardware, production lead time, and delivery terms in the offer. Keep production time separate from carrier transit estimates. Confirm any deadline with the chosen service rather than converting an estimated delivery window into a promise."
+      ]
+    },
+    {
+      "id": "pilot",
+      "title": "Validate one paid shipment before expanding the range",
+      "paragraphs": [
+        "Run a small paid pilot using the exact artwork and package you intend to repeat. Record accepted production yield, assembly and packing minutes, the postage invoice, delivered condition reported by the buyer, and any replacement work. One successful delivery is useful process evidence; it is not proof of a stable damage rate or broad market demand.",
+        "Revise the order model using those records before adding a larger wall-art size or buying more cutting capacity. Use the calculator for production and payback planning, then reconcile shipping, selling fees, and the excluded costs separately. The next decision is whether this specific shipped offer leaves enough contribution to operate, not whether a light piece of wood looks inexpensive to mail."
+      ],
+      "links": [
+        {
+          "href": "/learn/laser-engraving-business-startup-costs/",
+          "label": "Separate order contribution from startup cash and payback"
+        },
+        {
+          "href": "/learn/how-to-price-acrylic-wedding-signs/",
+          "label": "Compare the separate pricing model for acrylic event signs"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "usps-pack",
+      "title": "USPS — How to Send a Package: Domestic",
+      "url": "https://www.usps.com/ship/packages.htm"
+    },
+    {
+      "id": "usps-priority",
+      "title": "USPS Domestic Mail Manual — Priority Mail: prices and dimensional weight",
+      "url": "https://pe.usps.com/text/dmm300/123.htm"
+    },
+    {
+      "id": "ups-dimensions",
+      "title": "UPS — Package Dimensions, Size Limits and Weight Guide",
+      "url": "https://www.ups.com/us/en/support/shipping-support/shipping-dimensions-weight"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Can I quote shipping from the dimensions of the wall art?",
+      "answer": "No. Quote the sealed parcel, including backing, hardware, cushioning, box, and tape. Use its exterior dimensions and actual weight with the selected carrier’s rules and a current destination-specific quote."
+    },
+    {
+      "question": "Does staying below one cubic foot remove dimensional weight for every carrier?",
+      "answer": "No. The 1,728 cubic inch threshold discussed here is specific to the cited USPS Priority Mail own-box rule. UPS has its own rate and service rules. Do not reuse one carrier’s threshold as another carrier’s exemption."
+    },
+    {
+      "question": "Is the example’s $18 postage a current shipping rate?",
+      "answer": "No. It is an assumed USD input used to show contribution sensitivity. No origin, destination, shipping date, or account tariff has been quoted. Replace it with the total charge for your actual packed parcel."
+    },
+    {
+      "question": "Should I remove cushioning to get a smaller parcel?",
+      "answer": "Keep enough protection for the artwork. Test a smaller finished format or a different protective packing design instead of treating a billing threshold as a packaging specification. This article does not certify packaging or promise damage-free delivery."
+    }
+  ],
+  "tool": {
+    "href": "/calculator/laser-roi?product=layered-wood-wall-art",
+    "label": "Model wall art production and payback"
+  }
+},
   {
     "slug": "3d-printer-hourly-cost",
     "publishedDate": "2026-10-23",

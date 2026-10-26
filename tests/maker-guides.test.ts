@@ -11,7 +11,7 @@ import { buildLlmsText } from "@/app/llms.txt/route";
 
 describe("U.S. guide discovery and source integrity", () => {
   it("publishes unique articles with resolvable sources, images, and section anchors", () => {
-    expect(new Set(makerGuides.map(guide => guide.slug)).size).toBe(7);
+    expect(new Set(makerGuides.map(guide => guide.slug)).size).toBe(8);
     expect(new Set(makerGuides.map(guide => guide.image)).size).toBe(makerGuides.length);
     for (const guide of makerGuides) {
       expect(existsSync(`public${guide.image}`)).toBe(true);
