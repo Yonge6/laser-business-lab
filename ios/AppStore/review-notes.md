@@ -8,7 +8,10 @@ Review path:
 2. Opportunities opens product details, planning assumptions, and optional external equipment links.
 3. Calculate updates contribution margin and payback from user-entered assumptions in the app's first-party web content.
 4. Radar shows the weekly product focus and current daily validation task.
-5. Learn opens bilingual U.S.-focused business guides.
+5. Learn opens complete English and Chinese U.S.-focused business guides.
+6. Open the native menu for Project Library, Saved opportunities, Equipment Finder, About, Privacy, and Disclaimer. These first-party destinations remain inside the app. Use native Back to return, and Home to restore the selected section root.
+
+Version 1.3 uses the iOS 27.1 SDK and supports resizing across iPhone Duo inner and outer displays, portrait, landscape, and fold transitions. Language selection persists when navigating to later pages. Bookmarks stay in the device's local website data store; no cross-device account synchronization is claimed.
 
 The app revalidates first-party content at launch, when the selected tab becomes active, and when returning from the background. Pull-to-refresh forces an origin reload. If a refresh fails after content has loaded, the app keeps the last visible page and presents a small retry banner instead of replacing it with an error screen.
 

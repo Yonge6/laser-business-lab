@@ -1,6 +1,6 @@
 # Maker 1.3 (16) validation — 2026-10-24
 
-Status: source implementation complete; native runtime verification BLOCKED. PR remains a draft. No App Store build, submission, release, or Duo screenshot upload has occurred.
+Historical 2026-10-24 attempt. The simulator blocker was resolved after DevSSD migration. Current build, runtime and store evidence is recorded in [2026-10-26 validation](2026-10-26-app-store-validation.md). The blocked results below describe only the earlier attempt.
 
 ## Completed evidence
 
@@ -31,7 +31,7 @@ No real app screenshot or UI interaction was accepted. Inner/outer geometry was 
 - Mount: /Volumes/MakerDuoQA-20261024
 - Dedicated QA device: 5DDB8FDD-AA64-481C-AB8E-5CAE6A8A6F27 (data is symlinked from default device set into this task-owned APFS image)
 
-Do not reset the global simulator service while another project's simulator is active without user permission. A permission question is pending in the conversation.
+Do not reset the global simulator service while another project's simulator is active without user permission. No shared service restart was performed; the later SSD-backed default device set resolved the environment blocker.
 
 ## Remaining acceptance gate
 

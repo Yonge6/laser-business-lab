@@ -1,0 +1,506 @@
+[
+  {
+    "asset": "iphone/en/home.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-en-home.png",
+    "rawSha256": "9210395e873634690db3046ddd8bc4b679cfbd90eb1c0635c58b87afd74eb793",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/en/opportunities.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-en-opportunities.png",
+    "rawSha256": "b1a125f8095b1ead9d7d60759487ab0ee661c908e40b8067a97995f1ea6bc891",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/en/calculator.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-en-calculator.png",
+    "rawSha256": "62ad631635584d751924bb7189afa9356a6178d682a34c8031a8082a5d0d6674",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/en/radar.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-en-radar.png",
+    "rawSha256": "1e22ece96945de49eb6521bff5559c054301ec2ee40164d137f22e615a151ff8",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/en/learn.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-en-learn.png",
+    "rawSha256": "9ff6caf93263679132ba657ce0869d153a5cb5564dd6ec9098c7e8c33af55fe1",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone-large/en/home.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-en-home.png",
+    "rawSha256": "9210395e873634690db3046ddd8bc4b679cfbd90eb1c0635c58b87afd74eb793",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/en/opportunities.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-en-opportunities.png",
+    "rawSha256": "b1a125f8095b1ead9d7d60759487ab0ee661c908e40b8067a97995f1ea6bc891",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/en/calculator.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-en-calculator.png",
+    "rawSha256": "62ad631635584d751924bb7189afa9356a6178d682a34c8031a8082a5d0d6674",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/en/radar.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-en-radar.png",
+    "rawSha256": "1e22ece96945de49eb6521bff5559c054301ec2ee40164d137f22e615a151ff8",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/en/learn.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-en-learn.png",
+    "rawSha256": "9ff6caf93263679132ba657ce0869d153a5cb5564dd6ec9098c7e8c33af55fe1",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-duo/en/home.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-en-home.png",
+    "rawSha256": "2ebcf54c61e0c44b27b94d8d6d1e02bfe8f80aaddc5bc9357a495f43659f15fc",
+    "frame": [
+      339,
+      834,
+      1330,
+      1890
+    ]
+  },
+  {
+    "asset": "iphone-duo/en/opportunities.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-en-opportunities.png",
+    "rawSha256": "6c9275d2a962aa4024e0dc81d2b42754018293f07546b664a3484c4759aa2c1a",
+    "frame": [
+      339,
+      834,
+      1330,
+      1890
+    ]
+  },
+  {
+    "asset": "iphone-duo/en/calculator.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-en-calculator.png",
+    "rawSha256": "93f637957a91526e156d0af1d9ba5cbf9cf9d124f9155566d5d54fe5c6f6becf",
+    "frame": [
+      339,
+      834,
+      1330,
+      1890
+    ]
+  },
+  {
+    "asset": "iphone-duo/en/radar.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-en-radar.png",
+    "rawSha256": "b5f0bbe9c6fb660c146f0ec73f29a1a3be78a9bd88df5c3d358e89232d5d46c2",
+    "frame": [
+      339,
+      834,
+      1330,
+      1890
+    ]
+  },
+  {
+    "asset": "iphone-duo/en/learn.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-en-learn.png",
+    "rawSha256": "54558bb7ba5838dc9090d27b219b6b441b8033fcb1197fb29baf1d5ef2df04b3",
+    "frame": [
+      339,
+      834,
+      1330,
+      1890
+    ]
+  },
+  {
+    "asset": "iphone-duo/en/home-outer.png",
+    "size": [
+      1398,
+      2034
+    ],
+    "raw": "duo-outer-en-home.png",
+    "rawSha256": "4ca03b73768d83ca0c1b5259b570a9a37a05c2a0d44ca834762121086ae3c158"
+  },
+  {
+    "asset": "creative/en/header.png",
+    "size": [
+      3840,
+      1646
+    ],
+    "raw": "qa-landscape-duo-inner-en-home.png",
+    "rawSha256": "7a4f56696058e4d6a43fa479d88c1163d0df582141339d5df9c76ed2562365d5"
+  },
+  {
+    "asset": "creative/en/search.png",
+    "size": [
+      3840,
+      2560
+    ],
+    "raw": "duo-inner-en-home.png",
+    "rawSha256": "2ebcf54c61e0c44b27b94d8d6d1e02bfe8f80aaddc5bc9357a495f43659f15fc"
+  },
+  {
+    "asset": "iphone/zh/home.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-zh-home.png",
+    "rawSha256": "e542393f862c4b0f220b3ade6a513365a517f4a501ee3e7b437e4b2f48837096",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/zh/opportunities.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-zh-opportunities.png",
+    "rawSha256": "53500b63455fb36863167dd1716dbcf8579907ea398cb348b6e28ff838f62966",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/zh/calculator.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-zh-calculator.png",
+    "rawSha256": "bbdc1d0ae88550e5056449cc0be24134e50d7bfdf2a3eedf1100c45c8d542e3d",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/zh/radar.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-zh-radar.png",
+    "rawSha256": "d69f39c33ed1e7c726196ec702b33ca6cfb60db535b293116ffcf44f00c00ebc",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone/zh/learn.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "raw": "iphone-zh-learn.png",
+    "rawSha256": "54145571e33716db6ec54c8774a5eccd4575c8c471a705ffd49047dc5ed9d887",
+    "frame": [
+      183,
+      682,
+      838,
+      1822
+    ]
+  },
+  {
+    "asset": "iphone-large/zh/home.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-zh-home.png",
+    "rawSha256": "e542393f862c4b0f220b3ade6a513365a517f4a501ee3e7b437e4b2f48837096",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/zh/opportunities.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-zh-opportunities.png",
+    "rawSha256": "53500b63455fb36863167dd1716dbcf8579907ea398cb348b6e28ff838f62966",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/zh/calculator.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-zh-calculator.png",
+    "rawSha256": "bbdc1d0ae88550e5056449cc0be24134e50d7bfdf2a3eedf1100c45c8d542e3d",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/zh/radar.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-zh-radar.png",
+    "rawSha256": "d69f39c33ed1e7c726196ec702b33ca6cfb60db535b293116ffcf44f00c00ebc",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-large/zh/learn.png",
+    "size": [
+      1320,
+      2868
+    ],
+    "raw": "iphone-zh-learn.png",
+    "rawSha256": "54145571e33716db6ec54c8774a5eccd4575c8c471a705ffd49047dc5ed9d887",
+    "frame": [
+      201,
+      746,
+      917,
+      1993
+    ]
+  },
+  {
+    "asset": "iphone-duo/zh/home.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-zh-home.png",
+    "rawSha256": "89a566994734b683e0096e3724bd0f05824e1d23e5317df1f79082f95881d1ac",
+    "frame": [
+      327,
+      800,
+      1354,
+      1925
+    ]
+  },
+  {
+    "asset": "iphone-duo/zh/opportunities.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-zh-opportunities.png",
+    "rawSha256": "7e3a1facdfb2657fee0979e3d5c7083ae07703f01cf3705fad151c74630cdb40",
+    "frame": [
+      327,
+      800,
+      1354,
+      1925
+    ]
+  },
+  {
+    "asset": "iphone-duo/zh/calculator.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-zh-calculator.png",
+    "rawSha256": "ed25c2ef7d1ce3d51d029faf51489fa7463c60baa575f1be884937b52f3b1f48",
+    "frame": [
+      327,
+      800,
+      1354,
+      1925
+    ]
+  },
+  {
+    "asset": "iphone-duo/zh/radar.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-zh-radar.png",
+    "rawSha256": "4a2db24dc6e9bda0d2b0ae4b8fb5c1f77798945d4beb475c6483fba860b539b9",
+    "frame": [
+      327,
+      800,
+      1354,
+      1925
+    ]
+  },
+  {
+    "asset": "iphone-duo/zh/learn.png",
+    "size": [
+      2007,
+      2853
+    ],
+    "raw": "duo-inner-zh-learn.png",
+    "rawSha256": "18563a188c0eae645847e3c01605f03108c424b47f2eefb3151bd342d49cb69e",
+    "frame": [
+      327,
+      800,
+      1354,
+      1925
+    ]
+  },
+  {
+    "asset": "iphone-duo/zh/home-outer.png",
+    "size": [
+      1398,
+      2034
+    ],
+    "raw": "duo-outer-zh-home.png",
+    "rawSha256": "c84392692db363975bb3b919aec3d30eab326b4b05807412a5322505cc660a6f"
+  },
+  {
+    "asset": "creative/zh/header.png",
+    "size": [
+      3840,
+      1646
+    ],
+    "raw": "qa-landscape-duo-inner-zh-home.png",
+    "rawSha256": "746e98e484c9f1d937e2cf36c81ddb34240cd1da3da7e6dc8a899c32d8bc1056"
+  },
+  {
+    "asset": "creative/zh/search.png",
+    "size": [
+      3840,
+      2560
+    ],
+    "raw": "duo-inner-zh-home.png",
+    "rawSha256": "89a566994734b683e0096e3724bd0f05824e1d23e5317df1f79082f95881d1ac"
+  }
+]

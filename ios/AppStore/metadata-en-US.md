@@ -4,36 +4,40 @@
 Maker Business Lab
 
 ## Subtitle
-Profitable Maker Product Ideas
+Product Ideas, Costs & Pricing
 
 ## Promotional Text
-Compare maker product ideas, model real contribution margin, follow the daily opportunity radar, and match the right production setup before you invest.
+Find a product to test. Model costs and pricing, match equipment, and follow bilingual maker guides and the opportunity radar. No account required.
 
 ## Keywords
-maker,side hustle,laser,3D printing,heat press,profit calculator,business ideas,craft,Etsy
+laser,engraving,3d printing,heat press,craft,side hustle,break even,equipment,calculator
 
 ## Description
 Choose what to make before you choose the machine.
 
-Maker Business Lab is a decision tool for solo makers, one-person companies, and small creative workshops. Compare product opportunities, test your own numbers, follow the Maker Radar, and learn how to validate an idea before buying equipment.
+Maker Business Lab helps solo makers and small creative workshops compare product ideas, test costs, and plan their next experiment across laser engraving, 3D printing, and heat press.
 
-DISCOVER PRODUCTS WORTH TESTING
+DISCOVER YOUR NEXT PRODUCT
+Explore opportunities with product examples, planning assumptions, material estimates, production time, and a practical next step. Browse the project library and keep useful opportunities in Saved on your device.
 
-Explore ranked starting points across laser engraving and cutting, 3D printing, and heat press. Each opportunity includes a planning score, typical selling price, material estimate, production time, and a plain-language reason it may be worth testing.
+CALCULATE BEFORE YOU COMMIT
+Adjust selling price, materials, packaging, labor, channel fees, order volume, and equipment investment. Compare estimated contribution per item, contribution margin, monthly contribution, and equipment payback using your own assumptions.
 
-MODEL THE BUSINESS WITH YOUR NUMBERS
+FOLLOW THE OPPORTUNITY RADAR
+Start with the weekly product focus, then follow the daily validation task. Review past entries and the assumptions behind each recommendation.
 
-Adjust selling price, materials, packaging, labor, platform fees, monthly orders, and machine investment. See estimated contribution per item, contribution margin, monthly contribution, and equipment payback period update instantly.
+MATCH YOUR PRODUCTION SETUP
+Use equipment matching to explore a production path for the product you want to test. Optional brand links let you continue your own equipment research.
 
-FOLLOW THE MAKER RADAR
+LEARN THE BUSINESS OF MAKING
+Read complete English and Chinese guides on pricing, startup costs, machine costs, and small-batch validation, with USD examples and cited sources. Switch language in the app menu.
 
-Review this week's product focus, the current daily validation task, a clear next step, and the assumptions behind the estimate.
+STAY CURRENT
+The app loads first-party website content, so new guides and radar content can appear without a separate app update. Pages revalidate when you open or return to the app or switch sections. Pull down to refresh. An internet connection is required to load new content.
 
-STAY CURRENT WITH THE WEB
+No account is required. Anonymous analytics is optional and off by default. Saved items use local website storage; no cross-device account sync is claimed.
 
-First-party guides, opportunity data, and Radar updates are revalidated when the app opens, returns to the foreground, or changes sections. Pull down at any time to check again. The last successfully loaded page remains visible if a refresh is interrupted.
-
-No ads. No account. No income promises. Prices, costs, scores, margins, and payback periods are planning estimates—not demand forecasts or guaranteed earnings.
+Prices, costs, planning scores, margins, and payback periods are estimates for planning. They are not demand forecasts, investment advice, or guaranteed income. Replace examples with your own measurements before making a business decision.
 
 ## Store Settings
 - Primary category: Business
