@@ -45,6 +45,11 @@ Confirm the selected release contains non-empty `index.html`, `404.html`,
 If it passes, reload only through the host's existing service procedure. This
 step is manual: neither this PR nor the build applies the include automatically.
 
+Existing exported directory routes without a trailing slash return one permanent
+308 redirect to the slash canonical, retaining the complete query string. The
+rule checks for an actual `<route>/index.html`, so missing routes and empty
+directories are not redirected. Real files and `/_next/static/` assets stay files.
+
 The rules resolve actual files and exported route `index.html` files. Unknown
 routes, empty directories and missing JavaScript cannot resolve to `/index.html`.
 `error_page 404 /404.html` preserves status 404; `=200` would reintroduce a soft

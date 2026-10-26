@@ -29,6 +29,11 @@ describe("static export hosting contract", () => {
     expect(effectiveConfig).toMatch(/location\s+=\s+\/404\.html\s*\{\s*internal;/);
     expect(effectiveConfig).not.toMatch(/\b(rewrite|proxy_pass|root|listen|server_name)\b/);
   });
+
+  it("redirects only existing exported routes to the slash canonical and preserves attribution", () => {
+    expect(effectiveConfig).toContain('if (-f $request_filename/index.html)');
+    expect(effectiveConfig).toContain('return 308 $uri/$is_args$args;');
+  });
 });
 
 // A native Nginx executable is opt-in; contract tests above need no system service.
@@ -128,11 +133,23 @@ http {
   });
 
   it.each([
+    ["/calculator/laser-roi", "/calculator/laser-roi/"],
+    ["/calculator/laser-roi?utm_source=pinterest&ct=trial", "/calculator/laser-roi/?utm_source=pinterest&ct=trial"],
+    ["/learn/etsy-tumbler-pricing-us", "/learn/etsy-tumbler-pricing-us/"],
+  ])("canonicalizes an exported route at %s", async (path, target) => {
+    const response = await fetch(`${origin}${path}`, {redirect: "manual"});
+    expect(response.status).toBe(308);
+    expect(new URL(response.headers.get("location")!, origin).href).toBe(`${origin}${target}`);
+  });
+
+  it.each([
     "/hosting-check-missing/",
     "/learn/not-exported/?utm_source=pinterest",
     "/_next/static/chunks/missing.js",
     "/operations/missing.json",
     "/empty-directory/",
+    "/empty-directory",
+    "/learn/not-exported",
     "/404.html",
   ])("returns the not-found document with status 404 at %s", async (path) => {
     const response = await fetch(`${origin}${path}`);
