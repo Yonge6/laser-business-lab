@@ -236,11 +236,11 @@
   {
     "asset": "creative/en/header.png",
     "size": [
-      3840,
-      1646
+      5244,
+      2950
     ],
-    "raw": "qa-landscape-duo-inner-en-home.png",
-    "rawSha256": "7a4f56696058e4d6a43fa479d88c1163d0df582141339d5df9c76ed2562365d5"
+    "raw": "duo-inner-en-home.png",
+    "rawSha256": "2ebcf54c61e0c44b27b94d8d6d1e02bfe8f80aaddc5bc9357a495f43659f15fc"
   },
   {
     "asset": "creative/en/search.png",
@@ -488,11 +488,11 @@
   {
     "asset": "creative/zh/header.png",
     "size": [
-      3840,
-      1646
+      5244,
+      2950
     ],
-    "raw": "qa-landscape-duo-inner-zh-home.png",
-    "rawSha256": "746e98e484c9f1d937e2cf36c81ddb34240cd1da3da7e6dc8a899c32d8bc1056"
+    "raw": "duo-inner-zh-home.png",
+    "rawSha256": "89a566994734b683e0096e3724bd0f05824e1d23e5317df1f79082f95881d1ac"
   },
   {
     "asset": "creative/zh/search.png",

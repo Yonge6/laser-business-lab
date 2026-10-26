@@ -86,21 +86,28 @@ def poster(raw,lang,key,out,outer=False,canvas=None):
  return b
 
 def creative(raw,lang,placement,out):
- w,h=(3840,1646) if placement=='header' else (3840,2560)
+ w,h=(5244,2950) if placement=='header' else (3840,2560)
  im=Image.new('RGB',(w,h),CREAM);d=ImageDraw.Draw(im)
- margin=250 if placement=='header' else 220
- # Keep important content in the middle of each full-bleed asset.
  d.polygon([(w-800,0),(w,0),(w,h),(w-360,h)],fill=RED)
- d.rectangle((margin,round(h*.16),margin+150,round(h*.16)+12),fill=RED)
- text(d,(margin,round(h*.21)),'MAKER BUSINESS LAB',65)
  title='MAKE SOMETHING.\nMAKE IT ADD UP.' if lang=='en' else '先选产品，\n再算清生意。'
- size=(183 if lang=='en' else 180) if placement=='header' else (210 if lang=='en' else 205)
- yy=text(d,(margin,round(h*.32)),title,size,lang,spacing=size*1.05)
- sub=('Product ideas. Costs. Pricing.' if lang=='en' else '产品机会 · 完整成本 · 定价测算')
- text(d,(margin,yy+60),sub,50,lang,fill=MUTED,body=True)
- # Frame full actual UI, with no fake values or reconstructed controls.
- top=h*.095;fh=h*.82;fw=fh*Image.open(raw).width/Image.open(raw).height
- frame(im,raw,(w*.55,top,w*.39,fh))
+ sub='Product ideas. Costs. Pricing.' if lang=='en' else '产品机会 · 完整成本 · 定价测算'
+ if placement=='header':
+  # Apple's universal asset is cropped vertically to a wide banner and again
+  # horizontally on phones. Put all critical content in the shared central zone.
+  x=1260
+  d.rectangle((x,860,x+125,870),fill=RED)
+  text(d,(x,930),'MAKER BUSINESS LAB',61)
+  yy=text(d,(x,1100),title,190,lang,spacing=210)
+  text(d,(x,yy+70),sub,47,lang,fill=MUTED,body=True)
+  frame(im,raw,(2860,820,1030,1360))
+ else:
+  margin=220
+  d.rectangle((margin,round(h*.16),margin+150,round(h*.16)+12),fill=RED)
+  text(d,(margin,round(h*.21)),'MAKER BUSINESS LAB',65)
+  size=210 if lang=='en' else 205
+  yy=text(d,(margin,round(h*.32)),title,size,lang,spacing=size*1.05)
+  text(d,(margin,yy+60),sub,50,lang,fill=MUTED,body=True)
+  frame(im,raw,(w*.55,h*.095,w*.39,h*.82))
  out.parent.mkdir(parents=True,exist_ok=True);im.save(out,optimize=True)
 
 
@@ -122,7 +129,7 @@ def main():
   raw=a.raw/f'duo-inner-{lang}-home.png'
   if raw.exists():
    for placement in ('header','search'):
-    source=a.raw/f'qa-landscape-duo-inner-{lang}-home.png' if placement=='header' else raw
+    source=raw
     if not source.exists():source=raw
     out=a.out/'creative'/lang/f'{placement}.png';creative(source,lang,placement,out)
     manifest.append({'asset':str(out.relative_to(a.out)),'size':Image.open(out).size,'raw':source.name,'rawSha256':hashlib.sha256(source.read_bytes()).hexdigest()})

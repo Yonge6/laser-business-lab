@@ -21,3 +21,7 @@ The native app loads the production H5 content in persistent WKWebView tabs. Cur
 ## Validation
 
 See [2026-10-26 acceptance](../../docs/plans/2026-10-26-app-store-validation.md). All 12 unit tests passed. The signed 1.3 (16) archive was uploaded and processed VALID by Apple with Duo support. Real Duo inner/outer and normal iPhone screenshots underpin the localized poster assets. Review submission and public availability require their own status readback; an uploaded build is not a release.
+
+## App Store status
+
+Submitted 2026-10-26 17:57 Asia/Shanghai: **WAITING_FOR_REVIEW**, version 1.3 (16), release mode MANUAL. Online version remains 1.2 until Apple approval and release. See release-1.3-verification.json.

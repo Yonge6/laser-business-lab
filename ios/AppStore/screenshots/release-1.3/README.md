@@ -3,7 +3,7 @@
 - `iphone/{en,zh}`: 1206×2622, actual iPhone 17 Pro UI in a poster.
 - `iphone-large/{en,zh}`: 1320×2868 poster canvas, containing the same full iPhone 17 Pro capture at its original aspect ratio.
 - `iphone-duo/{en,zh}`: five inner-display posters at 2007×2853, plus outer Home at 1398×2034.
-- `creative/{en,zh}`: product-page header at 3840×1646 and search creative at 3840×2560.
+- `creative/{en,zh}`: product-page header at 5244×2950 and search creative at 3840×2560.
 
 Display order: Home → Opportunities → Calculator → Radar → Learn; Duo outer Home follows as the sixth screenshot.
 

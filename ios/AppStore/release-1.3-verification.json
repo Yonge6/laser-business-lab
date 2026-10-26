@@ -1,0 +1,46 @@
+{
+  "appId": "6806765660",
+  "bundleId": "com.wonderelian.makerbusinesslab",
+  "version": "1.3",
+  "build": "16",
+  "sdk": "iPhoneOS 27.1",
+  "nativeUnitTests": {
+    "executed": 12,
+    "failures": 0
+  },
+  "runtimeDevices": [
+    "iPhone Duo simulator / iOS27.1",
+    "iPhone17Pro simulator / iOS26.5"
+  ],
+  "runtimeAcceptance": [
+    "inner/outer/partial-open",
+    "both landscape directions",
+    "EN/ZH five main sections",
+    "fold page and language retention",
+    "native Projects/Saved/equipment/legal and Back",
+    "numeric keyboard 35 to350",
+    "new Chinese guide document and Back"
+  ],
+  "assets": {
+    "locales": [
+      "en-US",
+      "zh-Hans"
+    ],
+    "mediumPhone": 10,
+    "largePhone": 10,
+    "duo": 12,
+    "header": 2,
+    "search": 2,
+    "total": 36,
+    "processed": true,
+    "exactFileSizesVerified": true,
+    "rawSha256Verified": true
+  },
+  "versionId": "e0da72d3-5e62-4a83-9341-dcc89840ea35",
+  "reviewSubmissionId": "d3addb60-37f8-4920-9a10-5d78b4142e42",
+  "submittedDate": "2026-10-26T09:57:03.942Z",
+  "appStoreState": "WAITING_FOR_REVIEW",
+  "reviewSubmissionState": "WAITING_FOR_REVIEW",
+  "releaseType": "MANUAL",
+  "publicRelease": false
+}
