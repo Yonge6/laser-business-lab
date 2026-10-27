@@ -22,19 +22,5 @@ export const metadata: Metadata = {
 export default function RadarPage() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maker.wonderelian.com";
   const archiveItems = getRadarArchiveSummaries(briefing.state.lastRunDate);
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: `Maker Opportunity Radar: ${briefing.opportunity.title}`,
-    description: briefing.daily.answer,
-    datePublished: briefing.state.weekStarted,
-    dateModified: briefing.state.lastRunDate,
-    image: `${siteUrl}${briefing.opportunity.image}`,
-    mainEntityOfPage: `${siteUrl}/radar/`,
-    author: { "@type": "Organization", name: "Maker Business Lab", url: siteUrl },
-    publisher: { "@type": "Organization", name: "Maker Business Lab", url: siteUrl },
-    about: [briefing.opportunity.title, briefing.opportunity.process, "maker business"],
-  };
-
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} /><RadarBriefing archiveItems={archiveItems} /></>;
+  return <RadarBriefing siteUrl={siteUrl} archiveItems={archiveItems} />;
 }

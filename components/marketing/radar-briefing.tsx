@@ -9,17 +9,20 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { formatCurrency } from "@/lib/format";
 import type { RadarArchiveNavigation, RadarArchiveSummary } from "@/lib/operations/radar-archive";
 import { getActiveRadarBriefing, getRadarBriefing, type OperationsState } from "@/lib/operations/radar";
+import { radarStructuredData } from "@/lib/operations/radar-schema";
 import { assetPath } from "@/lib/site";
 
-export function RadarBriefing({ state, archiveItems = [], archiveNavigation }: { state?: OperationsState; archiveItems?: RadarArchiveSummary[]; archiveNavigation?: RadarArchiveNavigation }) {
+export function RadarBriefing({ state, archiveItems = [], archiveNavigation, siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maker.wonderelian.com" }: { state?: OperationsState; archiveItems?: RadarArchiveSummary[]; archiveNavigation?: RadarArchiveNavigation; siteUrl?: string }) {
   const { locale } = useLanguage();
   const zh = locale === "zh";
   const briefing = state ? getRadarBriefing(state, `/radar/${state.lastRunDate}`) : getActiveRadarBriefing();
   const { opportunity, profile, daily, links, marginRate } = briefing;
   const archived = Boolean(state);
+  const jsonLd = radarStructuredData(briefing, siteUrl, locale, archived);
 
   return (
-    <main className="operations-radar-page">
+    <main className="operations-radar-page" lang={zh ? "zh-CN" : "en-US"}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <section className="operations-radar-hero shell">
         <div className="operations-radar-copy">
           <p className="eyebrow">{zh ? "MAKER 商机雷达" : "MAKER OPPORTUNITY RADAR"}</p>
