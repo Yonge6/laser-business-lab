@@ -1,10 +1,10 @@
 {
   "version": 1,
   "timezone": "Asia/Shanghai",
-  "lastRunDate": "2026-10-29",
+  "lastRunDate": "2026-10-30",
   "weekStarted": "2026-10-26",
   "activeOpportunityId": "layered-wood-wall-art",
-  "activeLens": "production",
+  "activeLens": "equipment",
   "sequence": 10,
   "history": [
     {
